@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Work+Sans:wght@400;700&display=swap');
+:root {
+    /* Colors */
+    --LIGHTBG: #EBEBEB;
+    --DARKBG: #201D1D;
+    --CARD: #F5F5F5;
+    --PRIMARY: #044620;
+    --SECONDARY: #D8D8D8;
+    --ACCENT: #33BA7D;
+
+    /* Font Sizes and Families */
+    --HEADER: 4.25vh;      /*  50px */
+    --SUBHEADER: 2.375vh;  /*  35px */
+    --BODY: 1.125vh;       /*  25px */
+
+    --POPPINS: 'Poppins', sans-serif;
+    --WORK-SANS: 'Work Sans', sans-serif;
+}
