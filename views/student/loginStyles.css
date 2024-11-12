@@ -1,0 +1,120 @@
+body {
+    background-color: var(--LIGHTBG);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    border: solid 1px black;
+    border-radius: 20px;
+    padding: 40px;
+    margin: 50px;
+    box-sizing: border-box;
+}
+
+.login-container {
+    background: linear-gradient(rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 0.5)), 
+                url('../../public/images/docuBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--TEXTLIGHT);
+    padding-left: 2vw;
+    padding-bottom: 2vw;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 2vw;
+    border-radius: 20px;
+    border: solid 1px black;
+    background-color: var(--CARD);
+}
+
+h1 {
+    font-size: var(--HEADER);
+    font-family: var(--POPPINS);
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    width: 100%;
+}
+
+input{
+    padding: 15px;
+    font-size: var(--SUBHEADER);
+    font-family: var(--WORK-SANS);
+    border-radius: 15px;
+    margin-top: 4.25vh;
+}
+
+h2{
+    font-size: var(--SUBHEADER);
+    font-family: var(--WORK-SANS);
+}
+
+p{
+    font-size: var(--BODY);
+    font-family: var(--WORK-SANS);
+}
+
+.remember{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.btn{
+    width: 100%;
+    height: auto;
+    font-size: var(--HEADER);
+    font-family: var(--POPPINS);
+}
+
+@media (min-width: 600px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .login-container {
+        flex-direction: row;
+    }
+
+    .description {
+        flex: 1;
+        text-align: left;
+        margin-right: 20px;
+    }
+
+    .login-form {
+        flex: 1;
+    }
+}
