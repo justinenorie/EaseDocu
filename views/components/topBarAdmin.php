@@ -79,8 +79,8 @@
             <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
             <div class="account">
                 <a href="#">
-                    <h2>Name, Name</h2>
-                    <p>22-0001</p>
+                    <h2>Admin</h2>
+                    <p>00-0001</p>
                 </a>
             </div>
         </div>
