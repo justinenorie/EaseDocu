@@ -13,6 +13,7 @@
     <?php
     require '../../views/components/topBarAdmin.php';
     ?>
+    <h1>Hi Front-End</h1>
 </body>
 
 </html>
