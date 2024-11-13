@@ -68,7 +68,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="top-bar">
         <div class="title">
@@ -87,5 +86,4 @@
         </div>
     </div>
 </body>
-
 </html>

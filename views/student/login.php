@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../../public/css/styles.css">
-    <link rel="stylesheet" href="loginStyles.css">
+    <link rel="stylesheet" href="styles/loginStyles.css">
 </head>
 
 <body>
@@ -37,11 +37,39 @@
                     <button class="btns" type="submit">Login</button>
                 </form>
                 <div class="signupPanel">
-                    <p>Don't have an account? <a href="signup.php">Sign up</a></p>
+                    <p>Don't have an account? <a href="signup.php">Sign Up Here</a></p>
                 </div>
             </div>
         </div>
     </div>
-</body>
 
+    <!-- Example Student Data -->
+    <script>
+        async function fetchStudentData() {
+            try {
+                //Example data file path
+                const response = await fetch('../../data/studentsData.json');
+                const students = await response.json();
+                document.querySelector('form').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const studentID = document.querySelector('input[name="student"]').value;
+                    const password = document.querySelector('input[name="password"]').value;
+
+                    const student = students.find(s => s.studentID === studentID && s.password === password);
+
+                    if (student) {
+                        alert('Login successful!');
+                        //Redirect to the document request page
+                        window.location.href = 'documentRequest.php';
+                    } else {
+                        alert('Invalid StudentID or Password');
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+        }
+        fetchStudentData();
+    </script>
+</body>
 </html>
