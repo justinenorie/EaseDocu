@@ -36,9 +36,7 @@
                     </div>
                     <button class="btns" type="submit">Login</button>
                 </form>
-                <div class="signupPanel">
-                    <p>Don't have an account? <a href="signup.php">Sign Up Here</a></p>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -48,21 +46,21 @@
         async function fetchStudentData() {
             try {
                 //Example data file path
-                const response = await fetch('../../data/studentsData.json');
+                const response = await fetch('../../data/admin.json');
                 const students = await response.json();
                 document.querySelector('form').addEventListener('submit', function(event) {
                     event.preventDefault();
-                    const studentID = document.querySelector('input[name="student"]').value;
+                    const admin = document.querySelector('input[name="admin"]').value;
                     const password = document.querySelector('input[name="password"]').value;
 
-                    const student = students.find(s => s.studentID === studentID && s.password === password);
+                    const student = students.find(s => s.adminUsername === admin && s.adminPassword === password);
 
                     if (student) {
                         alert('Login successful!');
                         //Redirect to the document request page
-                        window.location.href = 'documentRequest.php';
+                        window.location.href = 'reportsList.php';
                     } else {
-                        alert('Invalid StudentID or Password');
+                        alert('Invalid Admin or Password');
                     }
                 });
             } catch (error) {
