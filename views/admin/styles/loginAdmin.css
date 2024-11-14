@@ -1,47 +1,61 @@
 body {
-    background-color: var(--LIGHTBG);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
     margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
+    background-color: var(--LIGHTBG);
 }
 
-.container {
+.login-back {
+    height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 80%;
-    max-width: 100%;
-    border-radius: 20px;
+    align-items: center;
+    padding: 40px;
+    margin: 0 40px;
     box-sizing: border-box;
 }
 
 .login-container {
-    background: linear-gradient(rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 0.5)), 
-                url('../../../public/images/docuBackground.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 80vh;
     display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 90vh;
     border-radius: 20px;
     box-shadow: 0 0 20px var(--DARKBG);
-    justify-content: space-between;
+    background: linear-gradient(rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 0.5)),
+        url("../../../public/images/docuBackground.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; /* Add a value position */
 }
 
+/* LEFT */
 .description {
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: flex-end;
     color: var(--TEXTLIGHT);
-    padding-left: 2vw;
-    padding-bottom: 2vw;
+    padding: 2vw;
     gap: 15px;
+    background: linear-gradient(rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 0.5)),
+        url("../../../public/images/docuBackground.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    z-index: 1;
+}
+
+/* RIGHT */
+.login-form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2vw;
+    border-radius: 20px;
+    border: solid 1px black;
+    background-color: var(--CARD);
+    z-index: 2;
 }
 
 .EaseDocu {
@@ -50,23 +64,30 @@ body {
 }
 
 .logo {
-    width: 50px;
+    width: 5vh;
     height: auto;
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 2vw;
-    border-radius: 20px;
-    border: solid 1px black;
-    background-color: var(--CARD);
-}
-
 h1 {
+    margin: 0;
     font-size: var(--HEADER);
     font-family: var(--POPPINS);
+}
+
+h2 {
+    margin: 0;
+    font-size: var(--SUBHEADER);
+    font-family: var(--WORK-SANS);
+}
+
+p {
+    margin: 0;
+    font-size: var(--BODY);
+    font-family: var(--WORK-SANS);
+}
+
+.description h2{
+    font-weight: 200;
 }
 
 /* Input Design */
@@ -78,22 +99,12 @@ h1 {
     width: 100%;
 }
 
-.inputs input{
+.inputs input {
     padding: 15px;
     font-size: var(--SUBHEADER);
     font-family: var(--WORK-SANS);
     border-radius: 15px;
     margin-top: 4.25vh;
-}
-
-h2{
-    font-size: var(--SUBHEADER);
-    font-family: var(--WORK-SANS);
-}
-
-p{
-    font-size: var(--BODY);
-    font-family: var(--WORK-SANS);
 }
 
 .remember {
@@ -112,13 +123,13 @@ p{
     font-size: var(--BODY);
 }
 
-a{
+a {
     text-decoration: none;
     color: var(--ACCENT);
     font-weight: bold;
 }
 
-.btns{
+.btns {
     width: 100%;
     height: auto;
     font-size: var(--SUBHEADER);
@@ -131,36 +142,47 @@ a{
     transition: all 0.3s ease-in-out;
 }
 
-.btns:hover{
+.btns:hover {
     background-color: var(--ACCENT);
     color: var(--TEXTDARK);
     font-weight: bold;
 }
 
-h1, h2, p {
-    margin: 0;
+.signupPanel {
+    margin: 20px 0 20px 0;
+    text-align: center;
 }
 
-
-@media (min-width: 700px) {
-    .container {
-        flex-direction: row;
-        margin: 0;
-        padding: 0;
+@media screen and (max-width: 1000px) {
+    .login-back {
+        height: unset;
     }
-
     .login-container {
-        flex-direction: row;
-        
+        flex-direction: column;
     }
+}
 
-    .description {
-        flex: 1;
-        text-align: left;
+@media screen and (max-width: 800px) {
+    .login-back{
         padding: 20px;
+        margin: 20px;
     }
+}
 
-    .login-form {
-        flex: 1;
+@media screen and (max-width: 650px) {
+    .login-back {
+        padding: 0;
+        margin: 0;
+        background-color: var(--CARD);
+    }
+    .description{
+        border-radius: 0;
+    }
+    .login-container{
+        box-shadow: none;
+    }
+    .login-form{
+        border-radius: 26px 26px 0 0;
+        border: none;
     }
 }

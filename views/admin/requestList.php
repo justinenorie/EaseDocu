@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request List</title>
+    <title>EaseDocu - Reports</title>
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="styles/requestList.css">
 </head>
