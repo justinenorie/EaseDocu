@@ -3,3 +3,12 @@ body{
     padding: 0;
     background-color: var(--LIGHTBG);
 }
+.container{
+    margin: 20px;
+}
+
+.title h1{
+    margin: 0;
+    font-family: var(--POPPINS);
+    font-size: var(--HEADER);
+}

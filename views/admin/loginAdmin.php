@@ -36,9 +36,6 @@
                     </div>
                     <button class="btns" type="submit">Login</button>
                 </form>
-                <div class="signupPanel">
-                    <p>Don't have an account? <a href="signup.php">Sign Up Here</a></p>
-                </div>
             </div>
         </div>
     </div>
@@ -60,7 +57,7 @@
                     if (admins) {
                         alert('Login successful!');
                         //Redirect to the document request page
-                        window.location.href = 'reportsList.php';
+                        window.location.href = 'requestList.php';
                     } else {
                         alert('Invalid Admin or Password');
                     }

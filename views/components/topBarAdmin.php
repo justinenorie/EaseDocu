@@ -20,7 +20,7 @@
             color: var(--TEXTLIGHT);
         }
 
-        .title {
+        .top-Title {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -70,7 +70,7 @@
 </head>
 <body>
     <div class="top-bar">
-        <div class="title">
+        <div class="top-Title">
             <img class="logo" src="../../public/images/icons/logo-white.png" alt="EaseDocu Logo">
             <h1>EaseDocu</h1>
         </div>
