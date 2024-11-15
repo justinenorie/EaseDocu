@@ -57,10 +57,20 @@
         // Function to load JSON data and insert it into the table
         async function loadStudentData() {
             try {
+                //Fetch the example JSON data for Request List
                 const response = await fetch('../../data/requestData.json');
                 const students = await response.json();
-                const tableBody = document.getElementById('request-list');
 
+                //Fetch the JSON data for Document List 
+                const docuResponse = await fetch('../../data/documentList.json');
+                const docuList = await docuResponse.json();
+                docuList.forEach(docu => {
+                    docu.id = parseInt(docu.id);
+                    docu.document = docu.document;
+                    docu.price = parseFloat(docu.price);
+                });
+
+                const tableBody = document.getElementById('request-list');
                 students.forEach(student => {
                     // Create the data row for each student
                     const row = document.createElement('tr');
@@ -89,16 +99,24 @@
                         '../../public/images/icons/checked.png' :
                         '../../public/images/icons/standby-circle.png';
 
-                    // Count occurrences of each document
+                    // Price list from documentList.json
+                    const priceLookup = docuList.reduce((acc, docu) => {
+                        acc[docu.document] = docu.price; // Mapping document name to its price
+                        return acc;
+                    }, {});
+
+                    // Count the number of each requested document
                     const documentCounts = student.requestedDocument.reduce((acc, document) => {
                         acc[document] = (acc[document] || 0) + 1;
                         return acc;
                     }, {});
 
+                    let totalCost = 0;
+
                     // Create a hidden confirmation status row
                     const confirmationRow = document.createElement('tr');
                     confirmationRow.classList.add('confirmation-status');
-                    confirmationRow.style.display = 'none'; 
+                    confirmationRow.style.display = 'none'; // change this to 'none' if needed
                     confirmationRow.innerHTML = `
                         <td class="req-data" colspan="4">
                             <div class="status-details">
@@ -126,19 +144,25 @@
                                 <div class="summary-container"> 
                                     <h3>Request Summary</h3>
                                     <div class="requested-documents">
-                                        <ul>
+                                        <span>
                                             ${Object.entries(documentCounts)
-                                                .map(([document, count]) => `<li>${count > 1 ? `x${count}` : ''} ${document} </li>`)
+                                                .map(([document, count]) => {
+                                                    const price = priceLookup[document] || 0;
+                                                    const cost = price * count;
+                                                    totalCost += cost;
+                                                    return `<p>${count}x ${document} - <strong class="prices">P${cost.toFixed(2)}</strong></p>`;
+                                                })
                                                 .join('')}
-                                        </ul>
-                                        <p>Total Payment: ${student.totalPayment}</p>
+                                        </span>
+                                        <p><strong>Total Payment:</strong> <strong class="prices">P${totalCost.toFixed(2)}</strong></p>
                                     </div>
-                                    <button onclick="confirmPayment()">Confirm Payment</button>
+                                    <button class="confirm-btn" onclick="confirmPayment()">Confirm Payment</button>
                                 </div>
                             </div>
                         </td>
                     `;
 
+                    // Remove this line later if you want to initially hide the confirmation row
                     
 
                     // Add click event to toggle the confirmation status row

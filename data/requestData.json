@@ -3,46 +3,45 @@
         "name": "John Doe",
         "studentID": "22-0001",
         "date": "2023-10-05",
-        "totalPayment": "P100",
         "status": "Unpaid",
         "requestedDocument": [
-            "Certificate of Enrollment",
-            "Certificate of Enrollment",
-            "Certificate of Enrollment",
-            "OVRF",
-            "Transcript",
-            "Form 137"
+            "Adding and Changing Form",
+            "Certificate of Enrolled",
+            "Certificate of Enrolled",
+            "Certified True Copy (OVRF)",
+            "Transcript Records",
+            "CAV"
         ]
     },
     {
         "name": "Jane Smith",
         "studentID": "22-0002",
         "date": "2023-10-06",
-        "totalPayment": "P150",
+        "totalPayment": "150.00",
         "status": "Paid",
-        "requestedDocument": ["Diploma", "Good Moral Certificate"]
+        "requestedDocument": ["Diploma", "Certificate of Good Moral Conduct"]
     },
     {
         "name": "Hayson Doe",
         "studentID": "22-0003",
         "date": "2023-10-06",
-        "totalPayment": "P150",
+        "totalPayment": "150.00",
         "status": "Process",
-        "requestedDocument": ["Transcript", "Certificate of Residency"]
+        "requestedDocument": ["Transcript Records", "Certificate of Enrolled"]
     },
     {
         "name": "Ayuson Doe",
         "studentID": "22-0004",
         "date": "2023-10-06",
-        "totalPayment": "P150",
+        "totalPayment": "150.00",
         "status": "Finished",
-        "requestedDocument": ["Birth Certificate", "Form 137"]
+        "requestedDocument": ["CAV", "Certificate of Enrolled"]
     },
     {
         "name": "Alexis Doe",
         "studentID": "22-0005",
         "date": "2023-10-07",
-        "totalPayment": "P200",
+        "totalPayment": "200.00",
         "status": "Unpaid",
         "requestedDocument": ["Certificate of Enrollment"]
     },
@@ -50,24 +49,24 @@
         "name": "Alyanna Doe",
         "studentID": "22-0006",
         "date": "2023-10-07",
-        "totalPayment": "P250",
+        "totalPayment": "250.00",
         "status": "Paid",
-        "requestedDocument": ["Diploma", "OVRF"]
+        "requestedDocument": ["Diploma", "Certified True Copy (OVRF)"]
     },
     {
         "name": "Alison Doe",
         "studentID": "22-0007",
         "date": "2023-10-07",
-        "totalPayment": "P300",
+        "totalPayment": "300.00",
         "status": "Process",
-        "requestedDocument": ["Transcript", "Good Moral Certificate"]
+        "requestedDocument": ["Transcript Records", "Certificate of Good Moral Conduct"]
     },
     {
         "name": "Amanda Doe",
         "studentID": "22-0008",
         "date": "2023-10-08",
-        "totalPayment": "P350",
+        "totalPayment": "350.00",
         "status": "Finished",
-        "requestedDocument": ["Form 137", "Certificate of Residency"]
+        "requestedDocument": ["CAV", "Certificate of Enrolled"]
     }
 ]

@@ -169,7 +169,6 @@ body {
 }
 .status-details h3 {
     font-family: var(--POPPINS);
-    margin: 0 0 1em 0;
 }
 .status-details p {
     font-family: var(--WORK-SANS);
@@ -213,17 +212,25 @@ body {
     border-top: 1px solid black;
 
 }
-.requested-documents{
-    display: flex;
-    flex-direction: row;
+.requested-documents p{
+    font-family: var(--WORK-SANS);
+    margin: 1em 0 1em 0;
 }
-button {
+.prices{
+    color: var(--PRIMARY);
+}
+.confirm-btn {
     background-color: green;
-    color: white;
+    color: var(--TEXTLIGHT);
+    font-size: var(--SUBHEADER);
+    font-weight: 600;
     border: none;
-    padding: 1vh 2vh;
-    border-radius: 5px;
+    padding: 2vh 8vh;
+    border-radius: 2vh;
     cursor: pointer;
+}
+.confirm-btn:hover {
+    background-color: var(--ACCENT);
 }
 @keyframes fadeInFromTop {
     0% {

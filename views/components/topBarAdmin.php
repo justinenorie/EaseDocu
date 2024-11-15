@@ -52,14 +52,14 @@
         }
 
         .icon {
-            width: 60px;
-            height: 60px;
+            width: 6vh;
+            height: 6vh;
             margin-right: 10px;
         }
 
         .logo {
-            width: 60px;
-            height: 60px;
+            width: 8vh;
+            height: 8vh;
             margin-right: 5px;
         }
 
