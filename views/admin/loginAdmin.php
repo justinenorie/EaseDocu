@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>EaseDocu - Admin</title>
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="styles/loginAdmin.css">
 </head>
 
 <body>
-    <div class="container">
+    <div class="login-back">
         <div class="login-container">
             <div class="description">
                 <div class="EaseDocu">
@@ -36,7 +36,6 @@
                     </div>
                     <button class="btns" type="submit">Login</button>
                 </form>
-                
             </div>
         </div>
     </div>
@@ -47,18 +46,18 @@
             try {
                 //Example data file path
                 const response = await fetch('../../data/admin.json');
-                const students = await response.json();
+                const adminsAccount = await response.json();
                 document.querySelector('form').addEventListener('submit', function(event) {
                     event.preventDefault();
                     const admin = document.querySelector('input[name="admin"]').value;
                     const password = document.querySelector('input[name="password"]').value;
 
-                    const student = students.find(s => s.adminUsername === admin && s.adminPassword === password);
+                    const admins = adminsAccount.find(s => s.adminUsername === admin && s.adminPassword === password);
 
-                    if (student) {
+                    if (admins) {
                         alert('Login successful!');
                         //Redirect to the document request page
-                        window.location.href = 'reportsList.php';
+                        window.location.href = 'requestList.php';
                     } else {
                         alert('Invalid Admin or Password');
                     }
@@ -70,4 +69,5 @@
         fetchStudentData();
     </script>
 </body>
+
 </html>
