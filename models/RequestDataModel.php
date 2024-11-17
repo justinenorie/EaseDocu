@@ -8,7 +8,7 @@ class RequestDataModel {
 
     public function __construct() {
         $db = getEaseDocuDatabase();
-        $this->collection = $db->selectCollection('documentRequestsList');
+        $this->collection = $db->selectCollection('documentRequestsList'); //Collection Name
     }
 
      // Fetch all request data
@@ -50,7 +50,7 @@ class DocumentModel {
 
     public function __construct() {
         $db = getEaseDocuDatabase();
-        $this->collection = $db->selectCollection('documentList');
+        $this->collection = $db->selectCollection('documentList'); //Collection Name
     }
 
     public function getAllDocuments() {
