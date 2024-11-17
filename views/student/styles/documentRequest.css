@@ -157,6 +157,7 @@ li.list-item{
     height: 22px;
 }
 .quantity-controls {
+    font-family: var(--WORK-SANS);
     border: 1px solid #606060;
     border-radius: 8px;
     display: flex;

@@ -19,9 +19,6 @@
 
 <body>
     <div class="content-holder">
-
-
-
         <form action="">
             <section class="req-doc">
 
@@ -30,248 +27,7 @@
                 </div>
                 <div class="req-doc-order">
                     <ul>
-
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-                        <li class="list-item">
-    
-                            <div class="list-item-left">
-                                <input type="checkbox" class="checkbox">
-                                <div class="item-icon">
-                                    <img src="../../public/images/icons/doc-certificate.png" alt="">
-                                </div>
-                            </div>
-    
-                            <div class="list-item-right">
-    
-                                <div class="upper-item">
-                                    <div class="item-name">
-                                        <h2>Certificate of Enrollment</h2>
-                                    </div>
-                                </div>
-        
-                                <div class="lower-item">
-                                    <div class="price"><span>&#8369;</span>999</div>
-        
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn">+</button>
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </li>
-
+                        <?php include '../components/fetchDocuments.php'; ?>
                     </ul>
                 </div>
             </section>
@@ -290,8 +46,8 @@
         </form>
     </div>
 </body>
-
-<script>
+<script src="../student/js/quantityButton.js"></script>
+<!-- <script>
     // JavaScript code to dynamically add 12 list items
 const paymentList = document.getElementById('paymentList'); // Get the UL element
 
@@ -334,6 +90,6 @@ for (let i = 0; i < 5; i++) {
     paymentList.appendChild(listItem);
 }
 
-</script>
+</script> -->
 
 </html>

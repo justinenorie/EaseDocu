@@ -15,6 +15,52 @@
     <link rel="stylesheet" href="../student/styles/signup.css">
 </head>
 <body>
-    
+    <div class="signup-holder">
+        <div class="signup-container">
+            
+            <div class="signup-form-container">
+
+                <section class="signup-header">
+                    <h1>Sign Up with EaseDocu</h1>
+                </section>
+
+                <section class="signup-content">
+                    <form id="signup-form" action="">
+                        <input id="name" type="text" placeholder="Full Name">
+                        <input id="studentID" type="text" placeholder="Student ID">
+                        <input id="email" type="email" placeholder="Email">
+                        <input id="password" type="password" placeholder="Password">
+                        <div class="password-toggle">
+                            <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
+                            <input id="confirmPassword" type="password" placeholder="Confirm Password">
+                        </div>
+                        
+                        <div id="legalTerms">
+                            <input type="checkbox" name="text" id="">
+                            <p>I agree to the <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a></p>
+                        </div>
+                        <input id="submit" type="submit" value="Sign Up">
+                    </form>
+
+                    <section class="signup-links">
+                        <p>Already have account? <a href="login.php">Login now</a></p>
+                    </section>
+                </section>
+            </div>
+
+            <div class="signup-background">
+                <img src="../../public/images/backgrounds/signup-background.jpg" alt="">
+                <div class="signup-background-overlay"></div>
+                <div class="signup-background-overlay"></div>
+                <div class="signup-description">
+                    <h3 id="docuText">EaseDocu</h3>
+                    <p>Your hassle-free solution for quickly requesting and tracking important school documents online.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../student/js/signup.js"></script>
 </body>
 </html>
