@@ -43,7 +43,7 @@
                     </form>
 
                     <section class="signup-links">
-                        <p>Already have account? <a href="login.php">Login now</a></p>
+                        <p>Already have account? <a href="">Login now</a></p>
                     </section>
                 </section>
             </div>
