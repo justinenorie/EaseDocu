@@ -1,57 +1,57 @@
-[
-    {   
-        "id" : "1",
-        "document" : "Adding and Changing Form",
-        "price" : 25.00
-    },
-    {   
-        "id" : "2",
-        "document" : "Certificate of Good Moral Conduct",
-        "price" : 50.00
-    },
-    {   
-        "id" : "3",
-        "document" : "Summary of Grades",
-        "price" : 50.00
-    },
-    {   
-        "id" : "4",
-        "document" : "Certificate of Enrolled",
-        "price" : 50.00
-    },
-    {   
-        "id" : "5",
-        "document" : "Certificate of Graduate",
-        "price" : 50.00
-    },
-    {   
-        "id" : "6",
-        "document" : "Completion Form",
-        "price" : 50.00
-    },
-    {   
-        "id" : "7",
-        "document" : "Transfer Credential/Honorable Dismissal",
-        "price" : 50.00
-    },
-    {   
-        "id" : "8",
-        "document" : "Transcript Records",
-        "price" : 100.00
-    },
-    {   
-        "id" : "9",
-        "document" : "Diploma",
-        "price" : 200.00
-    },
-    {   
-        "id" : "10",
-        "document" : "Certified True Copy (OVRF)",
-        "price" : 25.00
-    },
-    {   
-        "id" : "11",
-        "document" : "CAV",
-        "price" : 50.00
-    }
-]
+    [
+        {   
+            "id" : "1",
+            "document" : "Adding and Changing Form",
+            "price" : 25.00
+        },
+        {   
+            "id" : "2",
+            "document" : "Certificate of Good Moral Conduct",
+            "price" : 50.00
+        },
+        {   
+            "id" : "3",
+            "document" : "Summary of Grades",
+            "price" : 50.00
+        },
+        {   
+            "id" : "4",
+            "document" : "Certificate of Enrolled",
+            "price" : 50.00
+        },
+        {   
+            "id" : "5",
+            "document" : "Certificate of Graduate",
+            "price" : 50.00
+        },
+        {   
+            "id" : "6",
+            "document" : "Completion Form",
+            "price" : 50.00
+        },
+        {   
+            "id" : "7",
+            "document" : "Transfer Credential/Honorable Dismissal",
+            "price" : 50.00
+        },
+        {   
+            "id" : "8",
+            "document" : "Transcript Records",
+            "price" : 100.00
+        },
+        {   
+            "id" : "9",
+            "document" : "Diploma",
+            "price" : 200.00
+        },
+        {   
+            "id" : "10",
+            "document" : "Certified True Copy (OVRF)",
+            "price" : 25.00
+        },
+        {   
+            "id" : "11",
+            "document" : "CAV",
+            "price" : 50.00
+        }
+    ]

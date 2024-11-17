@@ -12,6 +12,6 @@
 <body>
     <h1>Login As?</h1>
     <button onclick="window.location.href='views/student/login.php'">Login as Student</button>
-    <button onclick="window.location.href='views/admin/login.php'">Login as Admin</button>
+    <button onclick="window.location.href='views/admin/loginAdmin.php'">Login as Admin</button>
 </body>
 </html>

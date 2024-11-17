@@ -11,62 +11,66 @@
             "Certified True Copy (OVRF)",
             "Transcript Records",
             "CAV"
-        ]
+        ],
+        "totalPayment": 150.00   
     },
     {
         "name": "Jane Smith",
         "studentID": "22-0002",
         "date": "2023-10-06",
-        "totalPayment": "150.00",
+        
         "status": "Paid",
-        "requestedDocument": ["Diploma", "Certificate of Good Moral Conduct"]
+        "requestedDocument": ["Diploma", "Certificate of Good Moral Conduct"],
+        "totalPayment": 150.00
     },
     {
         "name": "Hayson Doe",
         "studentID": "22-0003",
         "date": "2023-10-06",
-        "totalPayment": "150.00",
+        
         "status": "Process",
-        "requestedDocument": ["Transcript Records", "Certificate of Enrolled"]
+        "requestedDocument": ["Transcript Records", "Certificate of Enrolled"],
+        "totalPayment": 150.00
     },
     {
         "name": "Ayuson Doe",
         "studentID": "22-0004",
         "date": "2023-10-06",
-        "totalPayment": "150.00",
+        
         "status": "Finished",
-        "requestedDocument": ["CAV", "Certificate of Enrolled"]
+        "requestedDocument": ["CAV", "Certificate of Enrolled"],
+        "totalPayment": 150.00
     },
     {
         "name": "Alexis Doe",
         "studentID": "22-0005",
         "date": "2023-10-07",
-        "totalPayment": "200.00",
         "status": "Unpaid",
-        "requestedDocument": ["Certificate of Enrollment"]
+        "requestedDocument": ["Certificate of Enrollment"],
+        "totalPayment": 200.00
     },
     {
         "name": "Alyanna Doe",
         "studentID": "22-0006",
         "date": "2023-10-07",
-        "totalPayment": "250.00",
         "status": "Paid",
-        "requestedDocument": ["Diploma", "Certified True Copy (OVRF)"]
+        "requestedDocument": ["Diploma", "Certified True Copy (OVRF)"],
+        "totalPayment": 250.00
     },
     {
         "name": "Alison Doe",
         "studentID": "22-0007",
         "date": "2023-10-07",
-        "totalPayment": "300.00",
         "status": "Process",
-        "requestedDocument": ["Transcript Records", "Certificate of Good Moral Conduct"]
+        "requestedDocument": ["Transcript Records", "Certificate of Good Moral Conduct"],
+        "totalPayment": 300.00
     },
     {
         "name": "Amanda Doe",
         "studentID": "22-0008",
         "date": "2023-10-08",
-        "totalPayment": "350.00",
         "status": "Finished",
-        "requestedDocument": ["CAV", "Certificate of Enrolled"]
+        "requestedDocument": ["CAV", "Certificate of Enrolled"],
+        "totalPayment": 300.00
     }
 ]
