@@ -17,5 +17,5 @@ function getMongoClient() {
 
 function getEaseDocuDatabase() {
     $client = getMongoClient();
-    return $client->selectDatabase('EaseDocu');
+    return $client->selectDatabase('EaseDocu'); //Database Name
 }
