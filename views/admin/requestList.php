@@ -100,7 +100,7 @@ $documentList = $controller->getAllDocuments();
                         <!-- Confirmation Status Row -->
                         <!-- TODO: remove class="show" from tr -->
                         <!-- TODO: change style: table-row to none from tr -->
-                        <tr class="confirmation-status show" id="confirmation-<?= $request['_id'] ?>" style="display: table-row;">
+                        <tr class="confirmation-status" id="confirmation-<?= $request['_id'] ?>" style="display: none;">
                             <td class="req-data" colspan="4">
                                 <div class="status-details">
                                     <h3>Request Status: <?= htmlspecialchars($request['status']) ?></h3>
