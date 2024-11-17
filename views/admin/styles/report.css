@@ -1,0 +1,403 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #EBEBEB;
+  }
+  
+  /* Navbar styling */
+  .navbar {
+    background-color: #044620;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+    color: #ffffff;
+    position: relative;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .logo{
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Title positioning */
+  .navbar .title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4.25vh;
+    font-weight: bold;
+    color: #ffffff;
+    margin-right: auto;
+  }
+  
+  /* Navbar buttons */
+  .navbar-buttons {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 2.375vh;
+    display: flex;
+    white-space: nowrap;
+    gap: 1rem;
+    justify-content: center;
+    flex-grow: 1;
+  }
+  
+  .navbar-buttons a {
+    padding: 0.3rem 0.8rem;
+    color: #ffffff;
+    border: none;
+    text-decoration: none;
+  }
+  
+  .navbar-buttons a:visited,
+  .navbar-buttons a:active {
+    color: #ffffff;
+  }
+  
+  /* Profile section styling */
+  .profile-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .admin-text {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 2.375vh;
+    font-weight: bold;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+  
+  .concern {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 4.25vh;
+    padding-left: 20px;
+    margin-left: 8px;
+  }
+  
+  .card {
+    position: relative;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding: 5rem 2rem 2rem 2rem;
+    background-color: #f4f4f5;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .filter-label {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 35px;
+    font-weight: bold;
+    color: #044620;
+    margin-right: 1rem;
+  }
+  
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+  }
+  
+  .filter-btn.all,
+  .filter-btn.open,
+  .filter-btn.active,
+  .filter-btn.closed {
+    background-color: #f3f4f6;
+    font-weight: bold;
+    color: #000000;
+    margin-left: 0.5rem;
+  }
+  
+  .filter-btn.all,
+  .filter-btn.open:hover,
+  .filter-btn.active:hover,
+  .filter-btn.closed:hover,
+  .filter-btn.open:active,
+  .filter-btn.active:active,
+  .filter-btn.closed:active {
+    background-color: #33BA7D;
+    color: #ffffff;
+  }
+  
+  .report-list {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 2.125vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .report {
+    
+    padding-bottom: 15px;
+    padding-right: 5px;
+    padding-left: 20px;
+    background-color: #D8D8D8;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 6px  rgba(0, 0, 0, 0.1); 
+  }
+  .report:hover {
+    background-color: #FFFBD7;
+  }
+  
+  /* Report information styling */
+  .report-info h3 {
+    font-weight: 600;
+    color: #2a2a2a;
+  }
+  
+  .report-text,
+  .report-date {
+    color: #6b7280;
+  }
+  
+  .report-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .active-status {
+    background-color: #33BA7D;
+    color: #ffffff;
+  }
+  
+  /* Chat icon styling */
+  .chat-icon {
+    width: 35px;
+    height: 35px;
+    margin-top: 12px;
+    margin-right: 5px;
+    padding-top: 12px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  /* Media Query for Small Screens */
+  @media (max-width: 480px) {
+    /* Navbar */
+    .navbar {
+      flex-direction: row;
+      gap: 0.5rem;
+      padding: 1vw; /* Reduced padding */
+    }
+  
+    .navbar .title {
+      font-size: 5vw; /* Scales with viewport width */
+    }
+    .navbar-buttons {
+      gap: 0.5rem; /* Smaller gap between buttons */
+    }
+  
+    .navbar-buttons a {
+      font-size: 3.5vw; /* Scaled down font */
+      padding: 1vw 2vw; /* Smaller padding to fit content */
+    }
+    
+    .profile-section .admin-text {
+      font-size: 3.5vw; /* Reduced font size */
+    }
+  
+    .profile {
+      width: 8vw; /* Resizes proportionally */
+      height: 8vw;
+    }
+  
+    /* Card and Filter */
+    .card {
+      margin: 2vw;
+      padding: 3vw;
+      position: relative;
+    }
+    
+    .filter {
+      position: relative;
+      top: 0;
+      left: 0;
+      display: flex;
+      gap: 1vw; /* Smaller gap for buttons to fit better */
+      flex-wrap: nowrap; /* Ensures it stays horizontal */
+      overflow-x: auto; /* Allows scrolling without breaking layout */
+      margin-bottom: 2vw; /* Keeps it inside the card */
+    }
+    
+    .filter-label {
+      font-size: 3.5vw; /* Scaled down font */
+    }
+  
+    .filter-btn {
+      padding: 0.5vw 1.5vw; /* Smaller padding */
+      font-size: 3vw;
+      white-space: nowrap; /* Prevents wrapping */
+    }
+  
+    /* Report List */
+    .report {
+      padding: 2vw;
+    }
+  
+    .report-info h3 {
+      font-size: 3.5vw;
+    }
+  
+    .report-text,
+    .report-date {
+      font-size: 3vw;
+    }
+  
+    .chat-icon {
+      width: 8vw;
+      height: 8vw;
+      padding: 1vw;
+    }
+  }
+  
+  /* Chat modal styling to mimic Messenger */
+  .chat-modal {
+    font-family: 'Work Sans', sans-serif;
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    background-color: #f0f0f0;
+  }
+  
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the left */
+    padding: 10px;
+    background-color: #33BA7D;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    gap: 10px; /* Space between back button and chat title */
+  }
+  
+  /* Adjust the back button */
+  .backbtn {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .profile-icon {
+    width: 30px; /* adjust the size of the profile image */
+    height: 30px; /* adjust the size of the profile image */
+    border-radius: 50%; /* make it circular */
+    margin-right: 10px; /* space between profile image and sender info */
+  }
+  #chatSenderInfo {
+    font-weight: 600;
+    font-family: 'Work Sans', sans-serif;
+    color: #000000;
+  }
+  .chat-header,
+  .chat-body,
+  .chat-footer {
+      font-family: 'Work Sans', sans-serif;
+  }
+  .chat-message p {
+    font-family: 'Work Sans', sans-serif;
+  }
+  
+  .chat-title-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  #chatTitle {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .chat-body {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+  }
+  
+  .chat-message {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    display: inline-block;
+    word-wrap: break-word;
+  }
+  
+  .chat-message.received {
+    background-color: #F5F5F5;
+    align-self: flex-start;
+  }
+  
+  .chat-message.sent {
+    background-color: #33BA7D;
+    color: #ffffff;
+    align-self: flex-end;
+  }
+  .send-icon {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+  }
+  
+  
+  .chat-footer {
+    display: flex;
+    padding: 8px;
+    border-top: 1px solid #ddd;
+    background-color: #f0f0f0;
+    
+  }
+  
+  .chat-footer input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 5px;
+    font-size: 14px;
+  }
+  
+  /* Display modal */
+  .modal-open .chat-modal {
+    display: flex;
+  }
