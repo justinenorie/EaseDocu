@@ -47,49 +47,5 @@
     </div>
 </body>
 <script src="../student/js/quantityButton.js"></script>
-<!-- <script>
-    // JavaScript code to dynamically add 12 list items
-const paymentList = document.getElementById('paymentList'); // Get the UL element
-
-const documentData = {
-    quantity: '2x', // Quantity for all items
-    documentName: 'Certificate of Gradess', // Document name for all items
-    currency: '&#8369; 501' // Currency symbol for all items
-};
-
-for (let i = 0; i < 5; i++) {
-    // Create the list item (li) element
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-item-payment');
-    
-    // Create the content inside the li element
-    const docPaymentDiv = document.createElement('div');
-    docPaymentDiv.classList.add('list-doc-payment');
-    
-    const quantity = document.createElement('p');
-    quantity.classList.add('quantity');
-    quantity.textContent = documentData.quantity;
-    
-    const docName = document.createElement('p');
-    docName.classList.add('document-name');
-    docName.textContent = documentData.documentName;
-    
-    const docPrice = document.createElement('p');
-    docPrice.classList.add('document-price');
-    const currencySpan = document.createElement('span');
-    currencySpan.innerHTML = documentData.currency;
-    docPrice.appendChild(currencySpan);
-
-    // Append all created elements to the li element
-    docPaymentDiv.appendChild(quantity);
-    docPaymentDiv.appendChild(docName);
-    docPaymentDiv.appendChild(docPrice);
-    listItem.appendChild(docPaymentDiv);
-
-    // Append the li to the ul
-    paymentList.appendChild(listItem);
-}
-
-</script> -->
 
 </html>
