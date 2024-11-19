@@ -2,7 +2,26 @@
 require '../../controller/RequestDataController.php';
 $controller = new EaseDocuController();
 $documentRequests = $controller->getAllDocumentRequests(); // Fetch all the document requests
-$documentList = $controller->getAllDocuments();
+$documentList = $controller->getAllDocuments(); //Fetch all the document List
+$requestByStudentId = $controller->getRequestByStudentId($studentId);
+
+// Handle status update when the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
+    // Determine the new status based on the current status
+    $newStatus = $_POST['currentStatus'] === 'Unpaid' ? 'Paid'
+        : ($_POST['currentStatus'] === 'Paid' ? 'Process' : 'Finished');
+
+    // Update the status in the database
+    $updateRequestStatus = $controller->updateDocumentRequestStatus($_POST['studentID'], $newStatus);
+
+    // Check if the update was successful before redirecting
+    if ($updateRequestStatus) {
+        // Redirect to the same page to avoid form resubmission
+        header("Location: " . $_SERVER['PHP_SELF']);
+        
+    }
+}
+
 //Filter Request Later
 // $filter = $_GET['filter'] ?? null; // Example: Capture filter from URL
 // if ($filter) {
@@ -146,7 +165,26 @@ $documentList = $controller->getAllDocuments();
                                             <?php endif; ?>
                                             <p><strong>Total Payment:</strong> <strong class="prices">P<?= number_format($request['totalPayment'], 2) ?></strong></p>
                                         </div>
-                                        <button class="confirm-btn" onclick="confirmPayment(<?= htmlspecialchars(json_encode($request['_id'])) ?>)">Confirm Payment</button>
+                                        <?php
+                                        // Changing the text of button based on the status
+                                        // If for Unpaid
+                                        $confirmBtn = $request['status'] === 'Unpaid' ? 'Confirm Payment'
+                                            // Else for Paid
+                                            : ($request['status'] === 'Paid' ? 'Confirm to Process'
+                                                //Else for Process
+                                                : ($request['status'] === 'Process' ? 'Confirm Finished' : null));
+
+                                        //ifFinish the button will display block
+                                        $ifFinish = $request['status'] === 'Finished' ? "'display: none;'" : "'display: block;'";
+                                        ?>
+
+                                        <!-- // Form to handle status update -->
+                                        <!-- TODO: Add a Confirmation Yes or No -->
+                                        <form id="status-update-form" method="POST" style=<?= $ifFinish ?>>
+                                            <input type="hidden" name="studentID" value="<?= htmlspecialchars($request['studentID']) ?>">
+                                            <input type="hidden" name="currentStatus" value="<?= htmlspecialchars($request['status']) ?>">
+                                            <button class="confirm-btn"><?= $confirmBtn ?></button>
+                                        </form>
                                     </div>
 
                                 </div>
@@ -155,15 +193,9 @@ $documentList = $controller->getAllDocuments();
                     <?php endforeach; ?>
                 </tbody>
             </table>
-
         </div>
     </div>
     <script>
-        // Function to simulate payment confirmation
-        function confirmPayment() {
-            alert('Payment confirmed!');
-        }
-
         // Select all filter items
         document.querySelectorAll('.filters nav ul li').forEach(item => {
             item.addEventListener('click', function() {
@@ -186,6 +218,17 @@ $documentList = $controller->getAllDocuments();
 
                 // Add click event to toggle confirmation row
                 row.addEventListener('click', () => {
+                    const confirmationRows = document.querySelectorAll('.confirmation-status');
+                    confirmationRows.forEach(row => {
+                        if (row !== confirmationRow && row.classList.contains('show')) {
+                            row.classList.remove('show');
+                            row.classList.add('hide');
+                            setTimeout(() => {
+                                row.style.display = 'none';
+                                row.classList.remove('hide');
+                            }, 500);
+                        }
+                    });
                     if (confirmationRow.classList.contains('show')) {
                         confirmationRow.classList.remove('show');
                         confirmationRow.classList.add('hide');
@@ -193,11 +236,11 @@ $documentList = $controller->getAllDocuments();
                             confirmationRow.style.display = 'none';
                             confirmationRow.classList.remove('hide');
                         }, 500);
-                        console.log('Confirmation status hidden:', requestId);
+                        // console.log('Confirmation status hidden:', requestId);
                     } else {
                         confirmationRow.style.display = 'table-row';
                         confirmationRow.classList.add('show');
-                        console.log('Confirmation status shown:', requestId);
+                        // console.log('Confirmation status shown:', requestId);
                     }
                 });
             });
