@@ -27,7 +27,10 @@
                 </div>
                 <div class="req-doc-order">
                     <ul>
-                        <?php include '../components/fetchDocuments.php'; ?>
+                        <?php
+                            include '../components/document-request/fetchDocuments.php';
+                            echo renderDocumentsList();
+                        ?>
                     </ul>
                 </div>
             </section>

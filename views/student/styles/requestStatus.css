@@ -3,3 +3,268 @@ body{
     padding: 0;
     background-color: var(--LIGHTBG);
 }
+.content-holder{
+    /* background-color: orange; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* overflow: scroll; */
+    padding: 150px 0;
+}
+form{
+    /* background-color: orange; */
+    width: 70%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+section{
+    width: 90%;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 4px 6px 8px -3px, rgba(0, 0, 0, 0.2) -1px -3px 0px inset;
+}
+.req-doc{
+    /* background-color: blue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.req-doc-payment{
+    /* background-color: red; */
+    padding: 40px 20px;
+    width: 90%;
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+}
+.req-doc-payment p{
+    font-family: var(--WORK-SANS);
+    color: var(--TEXTDARK);
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+}
+.req-doc-description{
+    /* background-color: red; */
+    width: 100%;
+    text-align: left;
+    overflow: hidden;
+}
+.req-doc-description h2{
+    padding: 20px 40px 30px 40px;
+    font-family: var(--POPPINS);
+    color: var(--TEXTDARK);
+    margin: 0;
+}
+.req-doc-order{
+    /* background-color: darkorchid; */
+    width: 90%;
+    /* height: 500px; */
+    /* padding: 40px 20px; */
+    padding: 40px 20px 10px 20px;
+    /* border-radius: 22px 0 0 22px; */
+    /* overflow-y: scroll; */
+    /* border: 1px solid #606060; */
+}
+/* Custom scrollbar styling for WebKit browsers */
+.req-doc-order::-webkit-scrollbar {
+    width: 6px; /* Width of the scrollbar */
+}
+
+/* Track of the scrollbar */
+.req-doc-order::-webkit-scrollbar-track {
+    background: transparent; /* Light gray background */
+}
+
+/* Thumb of the scrollbar */
+.req-doc-order::-webkit-scrollbar-thumb {
+    background-color: green; /* Green scrollbar thumb */
+    /* border-radius: 10px; Rounded edges */
+}
+
+/* Hover effect on scrollbar */
+.req-doc-order::-webkit-scrollbar-thumb:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+ul {
+    /* background-color: green; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+li.list-item{
+    /* flex: 1; */
+    width: 70%;
+    background-color: var(--SECONDARY);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #606060;
+    display: flex;
+    border-radius: 14px;
+    overflow: hidden;
+    padding: 8px 0;
+}
+
+.list-item-left{
+    flex: 1;
+    /* background-color: green; */
+    padding: 0 12px 0 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.list-item-right{
+    flex: 5;
+    /* background-color: orangered; */
+}
+.upper-item{
+    /* background-color: salmon; */
+    padding: 4px;
+}
+.lower-item{
+    /* background-color: skyblue; */
+    padding: 4px 16px 4px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    /* flex-direction: row; */
+}
+.item-name h2 {
+    margin: 0;
+    font-family: var(--POPPINS);
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--TEXTDARK);
+}
+
+.price {
+    font-family: var(--WORK-SANS);
+    color: var(--TEXTDARK);
+    font-size: 18px;
+}
+.item-icon {
+    /* background-color: red; */
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item-icon img{
+    width: 100%;
+}
+
+/* LOWER */
+.list-doc-payment{
+    /* background-color: green; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 40px;
+}
+.total-price{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 40px;
+}
+.total-price p{
+    font-family: var(--WORK-SANS);
+    font-size: 20px;
+    margin: 0;
+}
+#paymentList{
+    /* background-color: red; */
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    padding: 0 0 20px 0;
+}
+.list-doc-payment p{
+    font-family: var(--WORK-SANS);
+    font-size: 20px;
+    margin: 0;
+}
+.req-doc-submit{
+    display: flex;
+    justify-content: end;
+}
+.req-doc-submit input{
+    border: none;
+    background-color: var(--PRIMARY);
+    font-family: var(--WORK-SANS);
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-right: 28px;
+    cursor: pointer;
+}
+.line-breaker{
+    height: 1px;
+    width: 96%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+@media screen and (max-width: 500px) {
+    section{
+        border-radius: 0;
+        /* box-shadow: none; */
+    }
+    form{
+        width: 100%;
+        padding: 0;
+    }
+    .req-doc{
+        padding: 0;
+    }
+    .req-doc-submit{
+        /* padding: 0; */
+        justify-content: center;
+    }
+    .req-doc-submit input{
+        margin-right: 0;
+    }
+
+}
+
+@media screen and (max-width: 800px) {
+    .form{
+        padding: 0;
+        width: 100%;
+    }
+    .item-icon {
+        display: none;
+    }
+    .list-item-left{
+        justify-content: center;
+        padding: 12px;
+    }
+    .checkbox {
+        margin-right: 0;
+    }
+    .req-doc-order{
+        width: 80%;
+    }
+    li.list-item{
+        /* width: unset; */
+        width: 80%;
+    }
+}
