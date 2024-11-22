@@ -1,3 +1,4 @@
+<!-- Session -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,25 +11,9 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <img src="../../public/images/icons/logo-white.png" class="logo">
-        <h1 class="title">EaseDocu</h1>
-        <div class="navbar-buttons">
-            <a href="report.php">
-                <h2>Request</h2>
-            </a>
-            <a href="concern.php">
-                <h2>Reports</h2>
-            </a>
-        </div>
-        <div class="profile-section">
-            <img src="../../public/images/icons/profile.png" class="profile">
-            <span class="admin-text">
-                <h2>Admin</h2>
-            </span>
-        </div>
-    </div>
-
+    <?php
+    require '../../views/components/topBarAdmin.php';
+    ?>
     <h1 class="concern">REPORT CONCERNS</h1>
     <div class="card">
         <div class="filter">

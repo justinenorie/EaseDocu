@@ -1,0 +1,92 @@
+:root {
+    --COMPLETED: #28a745;
+    --CURRENT: #28a745;
+    --UPCOMING: #343434;
+}
+
+.status-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.status-line::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--COMPLETED);
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.circle {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* filter: brightness(0) invert(1);  */
+}
+
+.status-label {
+    font-family: var(--WORK-SANS);
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    white-space: nowrap;
+    color: #333;
+}
+
+/* Completed status */
+.circle.completed {
+    background-color: var(--COMPLETED);
+}
+
+/* Current status */
+.circle.current {
+    background-color: var(--CURRENT);
+    
+}
+
+/* Upcoming status */
+.circle.upcoming {
+    font-family: var(--WORK-SANS);
+    background-color: var(--UPCOMING);
+    
+}
+
+/* 
+JUST ADDITIONAL STYLES FOR MESSAGE STATUS
+ */
+.status-message{
+    padding: 40px 20px 20px 20px;
+    /* background-color: red; */
+}
+
+.status-message h3,
+.status-message p {
+    font-family: var(--WORK-SANS);
+    color: var(--TEXTDARK);
+    margin: 0;
+}

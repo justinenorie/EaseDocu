@@ -8,10 +8,9 @@ body{
     left: 0;
     right: 0;
     bottom: 0; */
-
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     /* overflow: scroll; */
     padding: 150px 0;
 }
@@ -26,7 +25,7 @@ form{
     gap: 20px;
 }
 section{
-    width: 100%;
+    width: 90%;
     background-color: white;
     border-radius: 12px;
     padding: 20px 10px;
@@ -157,6 +156,7 @@ li.list-item{
     height: 22px;
 }
 .quantity-controls {
+    font-family: var(--WORK-SANS);
     border: 1px solid #606060;
     border-radius: 8px;
     display: flex;
@@ -188,6 +188,19 @@ li.list-item{
     flex-direction: row;
     gap: 20px;
     padding: 0 40px;
+}
+.total-price{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 40px;
+}
+.total-price p{
+    font-family: var(--WORK-SANS);
+    font-size: 20px;
+    margin: 0;
 }
 #paymentList{
     /* background-color: red; */
@@ -244,6 +257,10 @@ li.list-item{
 }
 
 @media screen and (max-width: 800px) {
+    .form{
+        padding: 0;
+        width: 100%;
+    }
     .item-icon {
         display: none;
     }
@@ -258,6 +275,7 @@ li.list-item{
         width: 80%;
     }
     li.list-item{
-        width: unset;
+        /* width: unset; */
+        width: 80%;
     }
 }
