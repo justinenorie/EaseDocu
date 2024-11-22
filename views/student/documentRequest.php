@@ -34,7 +34,6 @@
                     </ul>
                 </div>
             </section>
-    
             <section class="req-doc-payment">
                 <div class="req-doc-description">
                     <h2>Payment Details</h2>

@@ -1,3 +1,4 @@
+<!-- Login Session -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,6 +46,7 @@
         async function fetchStudentData() {
             try {
                 //Example data file path
+                //Session Login
                 const response = await fetch('../../data/admin.json');
                 const adminsAccount = await response.json();
                 document.querySelector('form').addEventListener('submit', function(event) {

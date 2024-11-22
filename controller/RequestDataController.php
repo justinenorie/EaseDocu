@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../models/RequestDataModel.php';
-
 class EaseDocuController {
     private $documentModel;
     private $requestDataModel;
@@ -9,7 +8,6 @@ class EaseDocuController {
         $this->documentModel = new DocumentModel();
         $this->requestDataModel = new RequestDataModel();
     }
-
     //DOCUMENT REQUEST LIST CONTROLLER
     // Retrieve all document requests
     public function getAllDocumentRequests() {

@@ -14,9 +14,7 @@ require '../../controller/FetchDataRequest.php';
 </head>
 
 <body>
-    <?php
-    require '../../views/components/topBarAdmin.php';
-    ?>
+    <?php require '../../views/components/topBarAdmin.php';?>
     <div class="container">
         <div class="title">
             <h1>LIST OF DOCUMENT REQUEST</h1>
@@ -86,22 +84,22 @@ require '../../controller/FetchDataRequest.php';
                         <tr class="confirmation-status" id="confirmation-<?= $request['_id'] ?>" style="display: none;">
                             <td class="req-data" colspan="4">
                                 <div class="status-details">
-                                    <h3>Request Status: <?= htmlspecialchars($request['status']) ?></h3>
+                                    <h3 class="status-text">Request Status: <?= htmlspecialchars($request['status']) ?></h3>
                                     <div class="req-container">
                                         <div class="reqstatus-line">
-                                            <div class="reqstatus-name unpaid">
+                                            <div class="reqstatus-name unpaid" data-student-id="<?= $request['studentID'] ?>">
                                                 <img class="icons" src=<?= $unpaidIcon ?> alt="Unpaid Icon">
                                                 <p>Unpaid</p>
                                             </div>
-                                            <div class="reqstatus-name paid">
+                                            <div class="reqstatus-name paid" data-student-id="<?= $request['studentID'] ?>">
                                                 <img class="icons" src=<?= $paidIcon ?> alt="Paid Icon">
                                                 <p>Paid</p>
                                             </div>
-                                            <div class="reqstatus-name process">
+                                            <div class="reqstatus-name process" data-student-id="<?= $request['studentID'] ?>">
                                                 <img class="icons" src=<?= $processIcon ?> alt="Process Icon">
                                                 <p>Processing</p>
                                             </div>
-                                            <div class="reqstatus-name finished">
+                                            <div class="reqstatus-name finished" data-student-id="<?= $request['studentID'] ?>">
                                                 <img class="icons" src=<?= $finishedIcon ?> alt="Finished Icon">
                                                 <p>Ready for Pick Up</p>
                                             </div>
