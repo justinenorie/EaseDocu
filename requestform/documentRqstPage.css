@@ -1,0 +1,184 @@
+
+body {
+    background-color: rgb(255, 255, 255);
+}
+* {
+    margin: 1;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffffcc; 
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px 10px rgba(0, 0, 0, 0.373);
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #004d00;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-id {
+    font-size: 0.8rem;
+    color: #dcdcdc;
+}
+
+.content h2 {
+    text-align: center;
+    color: #004d00;
+    margin-bottom: 20px;
+}
+
+.document-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.document-item label {
+    display: flex;
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.doc-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.doc-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.doc-price {
+    color: #555;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-control button {
+    padding: 0 10px;
+    font-size: 1.2rem;
+    border: none;
+    background-color: #004d00;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.quantity-control input {
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 5px;
+}
+
+.payment-details {
+    margin-top: 20px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.payment-details h3 {
+    color: #004d00;
+    margin-bottom: 10px;
+}
+
+.payment-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.total-payment {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #004d00;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+
+.request-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #004d00;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.request-button:hover {
+    background-color: #003300;
+}
+
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.chat-button {
+    padding: 10px 20px;
+    background-color: #003300;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chat-button:hover {
+    background-color: #003300;
+}

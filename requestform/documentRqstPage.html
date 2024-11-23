@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaseDocu - Request Document</title>
+    <link rel="stylesheet" href="documentRqstPage.css">
+    <script src="documentRqstPage.js" defer></script>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="title">EaseDocu</div>
+        <div class="user-info">
+            <div class="user-name">Rivero, Justin</div>
+            <div class="user-id">22-01664</div>
+        </div>
+    </header>
+
+    <main class="content">
+        <h2>Request a Document Now!</h2>
+        <form method="post" action="#">
+            <div class="document-list">
+                <div class="document-item">
+                    <input type="checkbox" id="doc1" class="doc-checkbox" onchange="updateTotal()">
+                    <label for="doc1">
+                        <div class="doc-info">
+                            <span class="doc-name">Certificate of Enrollment</span>
+                            <span class="doc-price">P50.00</span>
+                        </div>
+                    </label>
+                    <div class="quantity-control">
+                        <button type="button" class="decrement" onclick="decrementQuantity('quantity1')">-</button>
+                        <input type="number" id="quantity1" value="1" min="1" readonly>
+                        <button type="button" class="increment" onclick="incrementQuantity('quantity1')">+</button>
+                    </div>
+                </div>
+                
+                <div class="document-item">
+                    <input type="checkbox" id="doc2" class="doc-checkbox" onchange="updateTotal()">
+                    <label for="doc2">
+                        <div class="doc-info">
+                            <span class="doc-name">Certificate of Grades</span>
+                            <span class="doc-price">P50.00</span>
+                        </div>
+                    </label>
+                    <div class="quantity-control">
+                        <button type="button" class="decrement" onclick="decrementQuantity('quantity2')">-</button>
+                        <input type="number" id="quantity2" value="1" min="1" readonly>
+                        <button type="button" class="increment" onclick="incrementQuantity('quantity2')">+</button>
+                    </div>
+                </div>
+                
+                <div class="document-item">
+                    <input type="checkbox" id="doc3" class="doc-checkbox" onchange="updateTotal()">
+                    <label for="doc3">
+                        <div class="doc-info">
+                            <span class="doc-name">OVRF</span>
+                            <span class="doc-price">P50.00</span>
+                        </div>
+                    </label>s
+                    <div class="quantity-control">
+                        <button type="button" class="decrement" onclick="decrementQuantity('quantity3')">-</button>
+                        <input type="number" id="quantity3" value="1" min="1" readonly>
+                        <button type="button" class="increment" onclick="incrementQuantity('quantity3')">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-details">
+                <h3>Request Payment Details</h3>
+                <div class="payment-item" id="certificatePayment1">
+                    <span>Certificate of Enrollment</span>
+                    <span id="certificateTotal1">P50.00</span>
+                </div>
+                <div class="payment-item" id="certificatePayment2">
+                    <span>Certificate of Grades</span>
+                    <span id="certificateTotal2">P50.00</span>
+                </div>
+                <div class="payment-item" id="certificatePayment3">
+                    <span>OVRF</span>
+                    <span id="certificateTotal3">P50.00</span>
+                </div>
+                <div class="total-payment">
+                    <span>Total Payment:</span>
+                    <span id="totalPayment">P150.00</span>
+                </div>
+            </div>
+
+            <button type="submit" class="request-button">Request Now</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <button class="chat-button">Chat with Admin</button>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
