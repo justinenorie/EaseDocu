@@ -30,7 +30,7 @@
                     <h3 class="report-name">Marc Jan Banzal - 22-0003
                         <span class="report-status active-status">Active</span>
                     </h3>
-                    <p class="report-text">Pa follow up po ples ang tagal ko na nagaanta . . .</p>
+                    <p class="report-text">Pa follow up po pl ang tagal ko na nagaanta . . .</p>
                     <span class="report-date">11/9/24 10:33am</span>
                 </div>
                 <a href="javascript:void(0)">
@@ -125,21 +125,27 @@
             document.getElementById('chatBody').innerHTML = ''; // Clear chat history
         }
 
-        // Send a message (for demo purposes)
-        function sendMessage() {
-            const messageInput = document.getElementById('chatInput');
-            const message = messageInput.value.trim();
-            if (message) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('chat-message', 'sent');
-                messageDiv.innerHTML = `<p>${message}</p><span>Just now</span>`;
-                document.getElementById('chatBody').appendChild(messageDiv);
-                messageInput.value = ''; // Clear the input after sending
-                // Scroll to the bottom for new message
-                document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
-            }
-        }
+//         function sendMessage() {
+//     const messageInput = document.getElementById('chatInput');
+//     const message = messageInput.value.trim();
+//     if (message) {
+//         socket.emit('chatMessage', message);
+
+
+//         const messageDiv = document.createElement('div');
+//         messageDiv.classList.add('chat-message', 'sent');
+//         messageDiv.innerHTML = `<p>${message}</p><span>Just now</span>`;
+//         document.getElementById('chatBody').appendChild(messageDiv);
+
+//         messageInput.value = '';
+
+//         document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+//     }
+// }
+
     </script>
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script src="../../views/admin/js/chatserver.js"></script>
 </body>
 
 </html>
