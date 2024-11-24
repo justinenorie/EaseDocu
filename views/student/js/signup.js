@@ -5,6 +5,7 @@ const toggleBtn = document.querySelector('.password-toggle a');
 const toggleImg = document.querySelector('.password-toggle img');
 const passwordInput = document.querySelector('#confirmPassword');
 
+// Animation
 window.onload = function() {
     const textElement = document.getElementById('docuText');
     const textContent = textElement.textContent;
@@ -49,5 +50,19 @@ if (toggleBtn && toggleImg && passwordInput) {
             passwordInput.type = 'password';
             toggleImg.src = '../../public/images/icons/pw-toggle-hide.png';
         }
+    });
+}
+
+//Signup Success Popup
+function alertSignupSuccess() {
+    event.preventDefault();
+    Swal.fire({
+        position: "center",
+        icon: "success",
+        background: "#F5F5F5",
+        title: "Successfull",
+        text: "Successfuly Registered! You can now Login to your account....",
+        showConfirmButton: false,
+        timer: 1500
     });
 }

@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request</title>
+    <title>EaseDocu - Request</title>
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="styles/documentRequest.css">
 
