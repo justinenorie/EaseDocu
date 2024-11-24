@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Find all quantity control elements
     const quantityControls = document.querySelectorAll('.quantity-controls');
-    
     // Track number of unique selected documents
     let uniqueDocumentsCount = 0;
     
+    //TODO: (Optional) Alternatives hide the quantity controls if the checkbox is not checked
     quantityControls.forEach(control => {
+        const buttons = control.querySelectorAll('.quantity-btn');
         const minusBtn = control.querySelector('.quantity-btn:first-child');
         const plusBtn = control.querySelector('.quantity-btn:last-child');
         const quantitySpan = control.querySelector('.quantity');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize quantity
         let quantity = parseInt(quantitySpan.textContent);
+        buttons.forEach(button => button.disabled = true);
         
         // Handle minus button click
         minusBtn.addEventListener('click', function(e) {
@@ -20,12 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (quantity > 0) {
                 quantity--;
                 quantitySpan.textContent = quantity;
+                plusBtn.disabled = false;
                 updatePaymentList();
                 
                 // If quantity becomes 0, uncheck the checkbox
                 if (quantity === 0) {
                     checkbox.checked = false;
                     uniqueDocumentsCount--;
+                    buttons.forEach(button => button.disabled = true);
                 }
             }
         });
@@ -36,10 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (checkbox.checked && quantity < 3) {
                 quantity++;
                 quantitySpan.textContent = quantity;
+                plusBtn.disabled = false;
                 updatePaymentList();
                 
                 if (quantity === 3) {
                     alert('Maximum limit of 3 copies for this document reached!');
+                    plusBtn.disabled = true;
                 }
             }
         });
@@ -52,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 quantity = 0;
                 quantitySpan.textContent = quantity;
+                buttons.forEach(button => button.disabled = true); //disable buttons
                 updatePaymentList();
             } else {
                 if (uniqueDocumentsCount >= 5) {
@@ -62,11 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 quantity = 1;
                 uniqueDocumentsCount++;
                 quantitySpan.textContent = quantity;
+                buttons.forEach(button => button.disabled = false);
                 updatePaymentList();
             }
         });
     });
-    
+
     // Function to update payment list
     function updatePaymentList() {
         const paymentList = document.getElementById('paymentList');

@@ -32,7 +32,7 @@ section{
     box-shadow: rgba(0, 0, 0, 0.3) 4px 6px 8px -3px, rgba(0, 0, 0, 0.2) -1px -3px 0px inset;
 }
 .req-doc{
-    /* background-color: blue; */
+    background-color: var(--CARD);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,13 +70,13 @@ section{
 
 /* Thumb of the scrollbar */
 .req-doc-order::-webkit-scrollbar-thumb {
-    background-color: green; /* Green scrollbar thumb */
-    /* border-radius: 10px; Rounded edges */
+    background-color: var(--PRIMARY); /* Green scrollbar thumb */
+    border-radius: 10px; 
 }
 
 /* Hover effect on scrollbar */
 .req-doc-order::-webkit-scrollbar-thumb:hover {
-    background-color: darkgreen; /* Darker green on hover */
+    background-color: var(--ACCENT); /* Darker green on hover */
 }
 ul {
     /* background-color: green; */
