@@ -124,7 +124,7 @@ require '../../controller/FetchDataRequest.php';
                                             <?php else: ?>
                                                 <p>No documents requested.</p>
                                             <?php endif; ?>
-                                            <p><strong>Total Payment:</strong> <strong class="prices">P<?= number_format($request['totalPayment'], 2) ?></strong></p>
+                                            <p><strong>Total Payment:</strong> <strong class="prices">₱<?= number_format($request['totalPayment'], 2) ?></strong></p>
                                         </div>
                                         <?php
                                         // Changing the text of button based on the status

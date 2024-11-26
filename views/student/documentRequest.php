@@ -1,5 +1,5 @@
 <?php
-    require '../../views/components/topBarStudent.php';
+require '../../views/components/topBarStudent.php';
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request</title>
+    <title>EaseDocu - Request</title>
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="styles/documentRequest.css">
 
@@ -28,8 +28,8 @@
                 <div class="req-doc-order">
                     <ul>
                         <?php
-                            include '../components/document-request/fetchDocuments.php';
-                            echo renderDocumentsList();
+                        include '../components/document-request/fetchDocuments.php';
+                        echo renderDocumentsList();
                         ?>
                     </ul>
                 </div>
@@ -41,8 +41,12 @@
                 <ul id="paymentList">
                 </ul>
             </section>
-    
-            <section class="req-doc-submit">
+
+            <section class="req-doc-submit" id="req-doc-submit">
+                <div class="req-doc-total" id="req-doc-total">
+                    
+                </div>
+
                 <input type="submit" name="" value="Request Now" id="">
             </section>
         </form>

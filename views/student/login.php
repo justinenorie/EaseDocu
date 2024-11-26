@@ -25,7 +25,12 @@
                 <form action="login.php" method="post">
                     <div class="inputs">
                         <input type="name" name="student" placeholder="StudentID" required>
-                        <input type="password" name="password" placeholder="Password" required>
+
+                        <div class="password-toggle">
+                            <input id="password" type="password" name="password" placeholder="Password" required>
+                            <a href=""><img src="../../public//images//icons/pw-toggle-hide.png" alt="Eye Icon"></a>
+                        </div>
+
                     </div>
                     <div class="remember">
                         <div class="checkbox-container">
@@ -34,14 +39,20 @@
                         </div>
                         <p><a href="#">Forgot password?</a></p>
                     </div>
-                    <button class="btns" type="submit">Login</button>
+                    <button id="submit-btn" class="btns" type="submit">Login</button>
                 </form>
                 <div class="signupPanel">
                     <p>Don't have an account? <a href="signup.php">Sign Up Here</a></p>
                 </div>
             </div>
+
+
+
         </div>
     </div>
+    <script src="../../public/js/passToggle.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Example Student Data -->
     <script>
         async function fetchStudentData() {
@@ -57,11 +68,15 @@
                     const student = students.find(s => s.studentID === studentID && s.password === password);
 
                     if (student) {
-                        alert('Login successful!');
-                        //Redirect to the document request page
-                        window.location.href = 'documentRequest.php';
+                        //Call the success function here
+                        alertLoginSuccess();
+                        document.getElementById("submit-btn").addEventListener("click", alertLoginSuccess);
+                        setTimeout(() => {
+                            window.location.href = "documentRequest.php";
+                        }, 1500);
                     } else {
-                        alert('Invalid StudentID or Password');
+                        alertFailLogin();
+                        document.getElementById("submit-btn").addEventListener("click", alertFailLogin);
                     }
                 });
             } catch (error) {
