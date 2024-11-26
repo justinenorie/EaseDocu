@@ -1,4 +1,3 @@
-
 const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
 
 const toggleBtn = document.querySelector('.password-toggle a');
@@ -53,6 +52,12 @@ if (toggleBtn && toggleImg && passwordInput) {
     });
 }
 
+// TODO: Not final need to change based on the database
+document.querySelector('#signup-form').addEventListener('submit', function(event){
+    event.preventDefault();
+    alertSignupSuccess();
+});
+
 //Signup Success Popup
 function alertSignupSuccess() {
     event.preventDefault();
@@ -61,8 +66,11 @@ function alertSignupSuccess() {
         icon: "success",
         background: "#F5F5F5",
         title: "Successfull",
-        text: "Successfuly Registered! You can now Login to your account....",
+        text: "Successfully Registered! You can now Login to your account....",
         showConfirmButton: false,
-        timer: 1500
+        timer: 3000
     });
+    setTimeout(() => {
+        window.location.href = "login.php";
+    }, 1500);
 }

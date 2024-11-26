@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-     <!-- SweetAlert for Popup -->
+    <!-- SweetAlert for Popup -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../public/js/passToggle.js"> </script>
     <!-- Example Student Data -->

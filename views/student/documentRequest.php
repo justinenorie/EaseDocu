@@ -1,5 +1,5 @@
 <?php
-    require '../../views/components/topBarStudent.php';
+require '../../views/components/topBarStudent.php';
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +28,8 @@
                 <div class="req-doc-order">
                     <ul>
                         <?php
-                            include '../components/document-request/fetchDocuments.php';
-                            echo renderDocumentsList();
+                        include '../components/document-request/fetchDocuments.php';
+                        echo renderDocumentsList();
                         ?>
                     </ul>
                 </div>
@@ -41,8 +41,12 @@
                 <ul id="paymentList">
                 </ul>
             </section>
-    
-            <section class="req-doc-submit">
+
+            <section class="req-doc-submit" id="req-doc-submit">
+                <div class="req-doc-total" id="req-doc-total">
+                    
+                </div>
+
                 <input type="submit" name="" value="Request Now" id="">
             </section>
         </form>
