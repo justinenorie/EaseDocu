@@ -1,3 +1,4 @@
+<!-- Login Session -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +26,12 @@
                 <form action="login.php" method="post">
                     <div class="inputs">
                         <input type="name" name="admin" placeholder="Admin" required>
-                        <input type="password" name="password" placeholder="Password" required>
+
+                        <div class="password-toggle">
+                            <input id="password" type="password" name="password" placeholder="Password" required>
+                            <a href=""><img src="../../public//images//icons/pw-toggle-hide.png" alt="Eye Icon"></a>
+                        </div>
+
                     </div>
                     <div class="remember">
                         <div class="checkbox-container">
@@ -34,17 +40,20 @@
                         </div>
                         <p><a href="#">Forgot password?</a></p>
                     </div>
-                    <button class="btns" type="submit">Login</button>
+                    <button id="submit-btn" class="btns" type="submit">Login</button>
                 </form>
             </div>
         </div>
     </div>
-
+    <!-- SweetAlert for Popup -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../public/js/passToggle.js"> </script>
     <!-- Example Student Data -->
     <script>
         async function fetchStudentData() {
             try {
                 //Example data file path
+                //Session Login
                 const response = await fetch('../../data/admin.json');
                 const adminsAccount = await response.json();
                 document.querySelector('form').addEventListener('submit', function(event) {
@@ -55,11 +64,15 @@
                     const admins = adminsAccount.find(s => s.adminUsername === admin && s.adminPassword === password);
 
                     if (admins) {
-                        alert('Login successful!');
+                        alertLoginSuccess();
+                        document.getElementById("submit-btn").addEventListener("click", alertLoginSuccess);
                         //Redirect to the document request page
-                        window.location.href = 'requestList.php';
+                        setTimeout(() => {
+                            window.location.href = "requestList.php";
+                        }, 1500);
                     } else {
-                        alert('Invalid Admin or Password');
+                        alertFailLogin();
+                        document.getElementById("submit-btn").addEventListener("click", alertFailLogin);
                     }
                 });
             } catch (error) {

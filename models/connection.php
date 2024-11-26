@@ -6,8 +6,9 @@ function getMongoClient() {
 
     if ($client === null) {
         try {
-            // $client = new MongoDB\Client("mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/");
-            $client = new MongoDB\Client("mongodb://localhost:27017/");
+            //TODO: change the connection into .env
+            $client = new MongoDB\Client("mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/");
+            // $client = new MongoDB\Client("mongodb://localhost:27017/");
             // echo "Connected to MongoDB successfully.";
         } catch (Exception $e) {
             echo "Failed to connect to MongoDB: ", $e->getMessage();
