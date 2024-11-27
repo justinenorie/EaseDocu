@@ -2,6 +2,10 @@ const toggleBtn = document.querySelector('.password-toggle a');
 const toggleImg = document.querySelector('.password-toggle img');
 const passwordInput = document.querySelector('#password');
 
+const ConfirmtoggleBtn = document.querySelector('.confirm-password-toggle a');
+const ConfirmtoggleImg = document.querySelector('.confirm-password-toggle img');
+const confirmPasswordInput = document.querySelector('#confirmPassword');
+
 
 if (toggleBtn && toggleImg && passwordInput) {  
     toggleBtn.addEventListener('click', function(e) {
@@ -13,6 +17,20 @@ if (toggleBtn && toggleImg && passwordInput) {
         } else {
             passwordInput.type = 'password';
             toggleImg.src = '../../public/images/icons/pw-toggle-hide.png';
+        }
+    });
+}
+
+//Confirm Password
+if (ConfirmtoggleBtn && ConfirmtoggleImg && confirmPasswordInput) {  
+    ConfirmtoggleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirmPasswordInput.type === 'password') {
+            confirmPasswordInput.type = 'text';
+            ConfirmtoggleImg.src = '../../public/images/icons/pw-toggle-show.png';
+        } else {
+            confirmPasswordInput.type = 'password';
+            ConfirmtoggleImg.src = '../../public/images/icons/pw-toggle-hide.png';
         }
     });
 }

@@ -31,8 +31,13 @@
                         <input id="name" type="text" placeholder="Full Name">
                         <input id="studentID" type="text" placeholder="Student ID">
                         <input id="email" type="email" placeholder="Email">
-                        <input id="password" type="password" placeholder="Password">
+
                         <div class="password-toggle">
+                            <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
+                            <input id="password" type="password" placeholder="Password">
+                        </div>
+
+                        <div class="confirm-password-toggle password-toggle">
                             <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
                             <input id="confirmPassword" type="password" placeholder="Confirm Password">
                         </div>
@@ -68,6 +73,7 @@
     </div>
 
     <script src="../student/js/signup.js"></script>
+    <script src="../../public/js/passToggle.js"> </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 

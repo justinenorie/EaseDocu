@@ -1,9 +1,3 @@
-const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
-
-const toggleBtn = document.querySelector('.password-toggle a');
-const toggleImg = document.querySelector('.password-toggle img');
-const passwordInput = document.querySelector('#confirmPassword');
-
 // Animation
 window.onload = function() {
     const textElement = document.getElementById('docuText');
@@ -18,39 +12,6 @@ window.onload = function() {
       textElement.appendChild(span);
     });
 };
-
-inputs.forEach(input => {
-    input.addEventListener('click', function(e) {
-
-        inputs.forEach(input => {
-            input.classList.remove('active-input');
-        });
-        
-        e.target.classList.add('active-input');
-    });
-});
-
-document.addEventListener('click', function(e) {
-    if (!e.target.matches('input[type="text"], input[type="email"], input[type="password"]')) {
-        inputs.forEach(input => {
-            input.classList.remove('active-input');
-        });
-    }
-});
-
-if (toggleBtn && toggleImg && passwordInput) {  
-    toggleBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleImg.src = '../../public/images/icons/pw-toggle-show.png';
-        } else {
-            passwordInput.type = 'password';
-            toggleImg.src = '../../public/images/icons/pw-toggle-hide.png';
-        }
-    });
-}
 
 // TODO: Not final need to change based on the database
 document.querySelector('#signup-form').addEventListener('submit', function(event){

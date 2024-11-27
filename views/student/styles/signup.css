@@ -172,6 +172,16 @@ body{
     outline: none;
 }
 
+.signup-content input:focus::placeholder {
+    color: var(--ACCENT);
+}
+
+.signup-content input:focus {
+    color: var(--ACCENT);
+    border: 3px solid var(--ACCENT); 
+    outline: none; 
+}
+
 .password-toggle{
     /* background-color: orange; */
     position: relative;
