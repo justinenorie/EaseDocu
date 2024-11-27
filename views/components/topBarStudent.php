@@ -4,9 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../public/css/styles.css">
     <style>
-        body{
+        body {
             margin: 0;
         }
+
         .top-bar {
             background-color: var(--PRIMARY);
             position: absolute;
@@ -14,7 +15,6 @@
             left: 0;
             right: 0;
             height: 50px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -54,7 +54,8 @@
             justify-content: space-between;
             align-items: center;
         }
-        .account a{
+
+        .account a {
             display: flex;
             justify-content: space-between;
             align-items: start;
@@ -93,32 +94,58 @@
             text-decoration: none;
         }
 
+        .modal {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: blue;
+            padding: 15px;
+            color: var(--TEXTLIGHT);
+            border-radius: 10px;
+            display: none;
+            /* Hidden by default */
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Show the modal
+        .modal.show {
+            display: block;
+            opacity: 1;
+        } */
+
         @media screen and (max-width: 550px) {
             .top-bar {
                 padding: 20px 35px;
             }
+
             .profile {
                 padding-right: 0;
             }
         }
 
         @media screen and (max-width: 498px) {
-            .title h1{
+            .title h1 {
                 display: none;
             }
 
             .top-bar {
                 padding: 20px 30px;
             }
+
             .account p {
                 display: none;
             }
-            .account h2{
+
+            .account h2 {
                 margin: 0;
             }
-            .account{
+
+            .account {
                 justify-content: center;
             }
+
             .profile {
                 align-items: center;
             }
@@ -128,7 +155,6 @@
 
 <body>
     <div class="top-bar">
-
         <div class="title">
             <img class="logo" src="../../public/images/icons/logo-white.png" alt="EaseDocu Logo">
             <h1>EaseDocu</h1>
@@ -136,17 +162,48 @@
 
         <div class="profile">
             <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
-            
-            <div class="account">
-                <a href="#">
+
+            <div class="account" id="account">
+                <a id="click-profile" href="#">
                     <h2>John</h2>
                     <p>22-0001</p>
                 </a>
             </div>
-
         </div>
-
     </div>
+
+    <div id="modal" class="modal" style="display: none;">
+        <p>Show Profile</p>
+        <button id="logout-btn">Logout</button>
+    </div>
+    <script>
+        //TODO: Add more design such as popup animation
+        //TODO: The name and studentID should be based on the database
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("modal");
+            const accountClick = document.getElementById("account");
+        
+            // Toggle modal on click
+            accountClick.addEventListener("click", (event) => {
+                event.preventDefault();
+                modal.style.display = "block";
+            });
+
+            // Close modal if clicked outside
+            document.addEventListener("click", (event) => {
+                if (!modal.contains(event.target) && !accountClick.contains(event.target)) {
+                    modal.style.display = "none";
+                }
+            });
+
+            // Close modal on pressing 'Escape' key
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
