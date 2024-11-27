@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EaseDocu</title>
-    <link rel="icon" type="image/x-icon" href="../EaseDocu/public/images/icons/chat-white.png">
-   
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -14,4 +13,5 @@
     <button onclick="window.location.href='views/student/login.php'">Login as Student</button>
     <button onclick="window.location.href='views/admin/loginAdmin.php'">Login as Admin</button>
 </body>
+
 </html>

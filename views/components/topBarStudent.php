@@ -42,7 +42,7 @@
             /* background-color: red; */
             display: flex;
             justify-content: center;
-            align-items: start;
+            align-items: center;
             padding: 0 20px;
             height: 40px;
         }
@@ -78,8 +78,8 @@
 
         .icon {
             /* background-color: green; */
-            width: 30px;
-            height: 30px;
+            width: 6vh;
+            height: 6vh;
             margin-right: 10px;
         }
 

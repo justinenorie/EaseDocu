@@ -106,6 +106,32 @@ p {
     border-radius: 15px;
     margin-top: 4.25vh;
 }
+.inputs input:focus::placeholder {
+    color: var(--ACCENT);
+}
+.inputs input:focus {
+    color: var(--ACCENT);
+    border: 3px solid var(--ACCENT); 
+    outline: none; 
+}
+
+.password-toggle{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.password-toggle img{
+    position: absolute;
+    top: 50%;
+    left: 94%;
+    transform: translate(-80%, -10%);
+    height: 4.5vh;
+    width: 4.5vh;
+    margin: 0;
+    z-index: 1;
+}
 
 .remember {
     display: flex;
@@ -113,6 +139,8 @@ p {
     justify-content: space-between;
     align-items: flex-end;
 }
+
+
 
 .checkbox-container {
     align-content: center;

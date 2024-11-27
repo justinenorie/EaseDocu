@@ -26,6 +26,23 @@
             align-items: center;
         }
 
+        .navigation {
+            display: flex;
+        }
+
+        .navigation a {
+            margin: 0 10vh;
+            text-decoration: none;
+            font-family: var(--WORK-SANS);
+            font-size: var(--SUBHEADER);
+            color: var(--TEXTLIGHT);
+        }
+
+        .navigation a:hover {
+            color: var(--ACCENT);
+            font-weight: 600;
+        }
+
         .profile {
             display: flex;
             flex-direction: row;
@@ -35,6 +52,10 @@
 
         .account {
             flex-direction: column;
+        }
+
+        .account :hover {
+            color: var(--ACCENT);
         }
 
         .account h2 {
@@ -68,6 +89,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="top-bar">
         <div class="top-Title">
@@ -75,9 +97,15 @@
             <h1>EaseDocu</h1>
         </div>
 
+        <div class="navigation">
+            <a href="../admin/requestList.php">Request</a>
+            <a href="../admin/reportsList.php">Report</a>
+        </div>
+
         <div class="profile">
             <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
             <div class="account">
+                <!-- TODO: Hovered Logout Panel -->
                 <a href="#">
                     <h2>Admin</h2>
                     <p>00-0001</p>
@@ -86,4 +114,5 @@
         </div>
     </div>
 </body>
+
 </html>

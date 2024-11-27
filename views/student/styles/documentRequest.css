@@ -1,7 +1,7 @@
-body{
+body {
     background-color: var(--LIGHTBG);
 }
-.content-holder{
+.content-holder {
     /* background-color: orange; */
     /* position: absolute;
     top: 0;
@@ -14,7 +14,7 @@ body{
     /* overflow: scroll; */
     padding: 150px 0;
 }
-form{
+form {
     /* background-color: orange; */
     width: 70%;
     padding: 20px;
@@ -24,36 +24,38 @@ form{
     flex-direction: column;
     gap: 20px;
 }
-section{
+section {
     width: 90%;
     background-color: white;
     border-radius: 12px;
     padding: 20px 10px;
-    box-shadow: rgba(0, 0, 0, 0.3) 4px 6px 8px -3px, rgba(0, 0, 0, 0.2) -1px -3px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.3) 4px 6px 8px -3px,
+        rgba(0, 0, 0, 0.2) -1px -3px 0px inset;
 }
-.req-doc{
-    /* background-color: blue; */
+.req-doc {
+    background-color: var(--CARD);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-.req-doc-description{
+.req-doc-description {
     /* background-color: red; */
     width: 100%;
     text-align: left;
     overflow: hidden;
 }
-.req-doc-description h2{
+.req-doc-description h2 {
     padding: 20px 40px 30px 40px;
     font-family: var(--POPPINS);
     margin: 0;
 }
-.req-doc-order{
+.req-doc-order {
     /* background-color: darkorchid; */
     width: 90%;
     height: 500px;
     padding: 40px 20px;
+    margin: 20px;
     border-radius: 22px 0 0 22px;
     overflow-y: scroll;
     border: 1px solid #606060;
@@ -70,13 +72,13 @@ section{
 
 /* Thumb of the scrollbar */
 .req-doc-order::-webkit-scrollbar-thumb {
-    background-color: green; /* Green scrollbar thumb */
-    /* border-radius: 10px; Rounded edges */
+    background-color: var(--PRIMARY); /* Green scrollbar thumb */
+    border-radius: 10px;
 }
 
 /* Hover effect on scrollbar */
 .req-doc-order::-webkit-scrollbar-thumb:hover {
-    background-color: darkgreen; /* Darker green on hover */
+    background-color: var(--ACCENT); /* Darker green on hover */
 }
 ul {
     /* background-color: green; */
@@ -85,24 +87,28 @@ ul {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 20px;
+    gap: 35px;
     list-style: none;
     margin: 0;
     padding: 0;
 }
-li.list-item{
+li.list-item {
     /* flex: 1; */
-    width: 60%;
+    width: 80%;
     background-color: var(--SECONDARY);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #606060;
     display: flex;
     border-radius: 14px;
     overflow: hidden;
     padding: 8px 0;
+    cursor: pointer;
+}
+.req-doc-order li:hover {
+    background-color: #daffea;
 }
 
-.list-item-left{
+.list-item-left {
     flex: 1;
     /* background-color: green; */
     padding: 0 12px 0 28px;
@@ -110,15 +116,15 @@ li.list-item{
     justify-content: space-between;
     align-items: center;
 }
-.list-item-right{
+.list-item-right {
     flex: 5;
     /* background-color: orangered; */
 }
-.upper-item{
+.upper-item {
     /* background-color: salmon; */
     padding: 4px;
 }
-.lower-item{
+.lower-item {
     /* background-color: skyblue; */
     padding: 4px 16px 4px 4px;
     display: flex;
@@ -130,14 +136,14 @@ li.list-item{
     margin: 0;
     font-family: var(--POPPINS);
     font-weight: bold;
-    font-size: 20px;
+    font-size: var(--BODY);
     color: var(--TEXTDARK);
 }
 
 .price {
     font-family: var(--WORK-SANS);
     color: var(--TEXTDARK);
-    font-size: 18px;
+    font-size: var(--BODY);
 }
 .item-icon {
     /* background-color: red; */
@@ -147,7 +153,7 @@ li.list-item{
     justify-content: center;
     align-items: center;
 }
-.item-icon img{
+.item-icon img {
     width: 100%;
 }
 .checkbox {
@@ -166,7 +172,7 @@ li.list-item{
 }
 .quantity-btn {
     background-color: transparent;
-    border: none; 
+    border: none;
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -180,7 +186,7 @@ li.list-item{
 }
 
 /* LOWER */
-.list-doc-payment{
+.list-doc-payment {
     /* background-color: green; */
     display: flex;
     justify-content: center;
@@ -189,7 +195,7 @@ li.list-item{
     gap: 20px;
     padding: 0 40px;
 }
-.total-price{
+.total-price {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -197,28 +203,34 @@ li.list-item{
     gap: 20px;
     padding: 0 40px;
 }
-.total-price p{
+.total-price p {
     font-family: var(--WORK-SANS);
     font-size: 20px;
     margin: 0;
 }
-#paymentList{
+.total-price strong {
+    color: var(--PRIMARY);
+}
+#paymentList {
     /* background-color: red; */
     display: flex;
     justify-content: start;
     align-items: start;
     padding: 0 0 20px 0;
 }
-.list-doc-payment p{
+.list-doc-payment p {
     font-family: var(--WORK-SANS);
     font-size: 20px;
     margin: 0;
 }
-.req-doc-submit{
+.req-doc-submit {
     display: flex;
     justify-content: end;
 }
-.req-doc-submit input{
+.req-doc-submit input:hover {
+    background-color: var(--ACCENT);
+}
+.req-doc-submit input {
     border: none;
     background-color: var(--PRIMARY);
     font-family: var(--WORK-SANS);
@@ -226,55 +238,61 @@ li.list-item{
     font-weight: bold;
     color: white;
     padding: 16px 20px;
-    border-radius: 6px;
+    border-radius: 20px;
+    width: 45%;
     margin-right: 28px;
     cursor: pointer;
 }
+.req-doc-total {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
 
 @media screen and (max-width: 500px) {
-    section{
+    section {
         border-radius: 0;
         /* box-shadow: none; */
     }
-    form{
+    form {
         width: 100%;
         padding: 0;
     }
-    .req-doc{
+    .req-doc {
         padding: 0;
     }
     /* .req-doc-payment{
         padding: 0;
     } */
-    .req-doc-submit{
+    .req-doc-submit {
         /* padding: 0; */
         justify-content: center;
     }
-    .req-doc-submit input{
+    .req-doc-submit input {
         margin-right: 0;
     }
-
 }
 
 @media screen and (max-width: 800px) {
-    .form{
+    .form {
         padding: 0;
         width: 100%;
     }
     .item-icon {
         display: none;
     }
-    .list-item-left{
+    .list-item-left {
         justify-content: center;
         padding: 12px;
     }
     .checkbox {
         margin-right: 0;
     }
-    .req-doc-order{
+    .req-doc-order {
         width: 80%;
     }
-    li.list-item{
+    li.list-item {
         /* width: unset; */
         width: 80%;
     }
