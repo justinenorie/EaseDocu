@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,10 +15,11 @@
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="../student/styles/signup.css">
 </head>
+
 <body>
     <div class="signup-holder">
         <div class="signup-container">
-            
+
             <div class="signup-form-container">
 
                 <section class="signup-header">
@@ -34,17 +36,21 @@
                             <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
                             <input id="confirmPassword" type="password" placeholder="Confirm Password">
                         </div>
-                        
+
                         <div id="legalTerms">
                             <input type="checkbox" name="text" id="">
                             <p>I agree to the <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a></p>
                         </div>
                         <input id="submit" type="submit" value="Sign Up">
+
+                        <section class="signup-links">
+                            <p>Already have account? <a href="login.php">Login now</a></p>
+                        </section>
+
                     </form>
 
-                    <section class="signup-links">
-                        <p>Already have account? <a href="login.php">Login now</a></p>
-                    </section>
+
+
                 </section>
             </div>
 
@@ -64,4 +70,5 @@
     <script src="../student/js/signup.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
+
 </html>
