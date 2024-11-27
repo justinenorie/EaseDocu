@@ -37,7 +37,9 @@ $(document).ready(function () {
                             <td class="req-datalist">₱${totalPayment}</td>
                         </tr>
     
-                        <tr class="confirmation-status" id="confirmation-${request._id.$oid}" style="display: none;">
+                        <tr class="confirmation-status" id="confirmation-${
+                            request._id.$oid
+                        }" style="display: none;">
                             <td class="req-data" colspan="4">
                                 <div class="status-details">
                                     <h3 class="status-text">Request Status: ${escapeHtml(
@@ -136,12 +138,14 @@ $(document).ready(function () {
         };
         const buttonText = statuses[request.status] || "";
         const display = request.status === "ready" ? "none" : "block";
-    
+
         return buttonText
             ? `
             <form class="status-update-form" data-student-id="${escapeHtml(
                 request.studentID
-            )}" data-current-status="${escapeHtml(request.status)}" style="display: ${display};">
+            )}" data-current-status="${escapeHtml(
+                  request.status
+              )}" style="display: ${display};">
                 <button type="button" class="confirm-btn">${buttonText}</button>
             </form>
         `
@@ -151,31 +155,37 @@ $(document).ready(function () {
     // Handle form submission without refreshing the page
     $(document).on("click", ".status-update-form .confirm-btn", function (e) {
         e.preventDefault(); // Prevent form submission
-    
+
         const form = $(this).closest(".status-update-form");
         const studentID = form.data("student-id");
         const currentStatus = form.data("current-status");
-        const openRowId = form.closest(".confirmation-status").attr("id").replace("confirmation-", "");
-    
-        $.ajax({
-            url: "../../../controller/FetchDataRequest.php",
-            method: "POST",
-            data: { studentID, currentStatus },
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    // Refresh requests and keep the selected row open
-                    fetchRequests(openRowId);
-                } else {
-                    alert("Failed to update status. Please try again.");
-                }
-            },
-            error: function (error) {
-                console.error("Error updating status:", error);
-            },
+        const openRowId = form
+            .closest(".confirmation-status")
+            .attr("id")
+            .replace("confirmation-", "");
+
+        // Pass the AJAX function as a callback to ConfirmStatus
+        ConfirmStatus(() => {
+            $.ajax({
+                url: "../../../controller/FetchDataRequest.php",
+                method: "POST",
+                data: { studentID, currentStatus },
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        // Refresh requests and keep the selected row open
+                        fetchRequests(openRowId);
+                    } else {
+                        alert("Failed to update status. Please try again.");
+                    }
+                },
+                error: function (error) {
+                    console.error("Error updating status:", error);
+                },
+            });
         });
     });
-    
+
     // Helper functions for generating dynamic content
     function escapeHtml(text) {
         return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -188,22 +198,32 @@ $(document).ready(function () {
             paid: "../../public/images/icons/dollar-sign.png",
             process: "../../public/images/icons/data-processing.png",
             ready: "../../public/images/icons/checked.png",
+            done: "../../public/images/icons/done-circle.png",
         };
 
         return statuses
             .map((status) => {
-                const icon =
-                    status === request.status
-                        ? icons[status]
-                        : "../../public/images/icons/standby-circle.png";
+                let icon;
+                if (status === request.status) {
+                    icon = icons[status];
+                } else if (
+                    statuses.indexOf(status) < statuses.indexOf(request.status)
+                ) {
+                    icon = icons["done"];
+                } else {
+                    icon = "../../public/images/icons/standby-circle.png";
+                }
+
                 return `
-                <div class="reqstatus-name ${status}" data-student-id="${
+                    <div class="reqstatus-name ${status}" data-student-id="${
                     request.studentID
                 }">
-                    <img class="icons" src="${icon}" alt="${status} Icon">
-                    <p>${status.charAt(0).toUpperCase() + status.slice(1)}</p>
-                </div>
-            `;
+                        <img class="icons" src="${icon}" alt="${status} Icon">
+                        <p>${
+                            status.charAt(0).toUpperCase() + status.slice(1)
+                        }</p>
+                    </div>
+                `;
             })
             .join("");
     }
@@ -226,6 +246,22 @@ $(document).ready(function () {
         );
     }
 });
+
+// Function to show a confirmation dialog
+// TODO: Create a customizable modal here
+function ConfirmStatus(callback) {
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showCancelButton: true,
+        confirmButtonText: "Save",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+            callback(); // Proceed with the function if confirmed
+        } 
+        // If canceled, nothing happens
+    });
+}
 
 // TODO: Fix the filter and add Search function
 // Select all filter items
