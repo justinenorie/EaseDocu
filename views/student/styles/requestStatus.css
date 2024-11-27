@@ -30,6 +30,7 @@ section{
 }
 .req-doc{
     /* background-color: blue; */
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
