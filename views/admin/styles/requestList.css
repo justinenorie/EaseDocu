@@ -236,6 +236,37 @@ body {
 .confirm-btn:hover {
     background-color: var(--ACCENT);
 }
+
+.btn-success{
+    background-color: var(--PRIMARY);
+    color: var(--TEXTLIGHT);
+    font-size: var(--BODY);
+    font-weight: 600;
+    border: none;
+    padding: 2vh 4vh;
+    margin: 0 1em 0 1em;
+    border-radius: 2vh;
+    cursor: pointer;
+}
+.btn-success:hover{
+    background-color: var(--ACCENT);
+}
+
+.btn-danger{
+    background-color: var(--SECONDARY);
+    color: var(--TEXTDARK);
+    font-size: var(--BODY);
+    font-weight: 600;
+    border: none;
+    padding: 2vh 4vh;
+    margin: 0 1em 0 1em;
+    border-radius: 2vh;
+    cursor: pointer;
+}
+.btn-danger:hover{
+    background-color: var(--ACCENT);
+}
+
 @keyframes fadeInFromTop {
     0% {
         opacity: 0;

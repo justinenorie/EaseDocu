@@ -21,6 +21,7 @@
 
 .swal2-popup {
   font-family: var(--WORK-SANS) !important;
+  border-radius: 4vh !important;
 }
 
 body.swal2-shown > [aria-hidden="true"] {

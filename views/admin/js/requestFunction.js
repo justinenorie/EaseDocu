@@ -248,19 +248,52 @@ $(document).ready(function () {
 });
 
 // Function to show a confirmation dialog
-// TODO: Create a customizable modal here
+// function ConfirmStatus(callback) {
+//     Swal.fire({
+//         title: "Do you want to save the changes?",
+//         showCancelButton: true,
+//         confirmButtonText: "Save",
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             Swal.fire("Saved!", "", "success");
+//             callback(); // Proceed with the function if confirmed
+//         }
+//         // If canceled, nothing happens
+//     });
+// }
+
 function ConfirmStatus(callback) {
-    Swal.fire({
-        title: "Do you want to save the changes?",
-        showCancelButton: true,
-        confirmButtonText: "Save",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire("Saved!", "", "success");
-            callback(); // Proceed with the function if confirmed
-        } 
-        // If canceled, nothing happens
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger",
+        },
     });
+    swalWithBootstrapButtons
+        .fire({
+            title: "Are you sure about this confirmation?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            reverseButtons: true,
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire({
+                    title: "Confirmation Success",
+                    text: "Successfully Updated!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                callback();
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            );
+        });
 }
 
 // TODO: Fix the filter and add Search function
