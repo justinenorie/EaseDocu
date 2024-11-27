@@ -105,6 +105,7 @@
         <div class="profile">
             <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
             <div class="account">
+                <!-- TODO: Hovered Logout Panel -->
                 <a href="#">
                     <h2>Admin</h2>
                     <p>00-0001</p>

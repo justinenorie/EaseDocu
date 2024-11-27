@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
 
     $updateRequestStatus = $controller->updateDocumentRequestStatus($studentID, $newStatus);
 
-    //Sending the data as JSON
     if ($updateRequestStatus) {
         echo json_encode(['success' => true, 'newStatus' => $newStatus]);
     } else {
@@ -23,6 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
     }
     exit;
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['documentRequests' => $documentRequests]);
+    exit;
+}
+
 
 // Add a function here if the page is refresh all the request status will be updated as unpaid
 
