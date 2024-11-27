@@ -1,82 +1,108 @@
 $(document).ready(function () {
-    function fetchRequests() {
+    /**
+     * Function to handle the success response from the AJAX request
+     * @param {object} response - The JSON response from the server
+     * @description
+     *  This function loops through the requests and dynamically generates
+     *  table rows. It also appends the generated row to the table and
+     *  calls the confirmationToggle() function to toggle the confirmation
+     *  status of each request.
+     */
+    function fetchRequests(openRowId = null) {
         $.ajax({
             url: "../../../controller/FetchDataRequest.php?fetch=true",
             method: "GET",
             dataType: "json",
-            /**
-             * Function to handle the success response from the AJAX request
-             * @param {object} response - The JSON response from the server
-             * @description
-             *  This function loops through the requests and dynamically generates
-             *  table rows. It also appends the generated row to the table and
-             *  calls the confirmationToggle() function to toggle the confirmation
-             *  status of each request.
-             */
             success: function (response) {
                 const requests = response.documentRequests;
                 const requestList = $("#request-list");
                 requestList.empty(); // Clear the table before adding new rows
 
-                // Loop through requests and dynamically generate table rows
                 requests.forEach((request) => {
-                    const totalPayment = parseFloat(request.totalPayment).toFixed(2);
+                    const totalPayment = parseFloat(
+                        request.totalPayment
+                    ).toFixed(2);
 
                     const row = `
                         <tr data-id="${request._id.$oid}" class="data-row">
-                            <td class="req-datalist">${escapeHtml(request.name)}</td>
-                            <td class="req-datalist">${escapeHtml(request.studentID)}</td>
-                            <td class="req-datalist">${escapeHtml(request.date)}</td>
+                            <td class="req-datalist">${escapeHtml(
+                                request.name
+                            )}</td>
+                            <td class="req-datalist">${escapeHtml(
+                                request.studentID
+                            )}</td>
+                            <td class="req-datalist">${escapeHtml(
+                                request.date
+                            )}</td>
                             <td class="req-datalist">₱${totalPayment}</td>
                         </tr>
-
+    
                         <tr class="confirmation-status" id="confirmation-${request._id.$oid}" style="display: none;">
                             <td class="req-data" colspan="4">
                                 <div class="status-details">
-                                    <h3 class="status-text">Request Status: ${escapeHtml(request.status)}</h3>
-
+                                    <h3 class="status-text">Request Status: ${escapeHtml(
+                                        request.status
+                                    )}</h3>
+    
                                     <div class="req-container">
                                         <div class="reqstatus-line">
                                             ${generateStatusIcons(request)}
                                         </div>
                                     </div>
-
+    
                                     <div class="summary-container">
                                         <h3>Request Summary</h3>
                                         <div class="requested-documents">
-                                            ${generateRequestedDocuments(request.requestedDocument, totalPayment)}
+                                            ${generateRequestedDocuments(
+                                                request.requestedDocument,
+                                                totalPayment
+                                            )}
                                         </div>
-                                        ${generateStatusForm(request)}
+                                        ${buttonStatusForm(request)}
                                     </div>
-
+    
                                 </div>
                             </td>
                         </tr>
                     `;
                     requestList.append(row); // Append the generated row
                 });
+
                 confirmationToggle();
-                console.log(response.documentRequests);
+
+                // Keep the selected confirmation row open
+                if (openRowId) {
+                    const confirmationRow = $(`#confirmation-${openRowId}`);
+                    confirmationRow.show().addClass("show");
+                }
             },
             error: function (error) {
                 console.error("Error fetching data:", error);
             },
         });
     }
-     // Fetch requests on page load
-     fetchRequests();
-    
+
+    // Fetch requests on page load
+    fetchRequests();
+
     function confirmationToggle() {
         const dataRows = document.querySelectorAll(".data-row");
         dataRows.forEach((row) => {
             const requestId = row.getAttribute("data-id");
-            const confirmationRow = document.getElementById(`confirmation-${requestId}`);
+            const confirmationRow = document.getElementById(
+                `confirmation-${requestId}`
+            );
 
             // Add click event to toggle confirmation row
             row.addEventListener("click", () => {
-                const confirmationRows = document.querySelectorAll(".confirmation-status");
+                const confirmationRows = document.querySelectorAll(
+                    ".confirmation-status"
+                );
                 confirmationRows.forEach((row) => {
-                    if (row !== confirmationRow && row.classList.contains("show")) {
+                    if (
+                        row !== confirmationRow &&
+                        row.classList.contains("show")
+                    ) {
                         row.classList.remove("show");
                         row.classList.add("hide");
                         setTimeout(() => {
@@ -100,6 +126,56 @@ $(document).ready(function () {
         });
     }
 
+    //Button status function
+    //TODO: Add swalfile confirmation
+    function buttonStatusForm(request) {
+        const statuses = {
+            unpaid: "Confirm Payment",
+            paid: "Confirm to Process",
+            process: "Confirm Finished",
+        };
+        const buttonText = statuses[request.status] || "";
+        const display = request.status === "ready" ? "none" : "block";
+    
+        return buttonText
+            ? `
+            <form class="status-update-form" data-student-id="${escapeHtml(
+                request.studentID
+            )}" data-current-status="${escapeHtml(request.status)}" style="display: ${display};">
+                <button type="button" class="confirm-btn">${buttonText}</button>
+            </form>
+        `
+            : "";
+    }
+
+    // Handle form submission without refreshing the page
+    $(document).on("click", ".status-update-form .confirm-btn", function (e) {
+        e.preventDefault(); // Prevent form submission
+    
+        const form = $(this).closest(".status-update-form");
+        const studentID = form.data("student-id");
+        const currentStatus = form.data("current-status");
+        const openRowId = form.closest(".confirmation-status").attr("id").replace("confirmation-", "");
+    
+        $.ajax({
+            url: "../../../controller/FetchDataRequest.php",
+            method: "POST",
+            data: { studentID, currentStatus },
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    // Refresh requests and keep the selected row open
+                    fetchRequests(openRowId);
+                } else {
+                    alert("Failed to update status. Please try again.");
+                }
+            },
+            error: function (error) {
+                console.error("Error updating status:", error);
+            },
+        });
+    });
+    
     // Helper functions for generating dynamic content
     function escapeHtml(text) {
         return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -149,34 +225,9 @@ $(document).ready(function () {
             `<p><strong>Total Payment:</strong> <strong class="prices">₱${totalPayment}</strong></p>`
         );
     }
-
-    function generateStatusForm(request) {
-        const statuses = {
-            unpaid: "Confirm Payment",
-            paid: "Confirm to Process",
-            process: "Confirm Finished",
-        };
-        const buttonText = statuses[request.status] || "";
-        const display = request.status === "ready" ? "none" : "block";
-
-        return buttonText
-            ? `
-            <form id="status-update-form" method="POST" style="display: ${display};">
-                <input type="hidden" name="studentID" value="${escapeHtml(
-                    request.studentID
-                )}">
-                <input type="hidden" name="currentStatus" value="${escapeHtml(
-                    request.status
-                )}">
-                <button class="confirm-btn">${buttonText}</button>
-            </form>
-        `
-            : "";
-    }
 });
 
-
-// TODO: Fix the filter
+// TODO: Fix the filter and add Search function
 // Select all filter items
 document.querySelectorAll(".filters nav ul li").forEach((item) => {
     item.addEventListener("click", function () {

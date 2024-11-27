@@ -1,6 +1,5 @@
 <?php
 require 'RequestDataController.php';
-// TODO: Add a login session for admin
 $controller = new EaseDocuController();
 $documentRequests = $controller->getAllDocumentRequests(); // Fetch all the document requests
 $documentList = $controller->getAllDocuments(); //Fetch all the document List
@@ -29,9 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch'])) {
     exit;
 }
 
+// TODO: Add a login session for admin
 
-// Add a function here if the page is refresh all the request status will be updated as unpaid
 
+// TODO: Add a function here if the page is refresh all the request status will be updated as unpaid
 //Filter Request Later
 // $filter = $_GET['filter'] ?? null; // Example: Capture filter from URL
 // if ($filter) {
