@@ -84,3 +84,6 @@ class DocumentModel {
         return $result->getDeletedCount();
     }
 }
+
+// TODO: Database Model for Admin Credentials
+// TODO: Database Model for Students Credentials
