@@ -49,6 +49,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../public/js/passToggle.js"> </script>
     <!-- Example Student Data -->
+    <!-- TODO: Replace this with the actual admin credentials data -->
     <script>
         async function fetchStudentData() {
             try {
