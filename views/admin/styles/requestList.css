@@ -66,15 +66,16 @@ body {
     border-radius: 20px;
     width: 20vh;
     transition: 0.5s ease-in-out;
+    cursor: pointer;
 }
 .filters nav ul li.active {
     background-color: var(--ACCENT);
 }
-.filters nav ul li.active a {
+.filters nav ul li.active p {
     color: var(--TEXTLIGHT);
 }
 
-.filters nav ul li a {
+.filters nav ul li p {
     text-decoration: none;
     font-family: var(--WORK-SANS);
     font-size: var(--SUBHEADER);
@@ -83,6 +84,7 @@ body {
     display: flex;
     justify-content: flex-start;
     transition: 0.5s ease-in-out;
+    margin: 0;
 }
 .filters nav ul li img {
     margin: 0 1vh 0 0;

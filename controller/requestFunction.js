@@ -8,9 +8,12 @@ $(document).ready(function () {
      *  calls the confirmationToggle() function to toggle the confirmation
      *  status of each request.
      */
-    function fetchRequests(openRowId = null) {
+    function fetchRequests(status = "", openRowId = null) {
+        const url = `../../api/FetchDataRequest.php?fetch=true${status ? `&status=${status}` : ""
+            }&_=${new Date().getTime()}`;
+
         $.ajax({
-            url: "../../../controller/FetchDataRequest.php?fetch=true",
+            url: url,
             method: "GET",
             dataType: "json",
             success: function (response) {
@@ -19,57 +22,37 @@ $(document).ready(function () {
                 requestList.empty(); // Clear the table before adding new rows
 
                 requests.forEach((request) => {
-                    const totalPayment = parseFloat(
-                        request.totalPayment
-                    ).toFixed(2);
+                    const totalPayment = parseFloat(request.totalPayment).toFixed(2);
 
                     const row = `
                         <tr data-id="${request._id.$oid}" class="data-row">
-                            <td class="req-datalist">${escapeHtml(
-                                request.name
-                            )}</td>
-                            <td class="req-datalist">${escapeHtml(
-                                request.studentID
-                            )}</td>
-                            <td class="req-datalist">${escapeHtml(
-                                request.date
-                            )}</td>
+                            <td class="req-datalist">${escapeHtml(request.name)}</td>
+                            <td class="req-datalist">${escapeHtml(request.studentID)}</td>
+                            <td class="req-datalist">${escapeHtml(request.date)}</td>
                             <td class="req-datalist">₱${totalPayment}</td>
                         </tr>
-    
-                        <tr class="confirmation-status" id="confirmation-${
-                            request._id.$oid
-                        }" style="display: none;">
+                        <tr class="confirmation-status" id="confirmation-${request._id.$oid}" style="display: none;">
                             <td class="req-data" colspan="4">
                                 <div class="status-details">
-                                    <h3 class="status-text">Request Status: ${escapeHtml(
-                                        request.status
-                                    )}</h3>
-    
+                                    <h3 class="status-text">Request Status</h3>
                                     <div class="req-container">
                                         <div class="reqstatus-line">
                                             ${generateStatusIcons(request)}
                                         </div>
                                     </div>
-    
                                     <div class="summary-container">
                                         <h3>Request Summary</h3>
                                         <div class="requested-documents">
-                                            ${generateRequestedDocuments(
-                                                request.requestedDocument,
-                                                totalPayment
-                                            )}
+                                            ${generateRequestedDocuments(request.requestedDocument, totalPayment)}
                                         </div>
                                         ${buttonStatusForm(request)}
                                     </div>
-    
                                 </div>
                             </td>
                         </tr>
                     `;
-                    requestList.append(row); // Append the generated row
+                    requestList.append(row);
                 });
-
                 confirmationToggle();
 
                 // Keep the selected confirmation row open
@@ -84,8 +67,41 @@ $(document).ready(function () {
         });
     }
 
-    // Fetch requests on page load
-    fetchRequests();
+    //TODO: Add a Search Function
+
+    // Filter requests based on the selected status 
+    document.querySelectorAll(".filters nav ul li").forEach((item) => {
+        item.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            // Determine the status based on the clicked item's text
+            const statusText = item.textContent.trim().toLowerCase();
+            let status = "";
+
+            document.querySelectorAll(".filters nav ul li").forEach((li) => {
+                li.classList.remove("active");
+            });
+            item.classList.add("active");
+
+            // Match the clicked item's text to the corresponding status
+            if (statusText.includes("unpaid")) {
+                status = "unpaid";
+            } else if (statusText.includes("paid")) {
+                status = "paid";
+            } else if (statusText.includes("process")) {
+                status = "process";
+            } else if (statusText.includes("finished")) {
+                status = "ready";
+            }
+            fetchRequests(status);
+        });
+
+        // Initialize 'unpaid' as active by default
+        if (item.textContent.includes("UNPAID")) {
+            item.classList.add("active");
+            fetchRequests("unpaid");
+        }
+    });
 
     function confirmationToggle() {
         const dataRows = document.querySelectorAll(".data-row");
@@ -144,8 +160,8 @@ $(document).ready(function () {
             <form class="status-update-form" data-student-id="${escapeHtml(
                 request.studentID
             )}" data-current-status="${escapeHtml(
-                  request.status
-              )}" style="display: ${display};">
+                request.status
+            )}" style="display: ${display};">
                 <button type="button" class="confirm-btn">${buttonText}</button>
             </form>
         `
@@ -165,16 +181,17 @@ $(document).ready(function () {
             .replace("confirmation-", "");
 
         // Pass the AJAX function as a callback to ConfirmStatus
+        // TODO: Add a appointment scheduling to confirm
         ConfirmStatus(() => {
             $.ajax({
-                url: "../../../controller/FetchDataRequest.php",
+                url: "../../api/FetchDataRequest.php",
                 method: "POST",
                 data: { studentID, currentStatus },
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
                         // Refresh requests and keep the selected row open
-                        fetchRequests(openRowId);
+                        fetchRequests("unpaid", openRowId);
                     } else {
                         alert("Failed to update status. Please try again.");
                     }
@@ -215,13 +232,11 @@ $(document).ready(function () {
                 }
 
                 return `
-                    <div class="reqstatus-name ${status}" data-student-id="${
-                    request.studentID
-                }">
+                    <div class="reqstatus-name ${status}" data-student-id="${request.studentID
+                    }">
                         <img class="icons" src="${icon}" alt="${status} Icon">
-                        <p>${
-                            status.charAt(0).toUpperCase() + status.slice(1)
-                        }</p>
+                        <p>${status.charAt(0).toUpperCase() + status.slice(1)
+                    }</p>
                     </div>
                 `;
             })
@@ -245,28 +260,14 @@ $(document).ready(function () {
             `<p><strong>Total Payment:</strong> <strong class="prices">₱${totalPayment}</strong></p>`
         );
     }
-});
 
-// Function to show a confirmation dialog
-// function ConfirmStatus(callback) {
-//     Swal.fire({
-//         title: "Do you want to save the changes?",
-//         showCancelButton: true,
-//         confirmButtonText: "Save",
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             Swal.fire("Saved!", "", "success");
-//             callback(); // Proceed with the function if confirmed
-//         }
-//         // If canceled, nothing happens
-//     });
-// }
+});
 
 function ConfirmStatus(callback) {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-            confirmButton: "btn btn-success",
-            cancelButton: "btn btn-danger",
+            confirmButton: "btn-success",
+            cancelButton: "btn-danger",
         },
     });
     swalWithBootstrapButtons
@@ -295,19 +296,3 @@ function ConfirmStatus(callback) {
             );
         });
 }
-
-// TODO: Fix the filter and add Search function
-// Select all filter items
-document.querySelectorAll(".filters nav ul li").forEach((item) => {
-    item.addEventListener("click", function () {
-        document
-            .querySelectorAll(".filters nav ul li")
-            .forEach((li) => li.classList.remove("active"));
-        // Add active class to the clicked item
-        item.classList.add("active");
-    });
-    // Initialization active for unpaid
-    if (item.textContent.includes("UNPAID")) {
-        item.classList.add("active");
-    }
-});

@@ -1,7 +1,3 @@
-<?php
-require '../../controller/FetchDataRequest.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,10 +27,10 @@ require '../../controller/FetchDataRequest.php';
                 <h2>Filters</h2>
                 <nav>
                     <ul>
-                        <li><a href="#"><img class="icons" src="../../public/images/icons/warning.png" alt="Unpaid Icon">UNPAID</a></li>
-                        <li><a href="#"><img class="icons" src="../../public/images/icons/dollar-sign.png" alt="Paid Icon">PAID</a></li>
-                        <li><a href="#"><img class="icons" src="../../public/images/icons/data-processing.png" alt="Process Icon">PROCESS</a></li>
-                        <li><a href="#"><img class="icons" src="../../public/images/icons/checked.png" alt="Finished Icon">FINISHED</a></li>
+                        <li><p><img class="icons" src="../../public/images/icons/warning.png" alt="Unpaid Icon">UNPAID</p></li>
+                        <li><p><img class="icons" src="../../public/images/icons/dollar-sign.png" alt="Paid Icon">PAID</p></li>
+                        <li><p><img class="icons" src="../../public/images/icons/data-processing.png" alt="Process Icon">PROCESS</p></li>
+                        <li><p><img class="icons" src="../../public/images/icons/checked.png" alt="Finished Icon">FINISHED</p></li>
                     </ul>
                 </nav>
             </div>
@@ -59,7 +55,7 @@ require '../../controller/FetchDataRequest.php';
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/requestFunction.js"></script>
+    <script src="../../controller/requestFunction.js"></script>
 </body>
 
 </html>
