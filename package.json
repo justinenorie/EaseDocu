@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "start": "node server",
-        "dev": "nodemon server"
+        "dev": "nodemon server",
+        "app": "php -S localhost:3000"
     },
     "author": "group 8",
     "license": "ISC",
