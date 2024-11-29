@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/RequestDataModel.php';
+require_once __DIR__ . '/../models/Models.php';
 class EaseDocuController {
     private $documentModel;
     private $requestDataModel;
