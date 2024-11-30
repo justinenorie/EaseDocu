@@ -29,10 +29,10 @@ class RequestDataModel {
     }
 
     // Update a request status by student ID
-    public function updateRequestStatus($studentId, $status) {
+    public function updateRequestStatus($studentId, $status, $date, $time) {
         $result = $this->collection->updateOne(
             ['studentID' => $studentId],
-            ['$set' => ['status' => $status]]
+            ['$set' => ['status' => $status, 'appointmentDate' => $date, 'appointmentTime' => $time]]
         );
         return $result->getModifiedCount();
     }

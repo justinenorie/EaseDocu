@@ -5,16 +5,17 @@ require '../controller/RequestDataController.php';
 $controller = new EaseDocuController();
 $documentRequests = $controller->getAllDocumentRequests(); // Fetch all the document requests
 $documentList = $controller->getAllDocuments(); //Fetch all the document List
-$requestByStudentId = $controller->getRequestByStudentId($studentId); // Fetch a specific document request by student ID
 
 // Handle status update 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
     $studentID = $_POST['studentID'];
     $currentStatus = $_POST['currentStatus'];
+    $date = $_POST['date'] ?? null; // Get the date from the request
+    $time = $_POST['time'] ?? null; // Get the time from the request
 
     $newStatus = $currentStatus === 'unpaid' ? 'paid' : ($currentStatus === 'paid' ? 'process' : 'ready');
 
-    $updateRequestStatus = $controller->updateDocumentRequestStatus($studentID, $newStatus);
+    $updateRequestStatus = $controller->updateDocumentRequestStatus($studentID, $newStatus, $date, $time);
 
     if ($updateRequestStatus) {
         echo json_encode(['success' => true, 'newStatus' => $newStatus]);
@@ -27,19 +28,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
 // Get the document requests from database
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch'])) {
     header('Content-Type: application/json');
-    // echo json_encode(['documentRequests' => $documentRequests]);
+   
+    $status = $_GET['status'] ?? null; // Get the status filter 
+    $query = $_GET['query'] ?? ""; // Get the search query 
 
-    $status = $_GET['status'] ?? null; // Get the status filter (if provided)
+    $filteredRequests = $documentRequests; //Call the controller
 
+    // Filter Status
     if ($status) {
-        // Filter requests by status
-        $filteredRequests = array_filter($documentRequests, function ($request) use ($status) {
+        
+        $filteredRequests = array_filter($filteredRequests, function ($request) use ($status) {
             return $request['status'] === $status;
         });
-        echo json_encode(['documentRequests' => array_values($filteredRequests)]);
-    } else {
-        // Return all requests if no filter is applied
-        echo json_encode(['documentRequests' => $documentRequests]);
     }
+
+    // Search query
+    if ($query) {
+        $filteredRequests = array_filter($filteredRequests, function ($request) use ($query) {
+            $query = strtolower($query);
+            return strpos(strtolower($request['name']), $query) !== false || 
+                   strpos(strtolower($request['studentID']), $query) !== false;
+        });
+    }
+    
+    // Passed and Received the data as JSON
+    echo json_encode(['documentRequests' => array_values($filteredRequests)]);
     exit;
 }

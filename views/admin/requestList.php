@@ -19,7 +19,7 @@
         <div class="categorize-panel">
             <div class="search-bar">
                 <img src="../../public/images/icons/search.png" alt="search-icon">
-                <input type="text" class="search-input" id="search-input" placeholder="Search">
+                <input type="text" class="search-input" id="search-input" placeholder="Search" autocomplete="off">
             </div>
 
             <div class="filters">
@@ -51,7 +51,7 @@
                 </tbody>
             </table>
         </div>
-
+        
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

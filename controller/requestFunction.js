@@ -8,9 +8,8 @@ $(document).ready(function () {
      *  calls the confirmationToggle() function to toggle the confirmation
      *  status of each request.
      */
-    function fetchRequests(status = "", openRowId = null) {
-        const url = `../../api/FetchDataRequest.php?fetch=true${status ? `&status=${status}` : ""
-            }&_=${new Date().getTime()}`;
+    function fetchRequests(status = "", openRowId = null, query = "") {
+        const url = `../../api/FetchDataRequest.php?fetch=true${status ? `&status=${status}` : ""}${query ? `&query=${encodeURIComponent(query)}` : ""}&_=${new Date().getTime()}`;
 
         $.ajax({
             url: url,
@@ -53,6 +52,7 @@ $(document).ready(function () {
                     `;
                     requestList.append(row);
                 });
+
                 confirmationToggle();
 
                 // Keep the selected confirmation row open
@@ -67,16 +67,32 @@ $(document).ready(function () {
         });
     }
 
-    //TODO: Add a Search Function
+    // Search Functionality input
+    document.querySelector(".search-input").addEventListener("input", function (e) {
+        document.querySelectorAll(".filters nav ul li").forEach((li) => {
+            li.classList.remove("active");
+        });
+        const searchQuery = e.target.value.trim();
+        fetchRequests("", null, searchQuery);
+    });
+
+    // Search Functionality Click
+    document.querySelector(".search-input").addEventListener("click", function (e) {
+        document.querySelectorAll(".filters nav ul li").forEach((li) => {
+            li.classList.remove("active");
+        });
+        const searchQuery = e.target.value.trim();
+        fetchRequests("", null, searchQuery);
+    });
 
     // Filter requests based on the selected status 
     document.querySelectorAll(".filters nav ul li").forEach((item) => {
+        let status;
         item.addEventListener("click", function (event) {
             event.preventDefault(); // Prevent default link behavior
 
             // Determine the status based on the clicked item's text
             const statusText = item.textContent.trim().toLowerCase();
-            let status = "";
 
             document.querySelectorAll(".filters nav ul li").forEach((li) => {
                 li.classList.remove("active");
@@ -103,6 +119,7 @@ $(document).ready(function () {
         }
     });
 
+    //Confirmation toggle for more info
     function confirmationToggle() {
         const dataRows = document.querySelectorAll(".data-row");
         dataRows.forEach((row) => {
@@ -145,12 +162,11 @@ $(document).ready(function () {
     }
 
     //Button status function
-    //TODO: Add swalfile confirmation
     function buttonStatusForm(request) {
         const statuses = {
             unpaid: "Confirm Payment",
             paid: "Confirm to Process",
-            process: "Confirm Finished",
+            process: "Set Appointment Pick-Up Date",
         };
         const buttonText = statuses[request.status] || "";
         const display = request.status === "ready" ? "none" : "block";
@@ -175,38 +191,50 @@ $(document).ready(function () {
         const form = $(this).closest(".status-update-form");
         const studentID = form.data("student-id");
         const currentStatus = form.data("current-status");
-        const openRowId = form
-            .closest(".confirmation-status")
-            .attr("id")
-            .replace("confirmation-", "");
 
-        // Pass the AJAX function as a callback to ConfirmStatus
-        // TODO: Add a appointment scheduling to confirm
-        ConfirmStatus(() => {
-            $.ajax({
-                url: "../../api/FetchDataRequest.php",
-                method: "POST",
-                data: { studentID, currentStatus },
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        // Refresh requests and keep the selected row open
-                        fetchRequests("unpaid", openRowId);
-                    } else {
-                        alert("Failed to update status. Please try again.");
-                    }
-                },
-                error: function (error) {
-                    console.error("Error updating status:", error);
-                },
+        if (currentStatus === "process") {
+            // Call the date and time selection function
+            SelectTimeDate((date, time) => {
+                $.ajax({
+                    url: "../../api/FetchDataRequest.php",
+                    method: "POST",
+                    data: { studentID, currentStatus, date, time },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            // Refresh requests and keep the selected row open
+                            fetchRequests(currentStatus);
+                        } else {
+                            alert("Failed to update status. Please try again.");
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error updating status:", error);
+                    },
+                });
             });
-        });
+        } else {
+            // Handle other statuses
+            ConfirmStatus(() => {
+                $.ajax({
+                    url: "../../api/FetchDataRequest.php",
+                    method: "POST",
+                    data: { studentID, currentStatus },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            fetchRequests(currentStatus);
+                        } else {
+                            alert("Failed to update status. Please try again.");
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error updating status:", error);
+                    },
+                });
+            });
+        }
     });
-
-    // Helper functions for generating dynamic content
-    function escapeHtml(text) {
-        return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
 
     function generateStatusIcons(request) {
         const statuses = ["unpaid", "paid", "process", "ready"];
@@ -261,6 +289,11 @@ $(document).ready(function () {
         );
     }
 
+    // Helper functions for generating dynamic content
+    function escapeHtml(text) {
+        return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
 });
 
 function ConfirmStatus(callback) {
@@ -270,16 +303,15 @@ function ConfirmStatus(callback) {
             cancelButton: "btn-danger",
         },
     });
-    swalWithBootstrapButtons
-        .fire({
-            title: "Are you sure about this confirmation?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
-            reverseButtons: true,
-        })
+    swalWithBootstrapButtons.fire({
+        title: "Are you sure about this confirmation?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Confirm",
+        cancelButtonText: "Cancel",
+        reverseButtons: true,
+    })
         .then((result) => {
             if (result.isConfirmed) {
                 swalWithBootstrapButtons.fire({
@@ -296,3 +328,67 @@ function ConfirmStatus(callback) {
             );
         });
 }
+
+// Process the selected date and time
+function SelectTimeDate(callback) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn-success",
+            cancelButton: "btn-danger",
+        },
+    });
+
+    // First Swal for date and time selection
+    swalWithBootstrapButtons.fire({
+        title: 'Set the Appointment to \n Pick-Up',
+        html: `
+            <div class="date-time-container">
+                <label for="dateInput">Date:</label>
+                <input type="date" id="dateInput" class="swal2-input date" min="${new Date().toISOString().split('T')[0]}" />
+                <br>
+                <label for="timeInput">Time:</label>
+                <input type="time" id="timeInput" class="swal2-input time" />
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Confirm",
+        cancelButtonText: "Cancel",
+        reverseButtons: true,
+        preConfirm: () => {
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+            if (!date || !time) {
+                swalWithBootstrapButtons.showValidationMessage('Both date and time are required');
+                return null;
+            }
+            return { date, time };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const { date, time } = result.value;
+            // Confirmation step after selecting date and time
+            swalWithBootstrapButtons.fire({
+                title: "Are you sure about this confirmation?",
+                text: `You selected Date: ${date}, Time: ${time}`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Confirm!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true,
+            }).then((confirmResult) => {
+                if (confirmResult.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Appointment Setup Success",
+                        text: "Successfully Updated!",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    if (callback) callback(date, time);
+                }
+            });
+        }
+    });
+}
+
+//TODO: Add an API that sends Email notifications to the Students
