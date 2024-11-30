@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/connection.php';
+require_once __DIR__ . '/connection.php';
 
 //This is the model for manipulating the database
 //Request Data Model
@@ -84,6 +84,3 @@ class DocumentModel {
         return $result->getDeletedCount();
     }
 }
-
-// TODO: Database Model for Admin Credentials
-// TODO: Database Model for Students Credentials
