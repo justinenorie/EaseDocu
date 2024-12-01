@@ -1,5 +1,28 @@
 <?php
+session_start();
+
+// Check if session exists
+if (!isset($_SESSION['user_email'])) {
+    header("Location: login.php"); 
+    exit();
+}
+
+
+
+$userEmail = $_SESSION['user_email'];
+$userName = $_SESSION['user_name'];
+$userAge = $_SESSION['user_age'];
+var_dump($_SESSION);
+echo '<pre>';
+print_r($_SESSION['user_age']);
+echo '</pre>';
+
+// Access session data safely
+echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
 require '../../views/components/topBarStudent.php';
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +70,8 @@ require '../../views/components/topBarStudent.php';
                     
                 </div>
 
-                <input type="submit" name="" value="Request Now" id="">
+                <!-- <input type="submit" name="" value="Request Now" id=""> -->
+                <input type="submit" name="" value="Request Now" id="request-btn" onclick="window.location.href='requestStatus.php'">
             </section>
         </form>
     </div>
