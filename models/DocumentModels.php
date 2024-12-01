@@ -3,6 +3,7 @@ require_once __DIR__ . '/connection.php';
 
 //This is the model for manipulating the database
 //Request Data Model
+//TODO: Add a security validation in the models
 class RequestDataModel {
     private $collection;
 
@@ -29,12 +30,15 @@ class RequestDataModel {
     }
 
     // Update a request status by student ID
-    public function updateRequestStatus($studentId, $status, $date, $time) {
-        $result = $this->collection->updateOne(
-            ['studentID' => $studentId],
-            ['$set' => ['status' => $status, 'appointmentDate' => $date, 'appointmentTime' => $time]]
+    public function updateRequestStatus($id, $status, $date, $time) {
+        // Convert the string ID to a MongoDB ObjectId
+        $objectId = new MongoDB\BSON\ObjectId($id); //May Pula lang talaga siya pero gumagana
+        $result = $this->collection->findOneAndUpdate(
+            ['_id' => $objectId], // Query using _id
+            ['$set' => ['status' => $status, 'appointmentDate' => $date, 'appointmentTime' => $time]], // Update operation
+            ['returnDocument' => MongoDB\Operation\FindOneAndUpdate::RETURN_DOCUMENT_AFTER] // Return the document after update
         );
-        return $result->getModifiedCount();
+        return $result;
     }
 
     // Delete a request by student ID

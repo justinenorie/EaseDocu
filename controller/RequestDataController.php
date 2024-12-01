@@ -1,4 +1,5 @@
 <?php
+//Hindi na toh kailangan
 require_once __DIR__ . '/../models/DocumentModels.php';
 class EaseDocuController {
     private $documentModel;

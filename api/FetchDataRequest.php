@@ -1,21 +1,25 @@
 <?php
 // TODO: Add a login session for admin
 // TODO: Security - add a input validation for $_POST and $_GET
-require '../controller/RequestDataController.php';
-$controller = new EaseDocuController();
-$documentRequests = $controller->getAllDocumentRequests(); // Fetch all the document requests
-$documentList = $controller->getAllDocuments(); //Fetch all the document List
+// require '../controller/RequestDataController.php';
+// $controller = new EaseDocuController();
+// $documentRequests = $controller->getAllDocumentRequests(); // Fetch all the document requests
+// $documentList = $controller->getAllDocuments(); //Fetch all the document List
+
+require '../models/DocumentModels.php';
+$RequestModel = new RequestDataModel();
+// Fetch all the document requests
+$documentRequests = $RequestModel->getAllRequests(); 
 
 // Handle status update 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentID'])) {
-    $studentID = $_POST['studentID'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['studentObjectID'])) {
+    $id = $_POST['studentObjectID'];
     $currentStatus = $_POST['currentStatus'];
     $date = $_POST['date'] ?? null; // Get the date from the request
     $time = $_POST['time'] ?? null; // Get the time from the request
 
     $newStatus = $currentStatus === 'unpaid' ? 'paid' : ($currentStatus === 'paid' ? 'process' : 'ready');
-
-    $updateRequestStatus = $controller->updateDocumentRequestStatus($studentID, $newStatus, $date, $time);
+    $updateRequestStatus = $RequestModel->updateRequestStatus($id, $newStatus, $date, $time);
 
     if ($updateRequestStatus) {
         echo json_encode(['success' => true, 'newStatus' => $newStatus]);

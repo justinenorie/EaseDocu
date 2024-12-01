@@ -173,8 +173,8 @@ $(document).ready(function () {
 
         return buttonText
             ? `
-            <form class="status-update-form" data-student-id="${escapeHtml(
-                request.studentID
+            <form class="status-update-form" data-id="${escapeHtml(
+                request._id.$oid
             )}" data-current-status="${escapeHtml(
                 request.status
             )}" style="display: ${display};">
@@ -189,7 +189,7 @@ $(document).ready(function () {
         e.preventDefault(); // Prevent form submission
 
         const form = $(this).closest(".status-update-form");
-        const studentID = form.data("student-id");
+        const studentObjectID = form.data("id");
         const currentStatus = form.data("current-status");
 
         if (currentStatus === "process") {
@@ -198,7 +198,7 @@ $(document).ready(function () {
                 $.ajax({
                     url: "../../api/FetchDataRequest.php",
                     method: "POST",
-                    data: { studentID, currentStatus, date, time },
+                    data: { studentObjectID, currentStatus, date, time },
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
@@ -219,7 +219,7 @@ $(document).ready(function () {
                 $.ajax({
                     url: "../../api/FetchDataRequest.php",
                     method: "POST",
-                    data: { studentID, currentStatus },
+                    data: { studentObjectID, currentStatus },
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
@@ -260,7 +260,7 @@ $(document).ready(function () {
                 }
 
                 return `
-                    <div class="reqstatus-name ${status}" data-student-id="${request.studentID
+                    <div class="reqstatus-name ${status}" data-id="${request._id.$oid
                     }">
                         <img class="icons" src="${icon}" alt="${status} Icon">
                         <p>${status.charAt(0).toUpperCase() + status.slice(1)
