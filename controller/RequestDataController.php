@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../models/RequestDataModel.php';
+//Hindi na toh kailangan
+require_once __DIR__ . '/../models/DocumentModels.php';
 class EaseDocuController {
     private $documentModel;
     private $requestDataModel;
@@ -25,8 +26,8 @@ class EaseDocuController {
     }
 
     // Update the status of a document request
-    public function updateDocumentRequestStatus($studentId, $status) {
-        return $this->requestDataModel->updateRequestStatus($studentId, $status);
+    public function updateDocumentRequestStatus($studentId, $status, $date, $time) {
+        return $this->requestDataModel->updateRequestStatus($studentId, $status, $date, $time);
     }
 
     // Delete a document request by student ID
@@ -60,6 +61,7 @@ class EaseDocuController {
         return $this->documentModel->deleteDocumentById($id);
     }
 
+    //TODO: Add a control credentials for Admin and Student
     
 }
 //Testing if it works
