@@ -7,21 +7,18 @@ if (!isset($_SESSION['user_email'])) {
     exit();
 }
 
-
-
 $userEmail = $_SESSION['user_email'];
 $userName = $_SESSION['user_name'];
-$userAge = $_SESSION['user_age'];
-var_dump($_SESSION);
-echo '<pre>';
-print_r($_SESSION['user_age']);
-echo '</pre>';
+// $userAge = $_SESSION['user_age'];
+// var_dump($_SESSION);
+// echo '<pre>';
+// print_r($_SESSION['user_age']);
+// echo '</pre>';
 
 // Access session data safely
-echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+// echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
 require '../../views/components/topBarStudent.php';
-
-
 
 ?>
 

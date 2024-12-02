@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/easedocu')
+mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error:', err));
 
@@ -39,13 +39,13 @@ app.post('/login', async(req, res) => {
                 name: user.name,
                 age: user.age,
                 studentID: user.studentID
-
             },
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
+
 app.post('/signup', async(req, res) => {
     const { name, studentID, email, password } = req.body;
 

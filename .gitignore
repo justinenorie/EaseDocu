@@ -1,3 +1,14 @@
-/vendor
-/node_modules
+# Dependency directories
+node_modules/
+vendor/
+
+# Environment files
 .env
+*.env
+!.env.example
+
+# Composer
+composer.lock
+
+# Node.js
+package-lock.json

@@ -23,9 +23,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/easedocu')
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log('MongoDB connection error:', err));
+// mongoose.connect('mongodb://localhost:27017/easedocu')
+
+// Connect to MongoDB
+mongoose.connect($_ENV['MongoDBTOken'])
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.log('MongoDB connection error:', err));
 
 // WebSocket setup
 io.on('connection', (socket) => {
