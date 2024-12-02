@@ -267,5 +267,7 @@
             }
         });
     </script>
+      <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+      <script src="../../views/student/js/chatSupport.js"></script>
 </body>
 </html>

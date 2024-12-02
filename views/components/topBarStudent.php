@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <head>
@@ -165,38 +166,36 @@
 
             <div class="account" id="account">
                 <a id="click-profile" href="#">
-                    <h2>John</h2>
-                    <p>22-0001</p>
+                <h2><?php echo htmlspecialchars($userEmail ?? 'Unknown User'); ?></h2>
+<p>22-00000 </p>
+
                 </a>
             </div>
         </div>
     </div>
 
     <div id="modal" class="modal" style="display: none;">
-        <p>Show Profile</p>
-        <button id="logout-btn">Logout</button>
+        <p style="cursor: pointer;color:white;" >Show Profile</p>
+        <a style="cursor: pointer;color:white;" href="logout.php" id="logout-btn">Logout</a>
     </div>
     <script>
-        //TODO: Add more design such as popup animation
+            //TODO: Add more design such as popup animation
         //TODO: The name and studentID should be based on the database
         document.addEventListener("DOMContentLoaded", () => {
             const modal = document.getElementById("modal");
             const accountClick = document.getElementById("account");
         
-            // Toggle modal on click
             accountClick.addEventListener("click", (event) => {
                 event.preventDefault();
                 modal.style.display = "block";
             });
 
-            // Close modal if clicked outside
             document.addEventListener("click", (event) => {
                 if (!modal.contains(event.target) && !accountClick.contains(event.target)) {
                     modal.style.display = "none";
                 }
             });
 
-            // Close modal on pressing 'Escape' key
             document.addEventListener("keydown", (event) => {
                 if (event.key === "Escape") {
                     modal.style.display = "none";

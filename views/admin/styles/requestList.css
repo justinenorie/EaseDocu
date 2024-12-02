@@ -66,15 +66,16 @@ body {
     border-radius: 20px;
     width: 20vh;
     transition: 0.5s ease-in-out;
+    cursor: pointer;
 }
 .filters nav ul li.active {
     background-color: var(--ACCENT);
 }
-.filters nav ul li.active a {
+.filters nav ul li.active p {
     color: var(--TEXTLIGHT);
 }
 
-.filters nav ul li a {
+.filters nav ul li p {
     text-decoration: none;
     font-family: var(--WORK-SANS);
     font-size: var(--SUBHEADER);
@@ -83,6 +84,7 @@ body {
     display: flex;
     justify-content: flex-start;
     transition: 0.5s ease-in-out;
+    margin: 0;
 }
 .filters nav ul li img {
     margin: 0 1vh 0 0;
@@ -210,17 +212,16 @@ body {
     align-items: center;
     z-index: 2;
 }
-.summary-container{
+.summary-container {
     margin-top: 1em;
     padding: 1em 0 0 0;
     border-top: 1px solid black;
-
 }
-.requested-documents p{
+.requested-documents p {
     font-family: var(--WORK-SANS);
     margin: 1em 0 1em 0;
 }
-.prices{
+.prices {
     color: var(--PRIMARY);
 }
 .confirm-btn {
@@ -237,7 +238,7 @@ body {
     background-color: var(--ACCENT);
 }
 
-.btn-success{
+.btn-success {
     background-color: var(--PRIMARY);
     color: var(--TEXTLIGHT);
     font-size: var(--BODY);
@@ -248,11 +249,11 @@ body {
     border-radius: 2vh;
     cursor: pointer;
 }
-.btn-success:hover{
+.btn-success:hover {
     background-color: var(--ACCENT);
 }
 
-.btn-danger{
+.btn-danger {
     background-color: var(--SECONDARY);
     color: var(--TEXTDARK);
     font-size: var(--BODY);
@@ -263,8 +264,19 @@ body {
     border-radius: 2vh;
     cursor: pointer;
 }
-.btn-danger:hover{
+.btn-danger:hover {
     background-color: var(--ACCENT);
+}
+
+/* Appointment Container */
+.date-time-container {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+}
+
+.date, .time{
+    margin: 0 !important;
 }
 
 @keyframes fadeInFromTop {
