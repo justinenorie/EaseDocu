@@ -30,7 +30,6 @@
                             <input id="password" type="password" name="password" placeholder="Password" required>
                             <a href=""><img src="../../public//images//icons/pw-toggle-hide.png" alt="Eye Icon"></a>
                         </div>
-
                     </div>
                     <div class="remember">
                         <div class="checkbox-container">

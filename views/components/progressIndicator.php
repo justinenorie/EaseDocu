@@ -1,6 +1,6 @@
 <?php
 
-$currentStatus = "paid"; 
+$currentStatus = "unpaid"; 
 
 $statusSteps = [
     'unpaid' => [
