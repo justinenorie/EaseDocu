@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 // mongoose.connect('mongodb://localhost:27017/easedocu')
 
 // Connect to MongoDB
-mongoose.connect($_ENV['MongoDBTOken'])
+mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
 
@@ -49,10 +49,10 @@ io.on('connection', (socket) => {
 
 // Login route
 app.post('/login', async(req, res) => {
-    const { email, password } = req.body;
+    const { studentID, password } = req.body;
 
     try {
-        const user = await userLogin.findOne({ email });
+        const user = await userLogin.findOne({ studentID });
         if (!user) {
             return res.status(400).json({ success: false, message: 'User not found!' });
         }
@@ -65,9 +65,8 @@ app.post('/login', async(req, res) => {
         res.json({
             success: true,
             user: {
-                email: user.email,
+                // email: user.email,
                 name: user.name,
-                age: user.age,
                 studentID: user.studentID
             },
         });

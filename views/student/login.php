@@ -23,7 +23,7 @@
                 <h1>Sign in to your Account</h1>
                 <p>Enter your credentials to access your account</p>
                 <div class="inputs">
-                    <input type="text" name="student" placeholder="StudentID" required>
+                    <input type="text" name="studentID" placeholder="StudentID" required>
 
                     <div class="password-toggle">
                         <input id="password" type="password" name="password" placeholder="Password" required>
@@ -49,74 +49,89 @@
     <script src="../../public/js/passToggle.js"> </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-   <?php
-session_start();
+    <?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['student'];
-    $password = $_POST['password'];
+        // Define a log function
+        function log_message($message) {
+            $log_file = __DIR__ . '/login_debug.log'; // Logs to a file in the same directory
+            $timestamp = date('Y-m-d H:i:s');
+            file_put_contents($log_file, "[$timestamp] $message\n", FILE_APPEND);
+        }
 
-    // Send credentials to Node.js backend
-    $url = 'http://localhost:4000/login';
-    $data = json_encode(['email' => $email, 'password' => $password]);
+        session_start();
 
-    $options = [
-        'http' => [
-            'header'  => "Content-Type: application/json\r\n",
-            'method'  => 'POST',
-            'content' => $data,
-        ],
-    ];
-    $context = stream_context_create($options);
-    $result = @file_get_contents($url, false, $context);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $studentID = $_POST['studentID'];
+            $password = $_POST['password'];
 
-    if ($result !== FALSE) {
-        $responseData = json_decode($result, true);
+            $url = 'http://localhost:4000/login';
+            $data = json_encode(['studentID' => $studentID, 'password' => $password]);
 
-        if (isset($responseData['user'])) {
-            $_SESSION['user_email'] = $responseData['user']['email'];
-            $_SESSION['user_name'] = $responseData['user']['name'];
-            $_SESSION['user_age'] = $responseData['user']['age'];
+            $options = [
+                'http' => [
+                    'header'  => "Content-Type: application/json\r\n",
+                    'method'  => 'POST',
+                    'content' => $data,
+                ],
+            ];
+            $context = stream_context_create($options);
 
-            echo "<script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Login Successful',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.href = 'documentRequest.php';
-                    });
-                  </script>";
-        } else {
-            echo "<script>
+            // Log the request data
+            log_message("Sending request to $url with data: $data");
+
+            $result = @file_get_contents($url, false, $context);
+
+            if ($result !== FALSE) {
+                $responseData = json_decode($result, true);
+                log_message("Received response: " . print_r($responseData, true));
+
+                if (isset($responseData['user'])) {
+                    $_SESSION['user_studentID'] = $responseData['user']['studentID'];
+                    $_SESSION['user_name'] = $responseData['user']['name'];
+
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Login Successful',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = 'documentRequest.php';
+                        });
+                    </script>";
+                } else {
+                    log_message("Login failed: Invalid credentials.");
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login failed',
+                            text: 'Invalid Student ID or password!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = 'login.php';
+                        });
+                    </script>";
+                }
+            } else {
+                log_message("Error: Unable to connect to the backend.");
+                echo "<script>
                     Swal.fire({
                         icon: 'error',
-                        title: 'Login failed',
-                        text: 'Invalid email or password!',
+                        title: 'Server error',
+                        text: 'Unable to process request!',
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
                         window.location.href = 'login.php';
                     });
-                  </script>";
+                </script>";
+            }
+            exit();
         }
-    } else {
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Server error',
-                    text: 'Unable to process request!',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.location.href = 'login.php';
-                });
-              </script>";
-    }
-    exit();
-}
-?>
+
+    ?>
+
 
 
 </body>

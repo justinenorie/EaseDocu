@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../../public/css/styles.css">
+    <link rel="stylesheet" href="styles/studentProfile.css">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .student-profile {
+            display: flex;
+            height: 80vh;
+            background-color: rgb(70, 51, 51);
+            padding: 150px 150px 50px 150px;
+        }
+        .s-left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background-color: red;
+        }
+        .s-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 2;
+            background-color: green;
+        }
+        .student-icon-container {
+            background-color: violet;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            flex: 1;
+        }
+        .student-icon{
+            background-color: blue;
+            width: 180px;
+            height: 180px;
+            border-radius: 150px;
+            overflow: hidden;
+        }
+        .student-details{
+            flex: 1.5;
+            background-color: yellow;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .student-details div{
+            height: 100%;
+            background-color: tomato;
+        }
+        .student-details p{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            margin: 0;
+        }
+        .student-name, .student-id{
+            font-size: 26px;
+        }
+        .student-name{
+            padding-bottom: 20px;
+        }
+        .student-id{
+            padding-bottom: 4px;
+        }
+        .student-email{
+            background-color: red;
+            font-size: 14px;
+        }
+        
+        .logs{
+            position: relative;
+            width: 90%;
+            height: 90%;
+            background-color: rgb(16, 16, 16);
+            border-radius: 14px;
+        }
+
+        .mac-dots {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            display: flex;
+            gap: 8px;
+            /* background-color: red; */
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #bbb;
+        }
+
+        .red {
+            background-color: #ff5f56;
+        }
+
+        .yellow {
+            background-color: #ffbd2e;
+        }
+
+        .green {
+            background-color: #27c93f;
+        }
+    </style>
+</head>
+<body>
+    <div class="student-profile">
+        <div class="student-info s-left">
+            <div class="student-icon-container">
+                <div class="student-icon">
+                    <img src="" alt="hi">
+                </div>
+
+            </div>
+            <div class="student-details">
+                <div>
+                    <p class="student-name">Johnskrrr</p>
+                    <p class="student-id">00-00000</p>
+                    <p class="student-email">johnw@gmail.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="student-log s-right">
+            <div class="logs">
+                <div class="mac-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

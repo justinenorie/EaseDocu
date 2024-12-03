@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
     // Find all quantity control elements
     const quantityControls = document.querySelectorAll(".quantity-controls");
@@ -53,20 +55,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Handle plus button click
         plusBtn.addEventListener("click", function (e) {
-            e.preventDefault(); // Prevent form submission
-            if (checkbox.checked && quantity < 3) {
-                quantity++;
-                quantitySpan.textContent = quantity;
-                plusBtn.disabled = false;
-                updatePaymentList();
+            e.preventDefault(); 
 
-                if (quantity === 3) {
-                    //TODO: Make this into swalfile or toast popup
-                    alert(
-                        "Maximum limit of 3 copies for this document reached!"
-                    );
-                    plusBtn.disabled = true;
-                }
+            if (quantity >= 3) {
+                Swal.fire({
+                    icon: 'warning',  // Optional: You can choose icon like 'success', 'error', 'info', 'warning'
+                    title: 'Maximum limit reached',
+                    text: 'Maximum limit of 3 copies for this document reached!',
+                    confirmButtonText: 'OK'
+                });
+            } else if (checkbox.checked) {
+             
+                quantity++;  
+                quantitySpan.textContent = quantity; 
+                updatePaymentList(); 
             }
         });
 
@@ -82,13 +84,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 updatePaymentList();
             } else {
                 if (uniqueDocumentsCount >= 5) {
-                    //TODO: Make this into swalfile or toast popup
-                    alert(
-                        "Maximum limit of 5 different documents reached! You can add copies to already selected documents."
-                    );
-                    this.checked = false;
-                    return;
-                }
+                    Swal.fire({
+                        icon: 'warning',  // You can choose icon like 'success', 'error', 'info', 'warning'
+                        title: 'Maximum limit reached',
+                        text: 'Maximum limit of 5 different documents reached! You can add copies to already selected documents.',
+                        confirmButtonText: 'OK'
+                    });
+                
+                    this.checked = false;  // Uncheck the checkbox
+                    return;  // Exit the function
+                }                
                 quantity = 1;
                 uniqueDocumentsCount++;
                 quantitySpan.textContent = quantity;

@@ -1,24 +1,30 @@
 <?php
-session_start();
+    session_start();
 
-// Check if session exists
-if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php"); 
-    exit();
-}
+    // Check if session exists
+    // if (!isset($_SESSION['user_email'])) {
+    //     header("Location: login.php"); 
+    //     exit();
+    // }
 
-$userEmail = $_SESSION['user_email'];
-$userName = $_SESSION['user_name'];
-// $userAge = $_SESSION['user_age'];
-// var_dump($_SESSION);
-// echo '<pre>';
-// print_r($_SESSION['user_age']);
-// echo '</pre>';
+    // Correct session check
+    if (!isset($_SESSION['user_studentID'])) {
+        header("Location: login.php"); 
+        exit();
+    }
 
-// Access session data safely
-isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
-// echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
-require '../../views/components/topBarStudent.php';
+    // $userEmail = $_SESSION['user_email'];
+    $userName = $_SESSION['user_name'];
+    // $userAge = $_SESSION['user_age'];
+    // var_dump($_SESSION);
+    // echo '<pre>';
+    // print_r($_SESSION['user_age']);
+    // echo '</pre>';
+
+    // Access session data safely
+    isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+    // echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+    require '../../views/components/topBarStudent.php';
 
 ?>
 
@@ -74,5 +80,6 @@ require '../../views/components/topBarStudent.php';
     </div>
 </body>
 <script src="../student/js/quantityButton.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>
