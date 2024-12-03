@@ -20,6 +20,14 @@ class EaseDocuController {
         return $this->requestDataModel->getRequestByStudentId($studentId);
     }
 
+    // public function getRequestByStudentId($studentId) {
+    //     // Assuming you're using MongoDB
+    //     $filter = ['studentID' => $studentId];
+    //     return $this->requestDataModel->getRequestByStudentId($filter);
+    // }
+
+    
+
     // Add a new document request
     public function addNewDocumentRequest($data) {
         return $this->requestDataModel->addRequest($data);

@@ -1,10 +1,16 @@
+
 <?php
 
 function renderDocumentListItem($document) {
     return '
     <li class="list-item">
         <div class="list-item-left">
-            <input type="checkbox" class="checkbox">
+            <input type="checkbox" 
+                   class="checkbox" 
+                   name="document[]" 
+                   value="' . htmlspecialchars($document['document']) . '" 
+                   data-price="' . htmlspecialchars($document['price']) . '"
+            >
             <div class="item-icon">
                 <img src="../../public/images/icons/doc-certificate.png" alt="">
             </div>

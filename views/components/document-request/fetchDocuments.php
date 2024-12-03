@@ -1,6 +1,4 @@
 <?php
-// views/components/fetchDocuments.php
-
 require_once __DIR__ . '../../../../controller/RequestDataController.php';
 require_once __DIR__ . '/documentListItem.php';
 
@@ -20,13 +18,3 @@ function renderDocumentsList() {
         return '<li class="error">Unable to load documents. Please try again later.</li>';
     }
 }
-
-// If this file is called directly (AJAX), return JSON
-// if (basename($_SERVER['PHP_SELF']) === 'fetchDocuments.php') {
-//     header('Content-Type: application/json');
-//     echo json_encode([
-//         'success' => true,
-//         'html' => renderDocumentsList()
-//     ]);
-//     exit;
-// }

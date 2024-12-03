@@ -21,7 +21,7 @@
     // echo '</pre>';
 
     // Access session data safely
-    isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+    // isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
     // echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
     require '../../views/components/topBarStudent.php';
 
@@ -71,8 +71,6 @@
                 <div class="req-doc-total" id="req-doc-total">
                     
                 </div>
-
-                <!-- <input type="submit" name="" value="Request Now" id=""> -->
                 <input type="submit" name="" value="Request Now" id="request-btn">
             </section>
         </form>
@@ -80,5 +78,102 @@
 </body>
 <script src="../student/js/quantityButton.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const checkboxes = document.querySelectorAll('input[name="document[]"]');
+    const totalElement = document.getElementById('req-doc-total');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotal);
+    });
+
+    function updateTotal() {
+        let total = 0;
+        const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
+
+        selectedCheckboxes.forEach(checkbox => {
+            const price = parseFloat(checkbox.getAttribute('data-price'));
+            total += price;
+        });
+
+        if (totalElement) {
+            totalElement.textContent = `₱${total.toLocaleString()}`;
+        }
+    }
+
+    // Quantity controls
+    const quantityBtns = document.querySelectorAll('.quantity-btn');
+    quantityBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const quantitySpan = e.target.parentElement.querySelector('.quantity');
+            let quantity = parseInt(quantitySpan.textContent);
+
+            if (e.target.textContent === '+') {
+                quantity++;
+            } else if (e.target.textContent === '-' && quantity > 0) {
+                quantity--;
+            }
+
+            quantitySpan.textContent = quantity;
+        });
+    });
+});
+
+document.getElementById('request-btn').addEventListener('click', async (event) => {
+    event.preventDefault(); 
+
+    const requestedDocument = []; 
+    const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
+
+    selectedCheckboxes.forEach((checkbox) => {
+        requestedDocument.push(checkbox.value);
+    });
+
+    if (requestedDocument.length === 0) {
+        Swal.fire('Error', 'Please select at least one document', 'error');
+        return;
+    }
+
+    const totalPayment = document.getElementById('req-doc-total').textContent.trim();  
+
+    if (!totalPayment || totalPayment === '₱0') {
+        Swal.fire('Error', 'Total payment cannot be zero', 'error');
+        return;
+    }
+
+    const name = "<?php echo $userName; ?>"; 
+    const studentID = "<?php echo $studentID; ?>";
+
+    const requestData = {
+        name,
+        studentID,
+        requestedDocument,
+        totalPayment: parseFloat(totalPayment.replace('₱', '').replace(',', '')),
+    };
+
+    try {
+        const response = await fetch('http://localhost:4000/submitRequest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            Swal.fire('Success', result.message, 'success').then(() => {
+                window.location.reload();
+            });
+        } else {
+            Swal.fire('Error', result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Submission error:', error);
+        Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+    }
+});
+</script>
+
 
 </html>

@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
 const socketio = require('socket.io');
+
 const userLogin = require('./models/userLogin');
+const DocumentRequest = require('./models/documentRequest');
 
 const app = express();
 const server = http.createServer(app);
@@ -70,6 +72,7 @@ app.post('/login', async(req, res) => {
                 email: user.email 
             },
         });
+        
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
@@ -94,6 +97,45 @@ app.post('/signup', async(req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
+
+// Post ng Document Request
+app.post('/submitRequest', async (req, res) => {
+    const { name, studentID, requestedDocument, totalPayment } = req.body;
+
+    if (!name || !studentID || !requestedDocument || !totalPayment) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    try {
+        const newRequest = new DocumentRequest({
+            name,
+            studentID,
+            requestedDocument,
+            totalPayment,
+        });
+
+        await newRequest.save();
+
+        res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Retrieve document requests for the logged-in user based on their studentID
+// Retrieve all document requests or specific ones for testing
+app.get('/getDocumentRequests', async (req, res) => {
+    try {
+        // Fetch document requests where studentID is 'test101'
+        const requests = await DocumentRequest.find({ studentID: '23-00805' });
+
+        res.json({ success: true, requests });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+
 
 // Start the server
 const PORT = 4000;
