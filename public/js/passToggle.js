@@ -49,7 +49,21 @@ function alertLoginSuccess() {
     });
 }
 
-//Failed Login Popup
+//Failed Admin Login Popup
+function alertFailAdminLogin() {
+    event.preventDefault();
+    Swal.fire({
+        position: "center",
+        icon: "error",
+        background: "#F5F5F5",
+        title: "Login Failed",
+        text: "The Username Admin and Password you entered is incorrect! Please try again.....",
+        showConfirmButton: false,
+        timer: 2500
+    });
+}
+
+//Failed Student Login Popup
 function alertFailLogin() {
     event.preventDefault();
     Swal.fire({

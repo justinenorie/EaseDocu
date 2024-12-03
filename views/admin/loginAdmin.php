@@ -87,7 +87,7 @@ require '../../api/AdminLoginHandler.php';
                         }, 1000);
                     } else {
                         console.log("Login fail");
-                        alertFailLogin(); // Call failure function
+                        alertFailAdminLogin(); // Call failure function
                     }
                 },
                 error: function(xhr, status, error) {
