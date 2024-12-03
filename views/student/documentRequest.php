@@ -1,24 +1,13 @@
 <!-- documentRequest.php -->
 
 <?php
-    session_start();
+// session_start();
 
-    // Correct session check
-    if (!isset($_SESSION['user_studentID'])) {
-        header("Location: login.php"); 
-        exit();
-    }
-
-    $studentID = $_SESSION['user_studentID'];
-    $userEmail = $_SESSION['user_email'];
-    $userName = $_SESSION['user_name'];
-
-    // -- LOGS --
-    // $userAge = $_SESSION['user_age'];
-    // var_dump($_SESSION);
-    // echo '<pre>';
-    // print_r($_SESSION['user_age']);
-    // echo '</pre>';
+// // Check if session exists
+// if (!isset($_SESSION['user_email'])) {
+//     header("Location: login.php"); 
+//     exit();
+// }
 
     // Access session data safely
     // isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';

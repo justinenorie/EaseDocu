@@ -1,3 +1,13 @@
+<?php
+//If the user is not logged in, it will redirect to the login page
+session_start();
+if (!isset($_SESSION['admin'])) {
+    header("Location: loginAdmin.php");
+    exit;
+}
+    // echo "Current account: " . $_SESSION['admin'] . "<br>";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,10 +37,18 @@
                 <h2>Filters</h2>
                 <nav>
                     <ul>
-                        <li><p><img class="icons" src="../../public/images/icons/warning.png" alt="Unpaid Icon">UNPAID</p></li>
-                        <li><p><img class="icons" src="../../public/images/icons/dollar-sign.png" alt="Paid Icon">PAID</p></li>
-                        <li><p><img class="icons" src="../../public/images/icons/data-processing.png" alt="Process Icon">PROCESS</p></li>
-                        <li><p><img class="icons" src="../../public/images/icons/checked.png" alt="Finished Icon">FINISHED</p></li>
+                        <li>
+                            <p><img class="icons" src="../../public/images/icons/warning.png" alt="Unpaid Icon">UNPAID</p>
+                        </li>
+                        <li>
+                            <p><img class="icons" src="../../public/images/icons/dollar-sign.png" alt="Paid Icon">PAID</p>
+                        </li>
+                        <li>
+                            <p><img class="icons" src="../../public/images/icons/data-processing.png" alt="Process Icon">PROCESS</p>
+                        </li>
+                        <li>
+                            <p><img class="icons" src="../../public/images/icons/checked.png" alt="Finished Icon">FINISHED</p>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -51,7 +69,7 @@
                 </tbody>
             </table>
         </div>
-        
+        <button id="terminate-btn">Terminate Admin Account</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

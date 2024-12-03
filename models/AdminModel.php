@@ -7,17 +7,18 @@ class AdminModel {
 
     public function __construct() {
         $db = getEaseDocuDatabase();
-        $this->collection = $db->selectCollection('admin'); // Collection Name
+        $this->collection = $db->selectCollection('adminCredential'); // Collection Name
     }
 
-    // Fetch an admin by username
-    public function getAdminByUsername($username) {
-        return $this->collection->findOne(['username' => $username]);
+    public function getAdminAccount() {
+        $cursor = $this->collection->find();
+        return iterator_to_array($cursor);
     }
 
     // Add a new admin
-    public function addAdmin($data) {
-        $result = $this->collection->insertOne($data);
+    public function addAdminAccount($username, $password) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $result = $this->collection->insertOne(['username' => $username, 'password' => $hashedPassword]);
         return $result->getInsertedId();
     }
 
@@ -31,14 +32,14 @@ class AdminModel {
     }
 
     // Delete an admin by username
-    public function deleteAdminByUsername($username) {
-        $result = $this->collection->deleteOne(['username' => $username]);
+    public function deleteAdminById($id) {
+        $result = $this->collection->deleteOne(['_id' => new MongoDB\BSON\ObjectID($id)]); //Gumagana yan kahit may Pula
         return $result->getDeletedCount();
     }
 
     // Verify login credentials
     public function verifyLogin($username, $password) {
-        $admin = $this->collection->findOne(['username' => $username]);
+        $admin = $this->collection->findOne(['username' => ['$regex' => '^' . preg_quote($username) . '$', '$options' => 'i']]);
         if ($admin && password_verify($password, $admin['password'])) {
             return $admin;
         }
