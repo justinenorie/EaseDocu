@@ -1,13 +1,11 @@
 <?php
-session_start();
+// session_start();
 
-// Check if session exists
-if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php"); 
-    exit();
-}
-
-
+// // Check if session exists
+// if (!isset($_SESSION['user_email'])) {
+//     header("Location: login.php"); 
+//     exit();
+// }
 
 $userEmail = $_SESSION['user_email'];
 $userName = $_SESSION['user_name'];

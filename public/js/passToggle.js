@@ -45,7 +45,7 @@ function alertLoginSuccess() {
         title: "Successfull",
         text: "Successfuly logged in!",
         showConfirmButton: false,
-        timer: 1500
+        timer: 2500
     });
 }
 
