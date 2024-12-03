@@ -65,15 +65,16 @@ app.post('/login', async(req, res) => {
         res.json({
             success: true,
             user: {
-                // email: user.email,
                 name: user.name,
-                studentID: user.studentID
+                studentID: user.studentID,
+                email: user.email 
             },
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
+
 
 // Signup route
 app.post('/signup', async(req, res) => {
@@ -99,3 +100,5 @@ const PORT = 4000;
 server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+

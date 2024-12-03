@@ -9,6 +9,12 @@
             margin: 0;
         }
 
+        :root {
+            --text-color: #1F2937;
+            --text-light: #FFFFFF;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
         .top-bar {
             background-color: var(--PRIMARY);
             position: absolute;
@@ -39,43 +45,42 @@
             align-items: center;
         }
 
-        .profile {
-            /* background-color: red; */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0 20px;
+        .logo {
+            width: 40px;
             height: 40px;
+            margin-right: 12px;
         }
 
-        .account {
-            /* background-color: violet; */
-            height: 100%;
+        .title h1 {
+            color: var(--text-light);
+            font-size: 1.5rem;
+        }
+
+        .profile {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            cursor: pointer;
         }
 
-        .account a {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            flex-direction: column;
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
         }
 
-        .account h2 {
-            font-size: 20px;
-            font-family: var(--WORK-SANS);
-            color: var(--TEXTLIGHT);
+        .account-info {
+            color: var(--text-light);
+        }
+
+        .account-info h2 {
+            font-size: 1rem;
             margin: 0;
         }
 
-        .account p {
+        .account-info p {
+            font-size: 0.8rem;
+            opacity: 0.8;
             margin: 0;
-            margin-top: 2px;
-            font-size: 16px;
-            font-family: var(--WORK-SANS);
-            color: var(--TEXTLIGHT);
         }
 
         .icon {
@@ -95,27 +100,50 @@
             text-decoration: none;
         }
 
+
         .modal {
             position: absolute;
-            top: 70px;
+            top: 80px;
             right: 20px;
-            background-color: blue;
-            padding: 15px;
-            color: var(--TEXTLIGHT);
+            background-color: var(--text-light);
+            width: 250px;
             border-radius: 10px;
-            display: none;
-            /* Hidden by default */
-            z-index: 1001;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            overflow: hidden;
+            transform: translateY(-10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
         }
 
-        /* Show the modal
         .modal.show {
-            display: block;
+            transform: translateY(0);
             opacity: 1;
-        } */
+            visibility: visible;
+        }
 
+        .modal-content {
+            padding: 15px;
+        }
+
+        .modal-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-item:hover {
+            background-color: var(--background-color);
+        }
+
+        .modal-item svg {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        
         @media screen and (max-width: 550px) {
             .top-bar {
                 padding: 20px 35px;
@@ -161,16 +189,31 @@
             <h1>EaseDocu</h1>
         </div>
 
-        <div class="profile">
-            <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
-
-            <div class="account" id="account">
-                <a id="click-profile" href="#">
-                <h2><?php echo htmlspecialchars($userEmail ?? 'Unknown User'); ?></h2>
-<p>22-00000 </p>
-
-                </a>
+        <div class="profile" id="profile-trigger">
+            <img class="profile-icon" src="../../public/images/icons/profile.png" alt="User Icon">
+            <div class="account-info">
+                <h2 id="username"><?php echo htmlspecialchars($userName ?? 'Unknown User'); ?></h2>
+                <p id="user-id"><?php echo htmlspecialchars($studentID ?? 'Unknown ID'); ?></p>
             </div>
+        </div>
+
+        <div id="account-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-item" id="show-profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Show Profile
+                </div>
+                <div class="modal-item" id="logout-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                </div>
+            </div>
+        </div>
+
         </div>
     </div>
 
@@ -178,28 +221,36 @@
         <p style="cursor: pointer;color:white;" >Show Profile</p>
         <a style="cursor: pointer;color:white;" href="logout.php" id="logout-btn">Logout</a>
     </div>
+
     <script>
-            //TODO: Add more design such as popup animation
-        //TODO: The name and studentID should be based on the database
-        document.addEventListener("DOMContentLoaded", () => {
-            const modal = document.getElementById("modal");
-            const accountClick = document.getElementById("account");
-        
-            accountClick.addEventListener("click", (event) => {
-                event.preventDefault();
-                modal.style.display = "block";
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileTrigger = document.getElementById('profile-trigger');
+            const accountModal = document.getElementById('account-modal');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Toggle modal visibility
+            profileTrigger.addEventListener('click', (event) => {
+                event.stopPropagation();
+                accountModal.classList.toggle('show');
             });
 
-            document.addEventListener("click", (event) => {
-                if (!modal.contains(event.target) && !accountClick.contains(event.target)) {
-                    modal.style.display = "none";
+            // Hide modal when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!accountModal.contains(event.target) && !profileTrigger.contains(event.target)) {
+                    accountModal.classList.remove('show');
                 }
             });
 
-            document.addEventListener("keydown", (event) => {
-                if (event.key === "Escape") {
-                    modal.style.display = "none";
+            // Hide modal on Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    accountModal.classList.remove('show');
                 }
+            });
+
+            // Logout functionality (you'll need to implement server-side logout)
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'logout.php';
             });
         });
     </script>

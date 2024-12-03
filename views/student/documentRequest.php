@@ -1,11 +1,7 @@
+<!-- documentRequest.php -->
+
 <?php
     session_start();
-
-    // Check if session exists
-    // if (!isset($_SESSION['user_email'])) {
-    //     header("Location: login.php"); 
-    //     exit();
-    // }
 
     // Correct session check
     if (!isset($_SESSION['user_studentID'])) {
@@ -13,8 +9,11 @@
         exit();
     }
 
-    // $userEmail = $_SESSION['user_email'];
+    $studentID = $_SESSION['user_studentID'];
+    $userEmail = $_SESSION['user_email'];
     $userName = $_SESSION['user_name'];
+
+    // -- LOGS --
     // $userAge = $_SESSION['user_age'];
     // var_dump($_SESSION);
     // echo '<pre>';
@@ -45,7 +44,7 @@
 
 <body>
     <div class="content-holder">
-        <form action="">
+        <form action="requestStatus.php" method="POST">
             <section class="req-doc">
 
                 <div class="req-doc-description">
@@ -74,7 +73,7 @@
                 </div>
 
                 <!-- <input type="submit" name="" value="Request Now" id=""> -->
-                <input type="submit" name="" value="Request Now" id="request-btn" onclick="window.location.href='requestStatus.php'">
+                <input type="submit" name="" value="Request Now" id="request-btn">
             </section>
         </form>
     </div>
