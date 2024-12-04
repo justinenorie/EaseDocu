@@ -85,7 +85,7 @@ function renderProgressIndicator($currentStatus, $statusSteps)
                 'title' => 'Payment successfully received',
                 'description' => 'Thank you for your payment. Your request will be processed shortly.'
             ],
-            'processing' => [
+            'process' => [
                 'title' => 'Your document is on the process......',
                 'description' => 'We are currently working on your document request.'
             ],
