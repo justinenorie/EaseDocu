@@ -8,6 +8,7 @@ const socketio = require('socket.io');
 
 const userLogin = require('./models/userLogin');
 const DocumentRequest = require('./models/documentRequest');
+const DocumentList = require('./models/documentList');
 
 const app = express();
 const server = http.createServer(app);
@@ -128,10 +129,31 @@ app.post('/signup', async(req, res) => {
     }
 });
 
-// Post ng Document Request
+// // Post ng Document Request
+// app.post('/submitRequest', async (req, res) => {
+//     const { name, studentID, requestedDocument, totalPayment } = req.body;
+//     if (!name || !studentID || !requestedDocument || !totalPayment) {
+//         return res.status(400).json({ success: false, message: 'All fields are required' });
+//     }
+//     try {
+//         const newRequest = new DocumentRequest({
+//             name,
+//             studentID,
+//             requestedDocument,
+//             totalPayment,
+//         });
+//         await newRequest.save();
+//         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+//     }
+// });
+
+// Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
     const { name, studentID, requestedDocument, totalPayment } = req.body;
 
+    // Check if all required fields are present
     if (!name || !studentID || !requestedDocument || !totalPayment) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
@@ -148,9 +170,11 @@ app.post('/submitRequest', async (req, res) => {
 
         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
     } catch (error) {
+        console.error(error);  // Log error to server console
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
+
 
 // Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
 app.get('/getDocumentRequests', async (req, res) => {
@@ -163,6 +187,19 @@ app.get('/getDocumentRequests', async (req, res) => {
     try {
         const requests = await DocumentRequest.find({ studentID: studentID });
         res.json({ success: true, requests });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Get Document List
+app.get('/getDocumentList', async (req, res) => {
+    try {
+        const documentList = await DocumentList.find({});
+        res.json({ 
+            success: true, 
+            documentList: documentList.length ? documentList : [] // Return empty array if no documents found
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }

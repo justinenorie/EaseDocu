@@ -116,19 +116,11 @@
     document.getElementById('request-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
         const requestedDocument = [];
-
         const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
         selectedCheckboxes.forEach((checkbox) => {
-            const quantity = parseInt(checkbox.closest(".list-item").querySelector(".quantity").textContent);
-            
-            // Add the document to the requestedDocument array as many times as the quantity
-            for (let i = 0; i < quantity; i++) {
-                requestedDocument.push(checkbox.value);
-            }
+            requestedDocument.push(checkbox.value);
         });
-
-        const totalPaymentText = document.getElementById('req-doc-total').textContent.trim();
-        const totalPayment = parseFloat(totalPaymentText.replace('Total: ₱', '').replace(',', ''));
+        const totalPayment = document.getElementById('req-doc-total').textContent.trim();
 
         if (requestedDocument.length === 0) {
             Swal.fire('Error', 'Please select at least one document', 'error');
@@ -138,7 +130,7 @@
         // Confirm submission
         Swal.fire({
             title: 'Review Your Request',
-            html: `<p>Total Payment: ${totalPayment}</p>`,
+            html: `<ul>${requestedDocument.map(doc => `<li>${doc}</li>`).join('')}</ul><p>Total Payment: ${totalPayment}</p>`,
             icon: 'info',
             confirmButtonText: 'Submit',
             showCancelButton: true,
@@ -173,6 +165,17 @@
             }
         });
     });
-
 </script>
 </html>
+
+i got error: POST http://localhost:4000/submitRequest 500 (Internal Server Error)
+
+but in my requestLogs i got 
+
+
+2024-12-04T07:26:43.810Z - Request Submitted
+Name: Michael Jordan
+Student ID: 23-00805
+Requested Documents: Certificate of Enrolled
+Total Payment: Total: ₱100.00
+--------------------------------------------

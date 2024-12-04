@@ -97,6 +97,19 @@
         </div>
         <?php
     }
+
+    // Function to count document quantities
+    function countDocumentQuantities($documents) {
+        $docCount = [];
+        foreach ($documents as $doc) {
+            if (isset($docCount[$doc])) {
+                $docCount[$doc]++;
+            } else {
+                $docCount[$doc] = 1;
+            }
+        }
+        return $docCount;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -142,11 +155,13 @@
                         <?php
                         if ($responseData['success']) {
                             foreach ($responseData['requests'] as $request) {
-                                foreach ($request['requestedDocument'] as $doc) {
+                                // Count the quantity of each document
+                                $docCount = countDocumentQuantities($request['requestedDocument']);
+                                foreach ($docCount as $docName => $quantity) {
                                     echo "
                                     <li class='list-item'>
                                         <div class='list-item-left'>
-                                            <p>x3</p>
+                                            <p>x$quantity</p>
                                             <div class='item-icon'>
                                                 <img src='../../public/images/icons/doc-certificate.png' alt=''>
                                             </div>
@@ -154,7 +169,7 @@
                                         <div class='list-item-right'>
                                             <div class='upper-item'>
                                                 <div class='item-name'>
-                                                    <h2>" . htmlspecialchars($doc) . "</h2>
+                                                    <h2>" . htmlspecialchars($docName) . "</h2>
                                                 </div>
                                             </div>
                                             <div class='lower-item'>

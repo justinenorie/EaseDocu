@@ -1,7 +1,6 @@
-// const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const { default: mongoose } = require("mongoose");
-
+// Define the schema for document requests
 const documentRequestSchema = new mongoose.Schema({
     name: { type: String, required: true },
     studentID: { type: String, required: true },
@@ -13,11 +12,7 @@ const documentRequestSchema = new mongoose.Schema({
     appointmentTime: { type: String, default: null },
 });
 
-// const DocumentRequest = mongoose.model('DocumentRequest', documentRequestSchema, {
-//     collection: 'documentRequestList'
-// });
-
+// Create the model based on the schema, ensure collection name matches the one in your MongoDB database
 const DocumentRequest = mongoose.model('DocumentRequest', documentRequestSchema, 'documentRequestsList');
 
 module.exports = DocumentRequest;
-
