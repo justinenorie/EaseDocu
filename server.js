@@ -102,12 +102,8 @@ app.post('/signup', async(req, res) => {
 app.post('/submitRequest', async (req, res) => {
     const { name, studentID, requestedDocument, totalPayment, date } = req.body;
 
-<<<<<<< HEAD
-    if (!name || !studentID || !requestedDocument || !totalPayment) {
-=======
     // Check if all required fields are present
     if (!name || !studentID || !requestedDocument || !totalPayment || !date) {
->>>>>>> 0f51320925a261d2e81e2283060ffb2eb6e0d356
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
