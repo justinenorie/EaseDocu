@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 // Connect to MongoDB
 // mongoose.connect('mongodb://localhost:27017/easedocu')
 mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
@@ -120,23 +119,6 @@ app.post('/submitRequest', async (req, res) => {
         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
     } catch (error) {
         console.error(error);  // Log error to server console
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
-    }
-});
-
-
-// Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
-app.get('/getDocumentRequests', async (req, res) => {
-    const studentID = req.query.studentID; // Change from userId to studentID
-
-    if (!studentID) {
-        return res.status(400).json({ success: false, message: 'Student ID is required' });
-    }
-
-    try {
-        const requests = await DocumentRequest.find({ studentID: studentID });
-        res.json({ success: true, requests });
-    } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
