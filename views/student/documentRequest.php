@@ -1,28 +1,17 @@
-<!-- documentRequest.php -->
-
 <?php
     session_start();
 
     // Correct session check
-    if (!isset($_SESSION['user_studentID'])) {
+    if (!isset($_SESSION['user_id'])) {
         header("Location: login.php"); 
         exit();
     }
 
+    $userId = $_SESSION['user_id']; 
     $studentID = $_SESSION['user_studentID'];
     $userEmail = $_SESSION['user_email'];
     $userName = $_SESSION['user_name'];
-
-    // -- LOGS --
-    // $userAge = $_SESSION['user_age'];
-    // var_dump($_SESSION);
-    // echo '<pre>';
-    // print_r($_SESSION['user_age']);
-    // echo '</pre>';
-
-    // Access session data safely
-    // isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
-    // echo isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';
+    
     require '../../views/components/topBarStudent.php';
 
 ?>

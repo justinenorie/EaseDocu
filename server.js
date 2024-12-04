@@ -49,7 +49,36 @@ io.on('connection', (socket) => {
     });
 });
 
-// Login route
+// Login route -- V1 
+// app.post('/login', async(req, res) => {
+//     const { studentID, password } = req.body;
+
+//     try {
+//         const user = await userLogin.findOne({ studentID });
+//         if (!user) {
+//             return res.status(400).json({ success: false, message: 'User not found!' });
+//         }
+
+//         const isMatch = await user.comparePassword(password);
+//         if (!isMatch) {
+//             return res.status(400).json({ success: false, message: 'Invalid password!' });
+//         }
+
+//         res.json({
+//             success: true,
+//             user: {
+//                 name: user.name,
+//                 studentID: user.studentID,
+//                 email: user.email 
+//             },
+//         });
+        
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+//     }
+// });
+
+// Login route -- V2 SESSION HANDLER
 app.post('/login', async(req, res) => {
     const { studentID, password } = req.body;
 
@@ -67,6 +96,7 @@ app.post('/login', async(req, res) => {
         res.json({
             success: true,
             user: {
+                _id: user._id, // Ito gagamitin for Student Session
                 name: user.name,
                 studentID: user.studentID,
                 email: user.email 
@@ -122,19 +152,17 @@ app.post('/submitRequest', async (req, res) => {
     }
 });
 
-// Retrieve document requests for the logged-in user based on their studentID
-// Retrieve all document requests or specific ones for testing
+// Get ng Document Request
 app.get('/getDocumentRequests', async (req, res) => {
-    try {
-        // Fetch document requests where studentID is 'test101'
-        const requests = await DocumentRequest.find({ studentID: '23-00805' });
+    const userId = req.query.userId; 
 
+    try {
+        const requests = await DocumentRequest.find({ user: userId });
         res.json({ success: true, requests });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
-
 
 
 // Start the server

@@ -1,5 +1,13 @@
 
+<?php
 
+    session_start();
+    if (isset($_SESSION['user_id'])) {
+        header("Location: documentRequest.php"); 
+        exit();
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,8 +59,8 @@
     <script src="../../public/js/passToggle.js"> </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
     <?php
+
         // testing function lang
         function log_message($message) {
             $log_file = __DIR__ . '/login_debug.log'; 
@@ -60,7 +68,7 @@
             file_put_contents($log_file, "[$timestamp] $message\n", FILE_APPEND);
         }
 
-        session_start();
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $studentID = $_POST['studentID'];
@@ -88,10 +96,11 @@
                 log_message("Received response: " . print_r($responseData, true));
 
                 if (isset($responseData['user'])) {
+                    $_SESSION['user_id'] = $responseData['user']['_id'];
                     $_SESSION['user_studentID'] = $responseData['user']['studentID'];
                     $_SESSION['user_name'] = $responseData['user']['name'];
                     $_SESSION['user_email'] = $responseData['user']['email'];
-
+                
                     echo "<script>
                         Swal.fire({
                             icon: 'success',
