@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // Define the schema for document requests
 const documentRequestSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    email: { type: String, required: true },
     studentID: { type: String, required: true },
     date: { type: String, required: true },
     status: { type: String, default: "unpaid" },

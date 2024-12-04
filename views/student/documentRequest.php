@@ -117,7 +117,6 @@ function renderDocumentListItem($document)
     document.getElementById('request-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
         const date = new Date().toISOString().split('T')[0];
-
         const requestedDocument = [];
 
         const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
@@ -158,6 +157,7 @@ function renderDocumentListItem($document)
                         body: JSON.stringify({
                             name: '<?php echo $studentData['name']; ?>', // Pass user name from PHP
                             studentID: '<?php echo $studentData['studentID']; ?>', // Pass student ID from PHP
+                            email: '<?php echo $studentData['email']; ?>', // Pass email
                             date,
                             requestedDocument,
                             totalPayment,

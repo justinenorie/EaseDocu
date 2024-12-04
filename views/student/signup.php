@@ -90,7 +90,7 @@
                         icon: "success",
                         title: "Signup Successful",
                         showConfirmButton: false,
-                        timer: 1500,
+                        timer: 2500,
                     }).then(() => {
                         window.location.href = "login.php";
                     });

@@ -148,10 +148,10 @@ app.post('/signup', async(req, res) => {
 
 // Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
-    const { name, studentID, requestedDocument, totalPayment, date } = req.body;
+    const { name, studentID, requestedDocument, totalPayment, date, email } = req.body;
 
     // Check if all required fields are present
-    if (!name || !studentID || !requestedDocument || !totalPayment || !date) {
+    if (!name || !studentID || !requestedDocument || !totalPayment || !date || !email) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
@@ -162,6 +162,7 @@ app.post('/submitRequest', async (req, res) => {
             date,
             requestedDocument,
             totalPayment,
+            email,
         });
 
         await newRequest.save();
@@ -173,18 +174,21 @@ app.post('/submitRequest', async (req, res) => {
     }
 });
 
-// Retrieve document requests for the logged-in user based on their studentID
-// Retrieve all document requests or specific ones for testing
-// app.get('/getDocumentRequests', async (req, res) => {
-//     try {
-//         // Fetch document requests where studentID is 'test101'
-//         const requests = await DocumentRequest.find({ studentID: '23-00805' });
+// Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
+app.get('/getDocumentRequests', async (req, res) => {
+    const studentID = req.query.studentID; // Change from userId to studentID
 
-//         res.json({ success: true, requests });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
+    if (!studentID) {
+        return res.status(400).json({ success: false, message: 'Student ID is required' });
+    }
+
+    try {
+        const requests = await DocumentRequest.find({ studentID: studentID });
+        res.json({ success: true, requests });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
 
 // Get Document List
 app.get('/getDocumentList', async (req, res) => {
