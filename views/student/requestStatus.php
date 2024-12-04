@@ -33,15 +33,15 @@ $statusSteps = [
         'order' => 1
     ],
     'paid' => [
-        'image' => 'path/to/paid-icon.png',
+        'image' => '../../public/images/icons/dollar-sign.png',
         'order' => 2
     ],
-    'processing' => [
-        'image' => 'path/to/processing-icon.png',
+    'process' => [
+        'image' => '../../public/images/icons/data-processing.png',
         'order' => 3
     ],
     'ready' => [
-        'image' => 'path/to/ready-icon.png',
+        'image' => '../../public/images/icons/checked.png',
         'order' => 4
     ]
 ];
@@ -86,7 +86,7 @@ function renderStatusMessage($currentStatus)
             'title' => 'Payment successfully received',
             'description' => 'Thank you for your payment. Your request will be processed shortly.'
         ],
-        'processing' => [
+        'process' => [
             'title' => 'Your document is on the process......',
             'description' => 'We are currently working on your document request.'
         ],
