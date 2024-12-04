@@ -1,8 +1,9 @@
 <?php
 require '../../vendor/autoload.php';
 
+
 try {
-    $mongo = new MongoDB\Client("mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/");
+    $mongo = new MongoDB\Client($_ENV['MONGODB_TOKEN']);
     $collection = $mongo->easedocu->documentList;
     
     // Initial fetch of documents

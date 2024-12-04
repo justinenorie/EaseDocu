@@ -192,8 +192,8 @@
         <div class="profile" id="profile-trigger">
             <img class="profile-icon" src="../../public/images/icons/profile.png" alt="User Icon">
             <div class="account-info">
-                <h2 id="username"><?php echo htmlspecialchars($userName ?? 'Unknown User'); ?></h2>
-                <p id="user-id"><?php echo htmlspecialchars($studentID ?? 'Unknown ID'); ?></p>
+                <h2 id="username"><?php echo htmlspecialchars($studentData['name'] ?? 'Unknown User'); ?></h2>
+                <p id="user-id"><?php echo htmlspecialchars($studentData['studentID'] ?? 'Unknown ID'); ?></p>
             </div>
         </div>
 

@@ -1,13 +1,18 @@
 <!-- documentRequest.php -->
 
 <?php
-// session_start();
+require __DIR__ . '/../../models/StudentModel.php';
+session_start();
 
-// // Check if session exists
-// if (!isset($_SESSION['user_email'])) {
-//     header("Location: login.php"); 
-//     exit();
-// }
+// Check if session exists
+if (!isset($_SESSION['studentID'])) {
+    header("Location: login.php"); 
+    exit();
+}
+
+$studentId = $_SESSION['studentID'];
+$studentModel = new StudentModel();
+$studentData = $studentModel->getStudentById($studentId);
 
     // Access session data safely
     // isset($_SESSION['user']['key_name']) ? $_SESSION['user']['key_name'] : 'N/A';

@@ -68,8 +68,6 @@ require '../../api/AdminLoginHandler.php';
     <?php endif; ?>
 
     <script>
-        // login_ajax.js
-        // TODO: It will not break the session until the admin didn't click the logout button
         $('#login-form').submit(function(event) {
             event.preventDefault();
             const formData = $(this).serialize();
