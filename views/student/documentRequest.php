@@ -1,33 +1,34 @@
 <!-- documentRequest.php -->
 <?php
-    session_start();
+require __DIR__ . '/../../models/StudentModel.php';
+session_start();
 
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: login.php"); 
-        exit();
-    }
+if (!isset($_SESSION['studentID'])) {
+    header("Location: login.php");
+    exit();
+}
 
-    $userId = $_SESSION['user_id']; 
-    $studentID = $_SESSION['user_studentID'];
-    $userEmail = $_SESSION['user_email'];
-    $userName = $_SESSION['user_name'];
+$studentID = $_SESSION['studentID'];
+$studentModel = new StudentModel();
+$studentData = $studentModel->getStudentById($studentID);
 
-    require '../../views/components/topBarStudent.php';
+require '../../views/components/topBarStudent.php';
 
-    // Fetch the document list from the server
-    $url = 'http://localhost:4000/getDocumentList';
-    $response = file_get_contents($url);
-    $responseData = json_decode($response, true);
+// Fetch the document list from the server
+$url = 'http://localhost:4000/getDocumentList';
+$response = file_get_contents($url);
+$responseData = json_decode($response, true);
 
-    // Check if the response is valid
-    if (is_null($responseData) || !isset($responseData['success']) || !$responseData['success']) {
-        echo '<p>Error fetching document list. Please try again later.</p>';
-        exit;
-    }
+// Check if the response is valid
+if (is_null($responseData) || !isset($responseData['success']) || !$responseData['success']) {
+    echo '<p>Error fetching document list. Please try again later.</p>';
+    exit;
+}
 
-    // Function to render each document list item
-    function renderDocumentListItem($document) {
-        return '
+// Function to render each document list item
+function renderDocumentListItem($document)
+{
+    return '
         <li class="list-item">
             <div class="list-item-left">
                 <input type="checkbox" 
@@ -56,7 +57,7 @@
                 </div>
             </div>
         </li>';
-    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -81,9 +82,9 @@
                     <div id="request-summary" style="display:none;"></div>
                     <ul>
                         <?php
-                            foreach ($responseData['documentList'] as $document) {
-                                echo renderDocumentListItem($document); // Using the function to render each document item
-                            }
+                        foreach ($responseData['documentList'] as $document) {
+                            echo renderDocumentListItem($document); // Using the function to render each document item
+                        }
                         ?>
                     </ul>
 
@@ -115,12 +116,14 @@
 <script>
     document.getElementById('request-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
+        const requestDate = new Date().toISOString().split('T')[0];
+
         const requestedDocument = [];
 
         const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
         selectedCheckboxes.forEach((checkbox) => {
             const quantity = parseInt(checkbox.closest(".list-item").querySelector(".quantity").textContent);
-            
+
             // Add the document to the requestedDocument array as many times as the quantity
             for (let i = 0; i < quantity; i++) {
                 requestedDocument.push(checkbox.value);
@@ -143,36 +146,41 @@
             confirmButtonText: 'Submit',
             showCancelButton: true,
             cancelButtonText: 'Edit',
+            reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
                 // Send AJAX request
                 fetch('http://localhost:4000/submitRequest', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: '<?php echo $userName; ?>', // Pass user name from PHP
-                        studentID: '<?php echo $studentID; ?>', // Pass student ID from PHP
-                        requestedDocument,
-                        totalPayment,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('Success', data.message, 'success');
-                        // Optionally redirect or update UI
-                    } else {
-                        Swal.fire('Error', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
-                });
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: '<?php echo $studentData['name']; ?>', // Pass user name from PHP
+                            studentID: '<?php echo $studentData['studentID']; ?>', // Pass student ID from PHP
+                            requestDate,
+                            requestedDocument,
+                            totalPayment,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Success', data.message, 'success');
+                            // Redirect to the request status page
+                            setTimeout(function() {
+                                window.location.href = 'requestStatus.php';
+                            }, 1500);
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
+                    });
             }
         });
     });
-
 </script>
+
 </html>
