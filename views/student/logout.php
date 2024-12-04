@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-session_unset();
-session_destroy();
+if (isset($_SESSION['studentID'])) {
+    unset($_SESSION['studentID']);
+}
 
 header("Location: login.php");
 exit;
-?>
