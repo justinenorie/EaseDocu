@@ -14,14 +14,10 @@
     require '../../views/components/topBarStudent.php';
     require '../../views/components/chatModal.php';
 
-    // Modify the URL to include studentID
     $url = 'http://localhost:4000/getDocumentRequests?studentID=' . urlencode($studentID);
     $response = file_get_contents($url);
     $responseData = json_decode($response, true);
 
-    // Rest of the code remains the same...
-
-    // Define status steps similar to the original progressIndicator.php
     $statusSteps = [
         'unpaid' => [
             'image' => '../../public/images/icons/warning.png',
@@ -69,7 +65,7 @@
         <?php
     }
 
-    function renderStatusMessage($currentStatus) {
+    function renderStatusMessage($currentStatus, $request = null) {
         $messages = [
             'unpaid' => [
                 'title' => 'Payment process expires in 24 hours',
@@ -85,10 +81,12 @@
             ],
             'ready' => [
                 'title' => 'Your document is available to pick-up',
-                'description' => 'Your document is ready for pick-up on January 1, 2025, 3:00 PM Onwards.'
+                'description' => $request && $request['appointmentDate'] && $request['appointmentTime'] 
+                    ? formatPickupDescription($request['appointmentDate'], $request['appointmentTime'])
+                    : 'Your document is ready for pick-up.'
             ]
         ];
-
+    
         $message = $messages[$currentStatus];
         ?>
         <div class="status-message">
@@ -97,8 +95,20 @@
         </div>
         <?php
     }
+    
+    // Date and Time Format to Readable
+    function formatPickupDescription($dateString, $timeString) {
 
-    // Function to count document quantities
+        $timestamp = strtotime($dateString);
+        $formattedDate = date('F j, Y', $timestamp);
+    
+        // TODO: Format the time (assuming 24-hour format)
+        $formattedTime = date('h:i A', strtotime($timeString));
+    
+        return "Your document is ready for pick-up on $formattedDate at $formattedTime Onwards.";
+    }
+
+    // Count Document Quantities
     function countDocumentQuantities($documents) {
         $docCount = [];
         foreach ($documents as $doc) {
@@ -132,15 +142,14 @@
 
                 <div class="req-doc-order">
                     <?php
-                    if ($responseData['success']) {
-                        foreach ($responseData['requests'] as $request) {
-                            // Use the status directly from the MongoDB data
-                            renderProgressIndicator($request['status'], $statusSteps);
-                            renderStatusMessage($request['status']);
+                        if ($responseData['success']) {
+                            foreach ($responseData['requests'] as $request) {
+                                renderProgressIndicator($request['status'], $statusSteps);
+                                renderStatusMessage($request['status'], $request);
+                            }
+                        } else {
+                            echo '<p>No document requests found.</p>';
                         }
-                    } else {
-                        echo '<p>No document requests found.</p>';
-                    }
                     ?>
                 </div>
 

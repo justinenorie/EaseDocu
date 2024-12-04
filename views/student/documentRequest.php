@@ -1,4 +1,3 @@
-<!-- documentRequest.php -->
 <?php
     session_start();
 
@@ -14,18 +13,16 @@
 
     require '../../views/components/topBarStudent.php';
 
-    // Fetch the document list from the server
     $url = 'http://localhost:4000/getDocumentList';
     $response = file_get_contents($url);
     $responseData = json_decode($response, true);
 
-    // Check if the response is valid
     if (is_null($responseData) || !isset($responseData['success']) || !$responseData['success']) {
         echo '<p>Error fetching document list. Please try again later.</p>';
         exit;
     }
 
-    // Function to render each document list item
+    //  Render each document list item
     function renderDocumentListItem($document) {
         return '
         <li class="list-item">
@@ -82,14 +79,13 @@
                     <ul>
                         <?php
                             foreach ($responseData['documentList'] as $document) {
-                                echo renderDocumentListItem($document); // Using the function to render each document item
+                                echo renderDocumentListItem($document); 
                             }
                         ?>
                     </ul>
 
-                    <!-- Added total price display -->
                     <div id="totalAmount" class="total-amount">
-                        <h3>Total: ₱0</h3>
+                        <h3 style="display:none;">Total: ₱0</h3>
                     </div>
                 </div>
             </section>
@@ -114,14 +110,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.getElementById('request-btn').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         const requestedDocument = [];
 
         const selectedCheckboxes = document.querySelectorAll('input[name="document[]"]:checked');
         selectedCheckboxes.forEach((checkbox) => {
             const quantity = parseInt(checkbox.closest(".list-item").querySelector(".quantity").textContent);
-            
-            // Add the document to the requestedDocument array as many times as the quantity
+
             for (let i = 0; i < quantity; i++) {
                 requestedDocument.push(checkbox.value);
             }
@@ -135,44 +130,75 @@
             return;
         }
 
-        // Confirm submission
-        Swal.fire({
-            title: 'Review Your Request',
-            html: `<p>Total Payment: ${totalPayment}</p>`,
-            icon: 'info',
-            confirmButtonText: 'Submit',
-            showCancelButton: true,
-            cancelButtonText: 'Edit',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Send AJAX request
-                fetch('http://localhost:4000/submitRequest', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: '<?php echo $userName; ?>', // Pass user name from PHP
-                        studentID: '<?php echo $studentID; ?>', // Pass student ID from PHP
-                        requestedDocument,
-                        totalPayment,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('Success', data.message, 'success');
-                        // Optionally redirect or update UI
-                    } else {
-                        Swal.fire('Error', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
+        // First, check existing requests
+        fetch(`http://localhost:4000/getDocumentRequests?studentID=<?php echo $studentID; ?>`)
+        .then(response => response.json())
+        .then(existingRequestsData => {
+            // Check if there are any existing requests in unpaid or other active statuses
+            const activeRequests = existingRequestsData.requests.filter(request => 
+                request.status === 'unpaid' || 
+                request.status === 'processing' || 
+                request.status === 'paid'
+            );
+
+            if (activeRequests.length > 0) {
+                // If active requests exist, show warning
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Existing Request Detected',
+                    text: 'You already have an active document request. Please complete or cancel your existing request before submitting a new one.',
+                    confirmButtonText: 'OK'
                 });
+                return;
             }
+
+            // If no active requests, proceed with submission confirmation
+            Swal.fire({
+                title: 'Review Your Request',
+                html: `<p>Total Payment: ${totalPayment}</p>`,
+                icon: 'info',
+                confirmButtonText: 'Submit',
+                showCancelButton: true,
+                cancelButtonText: 'Edit',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('http://localhost:4000/submitRequest', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: '<?php echo $userName; ?>', 
+                            studentID: '<?php echo $studentID; ?>',
+                            requestedDocument,
+                            totalPayment,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Optional: Redirect or refresh the page
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            Swal.fire('Error', 'Unable to check existing requests.', 'error');
         });
     });
-
 </script>
 </html>
