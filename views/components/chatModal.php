@@ -157,51 +157,6 @@
     </div>
 
     <script>
-        // SAMPLE DATA ONLY
-        const chatData = {
-            messages: [
-                {
-                    timestamp: "2024-03-19T09:30:00Z",
-                    sender: "user",
-                    message: "Hi, I need help with my TOR request"
-                },
-                {
-                    timestamp: "2024-03-19T09:32:00Z",
-                    sender: "admin",
-                    message: "Hello! I'd be happy to help. What specific information do you need about your TOR request?"
-                },
-                {
-                    timestamp: "2024-03-19T09:30:00Z",
-                    sender: "user",
-                    message: "Hi, I need help with my TOR request"
-                },
-                {
-                    timestamp: "2024-03-19T09:32:00Z",
-                    sender: "admin",
-                    message: "Hello! I'd be happy to help. What specific information do you need about your TOR request?"
-                },
-                {
-                    timestamp: "2024-03-19T09:30:00Z",
-                    sender: "user",
-                    message: "Hi, I need help with my TOR request"
-                },
-                {
-                    timestamp: "2024-03-19T09:32:00Z",
-                    sender: "admin",
-                    message: "Hello! I'd be happy to help. What specific information do you need about your TOR request?"
-                },
-                {
-                    timestamp: "2024-03-19T09:30:00Z",
-                    sender: "user",
-                    message: "Hi, I need help with my TOR request"
-                },
-                {
-                    timestamp: "2024-03-19T09:32:00Z",
-                    sender: "admin",
-                    message: "Hello! I'd be happy to help. What specific information do you need about your TOR request?"
-                }
-            ]
-        };
 
         document.addEventListener('click', function(event) {
             const modal = document.getElementById('chatModal');

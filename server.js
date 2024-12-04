@@ -25,9 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// MongoDB connection
-// mongoose.connect('mongodb://localhost:27017/easedocu')
-
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
 .then(() => console.log('MongoDB connected'))
@@ -175,22 +172,18 @@ app.post('/submitRequest', async (req, res) => {
     }
 });
 
+// Retrieve document requests for the logged-in user based on their studentID
+// Retrieve all document requests or specific ones for testing
+// app.get('/getDocumentRequests', async (req, res) => {
+//     try {
+//         // Fetch document requests where studentID is 'test101'
+//         const requests = await DocumentRequest.find({ studentID: '23-00805' });
 
-// Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
-app.get('/getDocumentRequests', async (req, res) => {
-    const studentID = req.query.studentID; // Change from userId to studentID
-
-    if (!studentID) {
-        return res.status(400).json({ success: false, message: 'Student ID is required' });
-    }
-
-    try {
-        const requests = await DocumentRequest.find({ studentID: studentID });
-        res.json({ success: true, requests });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
-    }
-});
+//         res.json({ success: true, requests });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+//     }
+// });
 
 // Get Document List
 app.get('/getDocumentList', async (req, res) => {

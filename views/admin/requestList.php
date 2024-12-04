@@ -69,7 +69,7 @@ if (!isset($_SESSION['admin'])) {
                 </tbody>
             </table>
         </div>
-        <button id="terminate-btn">Terminate Admin Account</button>
+        <!-- <button id="terminate-btn">Terminate Admin Account</button> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

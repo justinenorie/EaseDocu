@@ -64,7 +64,7 @@ function alertFailAdminLogin() {
 }
 
 //Failed Student Login Popup
-function alertFailLogin() {
+function alertFailStudentLogin() {
     event.preventDefault();
     Swal.fire({
         position: "center",
