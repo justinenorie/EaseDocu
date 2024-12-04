@@ -116,7 +116,7 @@ function renderDocumentListItem($document)
 <script>
     document.getElementById('request-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
-        const requestDate = new Date().toISOString().split('T')[0];
+        const date = new Date().toISOString().split('T')[0];
 
         const requestedDocument = [];
 
@@ -158,7 +158,7 @@ function renderDocumentListItem($document)
                         body: JSON.stringify({
                             name: '<?php echo $studentData['name']; ?>', // Pass user name from PHP
                             studentID: '<?php echo $studentData['studentID']; ?>', // Pass student ID from PHP
-                            requestDate,
+                            date,
                             requestedDocument,
                             totalPayment,
                         }),

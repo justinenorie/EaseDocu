@@ -148,10 +148,10 @@ app.post('/signup', async(req, res) => {
 
 // Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
-    const { name, studentID, requestedDocument, totalPayment } = req.body;
+    const { name, studentID, requestedDocument, totalPayment, date } = req.body;
 
     // Check if all required fields are present
-    if (!name || !studentID || !requestedDocument || !totalPayment) {
+    if (!name || !studentID || !requestedDocument || !totalPayment || !date) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
@@ -159,6 +159,7 @@ app.post('/submitRequest', async (req, res) => {
         const newRequest = new DocumentRequest({
             name,
             studentID,
+            date,
             requestedDocument,
             totalPayment,
         });
