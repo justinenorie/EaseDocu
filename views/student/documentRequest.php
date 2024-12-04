@@ -1,5 +1,5 @@
 <?php
-    session_start();
+// session_start();
 
     // Correct session check
     if (!isset($_SESSION['user_id'])) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="../student/styles/signup.css">
 </head>
+
 <body>
     <div class="signup-holder">
         <div class="signup-container">
@@ -23,9 +25,16 @@
                         <input id="name" name="name" type="text" placeholder="Full Name" required>
                         <input id="studentID" name="studentID" type="text" placeholder="Student ID" required>
                         <input id="email" name="email" type="email" placeholder="Email" required>
-                        <input id="password" name="password" type="password" placeholder="Password" required>
-                        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required>
                         
+                        <div class="password-toggle">
+                            <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
+                            <input id="password" name="password" type="password" placeholder="Password">
+                        </div>
+                        <div class="confirm-password-toggle password-toggle">
+                            <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="" style="z-index: 1;"></a>
+                            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password">
+                        </div>
+
                         <div id="legalTerms">
                             <input type="checkbox" name="terms" required>
                             <p>I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></p>
@@ -52,9 +61,10 @@
 
     <!-- JavaScript for handling signup -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../public/js/passToggle.js"> </script>  
     <script>
         document.getElementById("signup-form").addEventListener("submit", async (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             const formData = new FormData(e.target);
             const data = {
                 name: formData.get("name"),
@@ -101,4 +111,5 @@
         });
     </script>
 </body>
+
 </html>

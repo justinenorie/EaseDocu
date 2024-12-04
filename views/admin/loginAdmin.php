@@ -1,4 +1,8 @@
 <!-- Login Session -->
+<?php
+require '../../api/AdminLoginHandler.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,13 +27,13 @@
             <div class="login-form">
                 <h1>Sign in as Admin</h1>
                 <p>Admin account controls everything</p>
-                <form action="login.php" method="post">
+                <form id="login-form">
                     <div class="inputs">
-                        <input type="name" name="admin" placeholder="Admin" required>
+                        <input type="name" name="admin" placeholder="Admin" required autocomplete="off">
 
                         <div class="password-toggle">
                             <input id="password" type="password" name="password" placeholder="Password" required>
-                            <a href=""><img src="../../public//images//icons/pw-toggle-hide.png" alt="Eye Icon"></a>
+                            <a href=""><img src="../../public/images/icons/pw-toggle-hide.png" alt="Eye Icon"></a>
                         </div>
 
                     </div>
@@ -46,42 +50,53 @@
         </div>
     </div>
     <!-- SweetAlert for Popup -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../public/js/passToggle.js"> </script>
-    <!-- Example Student Data -->
-    <!-- TODO: Replace this with the actual admin credentials data -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <?php if ($newAccountCreated): ?>
+        <script>
+            //TODO: Add a email confirmation
+            //TODO: Admin account not found do you want to generate an account for admin? Confirmation
+            Swal.fire({
+                title: 'Default Admin Account Created!',
+                html: `<p>Username: <strong><?= $username ?></strong></p><p>Password: <strong><?= $password ?></strong></p>`,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    <?php endif; ?>
+
     <script>
-        async function fetchStudentData() {
-            try {
-                //Example data file path
-                //Session Login
-                const response = await fetch('../../data/admin.json');
-                const adminsAccount = await response.json();
-                document.querySelector('form').addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    const admin = document.querySelector('input[name="admin"]').value;
-                    const password = document.querySelector('input[name="password"]').value;
-
-                    const admins = adminsAccount.find(s => s.adminUsername === admin && s.adminPassword === password);
-
-                    if (admins) {
-                        alertLoginSuccess();
-                        document.getElementById("submit-btn").addEventListener("click", alertLoginSuccess);
-                        //Redirect to the document request page
-                        setTimeout(() => {
-                            window.location.href = "requestList.php";
-                        }, 1500);
+        // login_ajax.js
+        // TODO: It will not break the session until the admin didn't click the logout button
+        $('#login-form').submit(function(event) {
+            event.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '../../api/AdminLoginHandler.php',
+                data: formData,
+                dataType: 'json', // Expect JSON response from the server
+                success: function(response) {
+                    if (response.success) {
+                        console.log("Login success");
+                        alertLoginSuccess(); // Call success function
+                        setTimeout(function() {
+                            window.location.href = 'requestList.php'; // Redirect to the desired page after 1 second
+                        }, 1000);
                     } else {
-                        alertFailLogin();
-                        document.getElementById("submit-btn").addEventListener("click", alertFailLogin);
+                        console.log("Login fail");
+                        alertFailAdminLogin(); // Call failure function
                     }
-                });
-            } catch (error) {
-                console.error('Error fetching student data:', error);
-            }
-        }
-        fetchStudentData();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
     </script>
+
 </body>
 
 </html>

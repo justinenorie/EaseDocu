@@ -1,4 +1,14 @@
 <!-- Session -->
+<?php
+//If the user is not logged in, it will redirect to the login page
+session_start();
+if (!isset($_SESSION['admin'])) {
+    header("Location: loginAdmin.php");
+    exit;
+}
+    // echo "Current account: " . $_SESSION['admin'] . "<br>";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

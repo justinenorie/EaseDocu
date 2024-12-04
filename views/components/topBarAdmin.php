@@ -54,10 +54,6 @@
             flex-direction: column;
         }
 
-        .account :hover {
-            color: var(--ACCENT);
-        }
-
         .account h2 {
             font-size: var(--SUBHEADER);
             font-family: var(--WORK-SANS);
@@ -87,6 +83,27 @@
         a {
             text-decoration: none;
         }
+
+        .modal {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: var(--ACCENT);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            /* Hidden by default */
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+        .modal a{
+            color: var(--TEXTDARK);
+            font-family: var(--WORK-SANS);
+            font-weight: 600;
+            font-size: var(--BODY);
+        }
     </style>
 </head>
 
@@ -102,7 +119,7 @@
             <a href="../admin/reportsList.php">Report</a>
         </div>
 
-        <div class="profile">
+        <div class="profile" id="account">
             <img class="icon" src="../../public/images/icons/profile.png" alt="User Icon">
             <div class="account">
                 <!-- TODO: Hovered Logout Panel -->
@@ -112,7 +129,41 @@
                 </a>
             </div>
         </div>
+        <div id="modal" class="modal" style="display: none;">
+            <a href="logout.php" id="logout-btn">Logout</a>
+        </div>
     </div>
+
+    <script>
+        //TODO: Add more design such as popup animation
+        //TODO: The name and studentID should be based on the database
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("modal");
+            const accountClick = document.getElementById("account");
+
+            accountClick.addEventListener("mouseover", (event) => {
+                event.preventDefault();
+                modal.style.display = "block";
+            });
+
+            modal.addEventListener("mouseover", (event) => {
+                event.preventDefault();
+                modal.style.display = "block";
+            });
+
+            document.addEventListener("mousemove", (event) => {
+                if (!modal.contains(event.target) && !accountClick.contains(event.target)) {
+                    modal.style.display = "none";
+                }
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
