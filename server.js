@@ -26,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB
+// mongoose.connect('mongodb://localhost:27017/easedocu')
 mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
@@ -47,36 +48,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// Login route -- V1 
-// app.post('/login', async(req, res) => {
-//     const { studentID, password } = req.body;
-
-//     try {
-//         const user = await userLogin.findOne({ studentID });
-//         if (!user) {
-//             return res.status(400).json({ success: false, message: 'User not found!' });
-//         }
-
-//         const isMatch = await user.comparePassword(password);
-//         if (!isMatch) {
-//             return res.status(400).json({ success: false, message: 'Invalid password!' });
-//         }
-
-//         res.json({
-//             success: true,
-//             user: {
-//                 name: user.name,
-//                 studentID: user.studentID,
-//                 email: user.email 
-//             },
-//         });
-        
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
-
-// Login route -- V2 SESSION HANDLER
+// Login route
 app.post('/login', async(req, res) => {
     const { studentID, password } = req.body;
 
@@ -126,26 +98,6 @@ app.post('/signup', async(req, res) => {
     }
 });
 
-// // Post ng Document Request
-// app.post('/submitRequest', async (req, res) => {
-//     const { name, studentID, requestedDocument, totalPayment } = req.body;
-//     if (!name || !studentID || !requestedDocument || !totalPayment) {
-//         return res.status(400).json({ success: false, message: 'All fields are required' });
-//     }
-//     try {
-//         const newRequest = new DocumentRequest({
-//             name,
-//             studentID,
-//             requestedDocument,
-//             totalPayment,
-//         });
-//         await newRequest.save();
-//         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
-
 // Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
     const { name, studentID, requestedDocument, totalPayment, date, email } = req.body;
@@ -174,22 +126,6 @@ app.post('/submitRequest', async (req, res) => {
     }
 });
 
-// Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
-app.get('/getDocumentRequests', async (req, res) => {
-    const studentID = req.query.studentID; // Change from userId to studentID
-
-    if (!studentID) {
-        return res.status(400).json({ success: false, message: 'Student ID is required' });
-    }
-
-    try {
-        const requests = await DocumentRequest.find({ studentID: studentID });
-        res.json({ success: true, requests });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
-    }
-});
-
 // Get Document List
 app.get('/getDocumentList', async (req, res) => {
     try {
@@ -202,7 +138,6 @@ app.get('/getDocumentList', async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
-
 
 // Start the server
 const PORT = 4000;

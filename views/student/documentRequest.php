@@ -1,4 +1,3 @@
-<!-- documentRequest.php -->
 <?php
 require __DIR__ . '/../../models/StudentModel.php';
 session_start();
@@ -88,9 +87,8 @@ function renderDocumentListItem($document)
                         ?>
                     </ul>
 
-                    <!-- Added total price display -->
                     <div id="totalAmount" class="total-amount">
-                        <h3>Total: ₱0</h3>
+                        <h3 style="display:none;">Total: ₱0</h3>
                     </div>
                 </div>
             </section>
@@ -179,6 +177,53 @@ function renderDocumentListItem($document)
                         Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
                     });
             }
+
+            // If no active requests, proceed with submission confirmation
+            Swal.fire({
+                title: 'Review Your Request',
+                html: `<p>Total Payment: ${totalPayment}</p>`,
+                icon: 'info',
+                confirmButtonText: 'Submit',
+                showCancelButton: true,
+                cancelButtonText: 'Edit',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('http://localhost:4000/submitRequest', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: '<?php echo $userName; ?>', 
+                            studentID: '<?php echo $studentID; ?>',
+                            requestedDocument,
+                            totalPayment,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Optional: Redirect or refresh the page
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            Swal.fire('Error', 'Unable to check existing requests.', 'error');
         });
     });
 </script>

@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const documentSubmit = document.getElementById("req-doc-submit");
         const documentTotalPrice = document.getElementById("req-doc-total");
         const paymentList = document.getElementById("paymentList");
-        paymentList.innerHTML = ""; // Clear current payment list
+        paymentList.innerHTML = "";
         documentTotalPrice.innerHTML = "";
         
         let totalPrice = 0;
@@ -121,13 +121,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (quantity > 0) {
                 const documentName =
                     item.querySelector(".item-name h2").textContent;
-                // Extract the numeric price value (removing the ₱ symbol)
+
                 const priceText = item.querySelector(".price").textContent;
                 const price = parseFloat(priceText.replace(/[₱,]/g, ""));
                 const itemTotal = price * quantity;
                 totalPrice += itemTotal;
 
-                // Create payment list item
                 const listItem = document.createElement("li");
                 listItem.classList.add("list-item-payment");
 

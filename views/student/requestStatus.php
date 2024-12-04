@@ -75,49 +75,61 @@ function renderProgressIndicator($currentStatus, $statusSteps)
 <?php
 }
 
-function renderStatusMessage($currentStatus)
-{
-    $messages = [
-        'unpaid' => [
-            'title' => 'Payment process expires in 24 hours',
-            'description' => 'Please complete your payment to proceed with your request.'
-        ],
-        'paid' => [
-            'title' => 'Payment successfully received',
-            'description' => 'Thank you for your payment. Your request will be processed shortly.'
-        ],
-        'process' => [
-            'title' => 'Your document is on the process......',
-            'description' => 'We are currently working on your document request.'
-        ],
-        'ready' => [
-            'title' => 'Your document is available to pick-up',
-            'description' => 'Your document is ready for pick-up on January 1, 2025, 3:00 PM Onwards.'
-        ]
-    ];
-
-    $message = $messages[$currentStatus];
-?>
-    <div class="status-message">
-        <h3><?php echo $message['title']; ?></h3>
-        <p><?php echo $message['description']; ?></p>
-    </div>
-<?php
-}
-
-// Function to count document quantities
-function countDocumentQuantities($documents)
-{
-    $docCount = [];
-    foreach ($documents as $doc) {
-        if (isset($docCount[$doc])) {
-            $docCount[$doc]++;
-        } else {
-            $docCount[$doc] = 1;
-        }
+    function renderStatusMessage($currentStatus, $request = null) {
+        $messages = [
+            'unpaid' => [
+                'title' => 'Payment process expires in 24 hours',
+                'description' => 'Please complete your payment to proceed with your request.'
+            ],
+            'paid' => [
+                'title' => 'Payment successfully received',
+                'description' => 'Thank you for your payment. Your request will be processed shortly.'
+            ],
+            'processing' => [
+                'title' => 'Your document is on the process......',
+                'description' => 'We are currently working on your document request.'
+            ],
+            'ready' => [
+                'title' => 'Your document is available to pick-up',
+                'description' => $request && $request['appointmentDate'] && $request['appointmentTime'] 
+                    ? formatPickupDescription($request['appointmentDate'], $request['appointmentTime'])
+                    : 'Your document is ready for pick-up.'
+            ]
+        ];
+    
+        $message = $messages[$currentStatus];
+        ?>
+        <div class="status-message">
+            <h3><?php echo $message['title']; ?></h3>
+            <p><?php echo $message['description']; ?></p>
+        </div>
+        <?php
     }
-    return $docCount;
-}
+    
+    // Date and Time Format to Readable
+    function formatPickupDescription($dateString, $timeString) {
+
+        $timestamp = strtotime($dateString);
+        $formattedDate = date('F j, Y', $timestamp);
+    
+        // TODO: Format the time (assuming 24-hour format)
+        $formattedTime = date('h:i A', strtotime($timeString));
+    
+        return "Your document is ready for pick-up on $formattedDate at $formattedTime Onwards.";
+    }
+
+    // Count Document Quantities
+    function countDocumentQuantities($documents) {
+        $docCount = [];
+        foreach ($documents as $doc) {
+            if (isset($docCount[$doc])) {
+                $docCount[$doc]++;
+            } else {
+                $docCount[$doc] = 1;
+            }
+        }
+        return $docCount;
+    }
 ?>
 
 <!DOCTYPE html>

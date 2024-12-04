@@ -225,7 +225,7 @@ li.list-item {
 }
 .req-doc-submit {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
 }
 .req-doc-submit input:hover {
     background-color: var(--ACCENT);
