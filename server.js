@@ -152,12 +152,16 @@ app.post('/submitRequest', async (req, res) => {
     }
 });
 
-// Get ng Document Request
+// Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
 app.get('/getDocumentRequests', async (req, res) => {
-    const userId = req.query.userId; 
+    const studentID = req.query.studentID; // Change from userId to studentID
+
+    if (!studentID) {
+        return res.status(400).json({ success: false, message: 'Student ID is required' });
+    }
 
     try {
-        const requests = await DocumentRequest.find({ user: userId });
+        const requests = await DocumentRequest.find({ studentID: studentID });
         res.json({ success: true, requests });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });

@@ -20,3 +20,4 @@ const documentRequestSchema = new mongoose.Schema({
 const DocumentRequest = mongoose.model('DocumentRequest', documentRequestSchema, 'documentRequestsList');
 
 module.exports = DocumentRequest;
+

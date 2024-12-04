@@ -14,11 +14,12 @@
     require '../../views/components/topBarStudent.php';
     require '../../views/components/chatModal.php';
 
-    // Remove the direct require of progressIndicator.php
-
-    $url = 'http://localhost:4000/getDocumentRequests';
+    // Modify the URL to include studentID
+    $url = 'http://localhost:4000/getDocumentRequests?studentID=' . urlencode($studentID);
     $response = file_get_contents($url);
     $responseData = json_decode($response, true);
+
+    // Rest of the code remains the same...
 
     // Define status steps similar to the original progressIndicator.php
     $statusSteps = [
@@ -40,7 +41,6 @@
         ]
     ];
 
-    // Function to render progress indicator (copied from original progressIndicator.php)
     function renderProgressIndicator($currentStatus, $statusSteps) {
         $currentOrder = $statusSteps[$currentStatus]['order'];
         ?>
@@ -69,7 +69,6 @@
         <?php
     }
 
-    // Function to render status message (copied from original progressIndicator.php)
     function renderStatusMessage($currentStatus) {
         $messages = [
             'unpaid' => [
