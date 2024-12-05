@@ -1,3 +1,5 @@
+// import {sendEmail} from '../EaseDocu/api/SendEmail';
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -19,6 +21,8 @@ const io = socketio(server, {
     }
 });
 
+require('dotenv').config()
+
 // Middleware setup
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu')
+mongoose.connect(process.env.MongoDBTokenNode)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
 

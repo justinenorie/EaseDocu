@@ -1,14 +1,33 @@
-
 <?php
+require __DIR__ . '/../../models/StudentModel.php';
+session_start();
+$student = new StudentModel();
+$getStudentByID = $student->getStudentById($studentId);
 
-    session_start();
-    
-    if (isset($_SESSION['user_id'])) {
-        header("Location: documentRequest.php"); 
-        exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = ['success' => false, 'message' => 'Invalid username or password'];
+
+    if (!empty($_POST['studentID']) && !empty($_POST['password'])) {
+        $studentId = $_POST['studentID'];
+        $password = $_POST['password'];
+
+        // Verify login details using AdminModel
+        $verifyLogin = $student->verifyLogin($studentId, $password); // Assumes this method exists
+        if ($verifyLogin) {
+            $_SESSION['studentID'] = $studentId; // Set the session variable
+            $response['success'] = true;
+            $response['message'] = 'Login successful';
+        } else {
+            $response['message'] = 'Invalid login details';
+        }
     }
 
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +40,7 @@
 </head>
 
 <body>
-    <form class="login-back" action="login.php" method="post">
+    <form class="login-back" id="login-form" method="post">
         <div class="login-container">
             <div class="description">
                 <div class="EaseDocu">
@@ -59,90 +78,35 @@
 
     <script src="../../public/js/passToggle.js"> </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <?php
-
-        // testing function lang
-        function log_message($message) {
-            $log_file = __DIR__ . '/login_debug.log'; 
-            $timestamp = date('Y-m-d H:i:s');
-            file_put_contents($log_file, "[$timestamp] $message\n", FILE_APPEND);
-        }
-
-
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $studentID = $_POST['studentID'];
-            $password = $_POST['password'];
-
-            $url = 'http://localhost:4000/login';
-            $data = json_encode(['studentID' => $studentID, 'password' => $password]);
-
-            $options = [
-                'http' => [
-                    'header'  => "Content-Type: application/json\r\n",
-                    'method'  => 'POST',
-                    'content' => $data,
-                ],
-            ];
-            $context = stream_context_create($options);
-
-            // Log the request data
-            log_message("Sending request to $url with data: $data");
-
-            $result = @file_get_contents($url, false, $context);
-
-            if ($result !== FALSE) {
-                $responseData = json_decode($result, true);
-                log_message("Received response: " . print_r($responseData, true));
-
-                if (isset($responseData['user'])) {
-                    $_SESSION['user_id'] = $responseData['user']['_id'];
-                    $_SESSION['user_studentID'] = $responseData['user']['studentID'];
-                    $_SESSION['user_name'] = $responseData['user']['name'];
-                    $_SESSION['user_email'] = $responseData['user']['email'];
-                
-                    echo "<script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Login Successful',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            window.location.href = 'documentRequest.php';
-                        });
-                    </script>";
-                } else {
-                    log_message("Login failed: Invalid credentials.");
-                    echo "<script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Login failed',
-                            text: 'Invalid Student ID or password!',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            window.location.href = 'login.php';
-                        });
-                    </script>";
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        $('#login-form').submit(function(event) {
+            event.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: window.location.href,
+                data: formData,
+                dataType: 'json', // Expect JSON response from the server
+                success: function(response) {
+                    if (response.success) {
+                        console.log("Login success");
+                        alertLoginSuccess(); // Call success function
+                        setTimeout(function() {
+                            window.location.href = 'documentRequest.php'; // Redirect to the desired page after 1 second
+                        }, 1000);
+                    } else {
+                        console.log("Login fail");
+                        alertFailStudentLogin(); // Call failure function
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
                 }
-            } else {
-                log_message("Error: Unable to connect to the backend.");
-                echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server error',
-                        text: 'Unable to process request!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.href = 'login.php';
-                    });
-                </script>";
-            }
-            exit();
-        }
-
-    ?>
+            });
+        });
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,58 @@
+[2024-12-05 01:58:52] Sending request to http://localhost:4000/login with data: {"studentID":"22-01820","password":"12345678"}
+[2024-12-05 01:58:56] Error: Unable to connect to the backend.
+[2024-12-05 02:06:20] Sending request to http://localhost:4000/login with data: {"studentID":"22-01820","password":"12345678"}
+[2024-12-05 02:06:21] Received response: Array
+(
+    [success] => 1
+    [user] => Array
+        (
+            [_id] => 67510a7bca4b1f264f38635c
+            [name] => Norie
+            [studentID] => 22-01820
+            [email] => justinedelacruz97@gmail.com
+        )
+
+)
+
+[2024-12-05 02:36:32] Sending request to http://localhost:4000/login with data: {"studentID":"22-01820","password":"12345678"}
+[2024-12-05 02:36:32] Received response: Array
+(
+    [success] => 1
+    [user] => Array
+        (
+            [_id] => 675111987e3b7c852667fe72
+            [name] => Justine Norie
+            [studentID] => 22-01820
+            [email] => justinedelacruz97@gmail.com
+        )
+
+)
+
+[2024-12-05 02:38:27] Sending request to http://localhost:4000/login with data: {"studentID":"22-01820","password":"12345678"}
+[2024-12-05 02:38:27] Received response: Array
+(
+    [success] => 1
+    [user] => Array
+        (
+            [_id] => 675111987e3b7c852667fe72
+            [name] => Justine Norie
+            [studentID] => 22-01820
+            [email] => justinedelacruz97@gmail.com
+        )
+
+)
+
+[2024-12-05 02:39:29] Sending request to http://localhost:4000/login with data: {"studentID":"22-01820","password":"12345678"}
+[2024-12-05 02:39:29] Received response: Array
+(
+    [success] => 1
+    [user] => Array
+        (
+            [_id] => 675111987e3b7c852667fe72
+            [name] => Justine Norie
+            [studentID] => 22-01820
+            [email] => justinedelacruz97@gmail.com
+        )
+
+)
+

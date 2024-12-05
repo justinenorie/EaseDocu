@@ -23,6 +23,7 @@ $(document).ready(function () {
                 requests.forEach((request) => {
                     const totalPayment = parseFloat(request.totalPayment).toFixed(2);
 
+                    //TODO: Add an API that sends Email notifications to the Students
                     const row = `
                         <tr data-id="${request._id.$oid}" class="data-row">
                             <td class="req-datalist">${escapeHtml(request.name)}</td>
@@ -391,4 +392,3 @@ function SelectTimeDate(callback) {
     });
 }
 
-//TODO: Add an API that sends Email notifications to the Students
