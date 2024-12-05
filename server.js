@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MongoDBTokenNode)
+mongoose.connect(process.env.MongoDBTOken)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
 

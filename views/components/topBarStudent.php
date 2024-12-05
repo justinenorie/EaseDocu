@@ -73,11 +73,13 @@
         }
 
         .account-info h2 {
+            font-family: var(--WORK-SANS);
             font-size: 1rem;
             margin: 0;
         }
 
         .account-info p {
+            font-family: var(--WORK-SANS);
             font-size: 0.8rem;
             opacity: 0.8;
             margin: 0;

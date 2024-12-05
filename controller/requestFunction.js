@@ -17,13 +17,16 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 const requests = response.documentRequests;
+
+                // Sort the requests array by date in descending order (latest date first)
+                requests.sort((a, b) => new Date(b.date) - new Date(a.date));
+
                 const requestList = $("#request-list");
                 requestList.empty(); // Clear the table before adding new rows
 
                 requests.forEach((request) => {
                     const totalPayment = parseFloat(request.totalPayment).toFixed(2);
 
-                    //TODO: Add an API that sends Email notifications to the Students
                     const row = `
                         <tr data-id="${request._id.$oid}" class="data-row">
                             <td class="req-datalist">${escapeHtml(request.name)}</td>
