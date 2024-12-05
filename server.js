@@ -20,6 +20,7 @@ const io = socketio(server, {
         methods: ["GET", "POST"]
     }
 });
+const { sendEmail } = require('./api/SendEmail'); //Send Email
 
 require('dotenv').config()
 
@@ -204,6 +205,20 @@ app.get('/getDocumentList', async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Sending Email
+
+app.post('/send-email', async (req, res) => {
+    const { name, email, status, appointment } = req.body;
+
+    try {
+        const response = await sendEmail(name, email, status, appointment);
+        res.json({ success: true, response });
+    } catch (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
