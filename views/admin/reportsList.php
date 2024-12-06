@@ -6,7 +6,7 @@ if (!isset($_SESSION['admin'])) {
     header("Location: loginAdmin.php");
     exit;
 }
-    // echo "Current account: " . $_SESSION['admin'] . "<br>";
+// echo "Current account: " . $_SESSION['admin'] . "<br>";
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +18,7 @@ if (!isset($_SESSION['admin'])) {
     <title>ReportList</title>
     <link rel="stylesheet" href="styles/report.css">
     <link rel="stylesheet" href="../../public/css/styles.css">
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 </head>
 
 <body>
@@ -34,9 +35,9 @@ if (!isset($_SESSION['admin'])) {
             </div>
 
             <div class="report-list">
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
+                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-01820', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
                     <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-0003
+                        <h3 class="report-name">Marc Jan Banzal - 22-01820
                             <span class="report-status active-status">Active</span>
                         </h3>
                         <p class="report-text">Pa follow up po pl ang tagal ko na nagaanta . . .</p>
@@ -46,42 +47,7 @@ if (!isset($_SESSION['admin'])) {
                         <img src="../../public/images/icons/chat-black.png" class="chat-icon">
                     </a>
                 </div>
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
-                    <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-0003
-                            <span class="report-status active-status">Active</span>
-                        </h3>
-                        <p class="report-text">Pa follow up po ples ang tagal ko na nagaanta . . .</p>
-                        <span class="report-date">11/9/24 10:33am</span>
-                    </div>
-                    <a href="javascript:void(0)">
-                        <img src="../../public/images/icons/chat-black.png" class="chat-icon">
-                    </a>
-                </div>
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
-                    <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-0003
-                            <span class="report-status active-status">Active</span>
-                        </h3>
-                        <p class="report-text">Pa follow up po ples ang tagal ko na nagaanta . . .</p>
-                        <span class="report-date">11/9/24 10:33am</span>
-                    </div>
-                    <a href="javascript:void(0)">
-                        <img src="../../public/images/icons/chat-black.png" class="chat-icon">
-                    </a>
-                </div>
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
-                    <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-0003
-                            <span class="report-status active-status">Active</span>
-                        </h3>
-                        <p class="report-text">Pa follow up po ples ang tagal ko na nagaanta . . .</p>
-                        <span class="report-date">11/9/24 10:33am</span>
-                    </div>
-                    <a href="javascript:void(0)">
-                        <img src="../../public/images/icons/chat-black.png" class="chat-icon">
-                    </a>
-                </div>
+
                 <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
                     <div class="report-info">
                         <h3 class="report-name">Marc Jan Banzal - 22-0003
@@ -107,7 +73,6 @@ if (!isset($_SESSION['admin'])) {
                 </div>
             </div>
 
-
             <div class="chat-body" id="chatBody">
                 <!-- Chat messages will go here -->
             </div>
@@ -120,13 +85,22 @@ if (!isset($_SESSION['admin'])) {
 
 
     <script>
-        // Open the chat modal with specific report details
         function openChatModal(name, studentNumber, message, date) {
             document.getElementById('chatSenderInfo').innerText = `${name}\n${studentNumber}`;
-            const initialMessage = document.createElement('div');
-            initialMessage.classList.add('chat-message', 'received');
-            initialMessage.innerHTML = `<p>${message}</p><span>${date}</span>`;
-            document.getElementById('chatBody').appendChild(initialMessage);
+            const chatBody = document.getElementById('chatBody');
+            const chatInput = document.getElementById('chatInput');
+
+            // Clear existing chat
+            chatBody.innerHTML = '';
+
+            // Add the initial message (if any)
+            if (message) {
+                const initialMessage = document.createElement('div');
+                initialMessage.classList.add('chat-message', 'received');
+                initialMessage.innerHTML = `<p>${message}</p><span>${date}</span>`;
+                chatBody.appendChild(initialMessage);
+            }
+
             document.body.classList.add('modal-open');
         }
 
@@ -136,26 +110,77 @@ if (!isset($_SESSION['admin'])) {
             document.getElementById('chatBody').innerHTML = ''; // Clear chat history
         }
 
-        //         function sendMessage() {
-        //     const messageInput = document.getElementById('chatInput');
-        //     const message = messageInput.value.trim();
-        //     if (message) {
-        //         socket.emit('chatMessage', message);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    
+        // Initialize Socket.IO and connect to the server
+        const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
+        const username = '<?php echo $_SESSION['admin']; ?>'; // Admin username from session
 
+        // When connected to the server
+        socket.on('connect', () => {
+            console.log('Connected to chat server as admin');
+            socket.emit('auth', { username });
+        });
 
-        //         const messageDiv = document.createElement('div');
-        //         messageDiv.classList.add('chat-message', 'sent');
-        //         messageDiv.innerHTML = `<p>${message}</p><span>Just now</span>`;
-        //         document.getElementById('chatBody').appendChild(messageDiv);
+        // Receive chat messages
+        socket.on('chat', (data) => {
+            const {
+                from,
+                message,
+                time
+            } = data;
+            
+            // Display received messages
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', 'received');
+            messageElement.innerHTML = `<p>${message}</p><span>${from} | ${time}</span>`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the latest message
+        });
 
-        //         messageInput.value = '';
+        // Send a chat message
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            const recipientInfo = document.getElementById('chatSenderInfo').innerText.split('\n');
+            const recipient = recipientInfo[1]; // Assuming the student number is used as the recipient identifier
 
-        //         document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
-        //     }
-        // }
+            if (message) {
+                const time = new Date().toLocaleTimeString();
+                socket.emit('chat', {
+                    from: username,
+                    to: recipient,
+                    message,
+                    time
+                });
+                chatInput.value = ''; // Clear the input field
+
+                // Display sent message
+                const chatBody = document.getElementById('chatBody');
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', 'sent');
+                messageElement.innerHTML = `<p>${message}</p>
+                <div class="message-time">${time}</div>`;
+                chatBody.appendChild(messageElement);
+
+                chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the latest message
+            }
+        }
+
+        // Handle disconnect
+        socket.on('disconnect', () => {
+            console.log('Disconnected from chat server');
+            const chatBody = document.getElementById('chatBody');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', 'system');
+            messageElement.innerHTML = `<p>Disconnected from chat server. Please refresh the page.</p>`;
+            chatBody.appendChild(messageElement);
+        });
     </script>
-    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
-    <script src="../../views/admin/js/chatserver.js"></script>
+
 </body>
 
 </html>

@@ -235,6 +235,11 @@ body {
   margin-right: 10px;
 }
 
+.message-time {
+  margin-top: 4px;
+  font-size: 10px;
+}
+
 .profile-icon {
   width: 30px; /* adjust the size of the profile image */
   height: 30px; /* adjust the size of the profile image */

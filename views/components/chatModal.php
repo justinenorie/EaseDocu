@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         body {
@@ -79,28 +80,42 @@
             max-height: 240px;
             overflow-y: auto;
             padding: 15px;
+
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .message {
             margin-bottom: 10px;
+            padding: 8px 12px;
             max-width: 80%;
             padding: 8px 12px;
             border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+            display: inline-block;
+            word-wrap: break-word;
         }
 
         .user-message {
-            font-size: 12px;
+            font-size: 15px;
             background: #e5e7eb;
             margin-left: auto;
             border-radius: 15px 15px 0 15px;
+            align-self: flex-end;
         }
 
         .admin-message {
-            font-size: 12px;
+            font-size: 15px;
             background: #044620;
             color: white;
             margin-right: auto;
             border-radius: 15px 15px 15px 0;
+            align-self: flex-start;
         }
 
         .chat-input {
@@ -126,17 +141,20 @@
             border-radius: 20px;
             cursor: pointer;
         }
-        .message-time{
+
+        .message-time {
             margin-top: 4px;
             font-size: 10px;
         }
     </style>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 </head>
+
 <body>
     <div class="chat-container">
         <button class="chat-button" onclick="toggleChat()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
             </svg>
             Chat with Admin
         </button>
@@ -146,6 +164,7 @@
                 <span>Admin Support</span>
                 <button class="close-button" onclick="toggleChat()">×</button>
             </div>
+
             <div class="chat-messages" id="chatMessages">
                 <!-- Messages will be inserted here by JavaScript -->
             </div>
@@ -157,72 +176,84 @@
     </div>
 
     <script>
-
-        document.addEventListener('click', function(event) {
-            const modal = document.getElementById('chatModal');
-            const chatButton = document.querySelector('.chat-button');
-
-            // Check if the modal is active and the click is outside the modal and the chat button
-            if (modal.classList.contains('active') && !modal.contains(event.target) && !chatButton.contains(event.target)) {
-                modal.classList.remove('active');
-            }
-        });
-
+        const chatModal = document.getElementById('chatModal');
+        const messagesDiv = document.getElementById('chatMessages');
+        const messageInput = document.querySelector('.message-input');
 
         function toggleChat() {
-            const modal = document.getElementById('chatModal');
-            modal.classList.toggle('active');
-            
-            if (modal.classList.contains('active')) {
-                loadMessages();
-            }
+            chatModal.classList.toggle('active');
+            //TODO: Initial Message
         }
 
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-
-        function loadMessages() {
-            const messagesDiv = document.getElementById('chatMessages');
-            messagesDiv.innerHTML = '';
-            
-            chatData.messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.sender}-message`;
-                messageDiv.innerHTML = `
-                    ${msg.message}
-                    <div class="message-time">${formatTime(msg.timestamp)}</div>
-                `;
-                messagesDiv.appendChild(messageDiv);
-            });
-            
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function sendMessage() {
-            const input = document.querySelector('.message-input');
-            const message = input.value.trim();
-            
-            if (message) {
-                chatData.messages.push({
-                    timestamp: new Date().toISOString(),
-                    sender: 'user',
-                    message: message
-                });
-                
-                loadMessages();
-                input.value = '';
-            }
-        }
-
-        document.querySelector('.message-input').addEventListener('keypress', function(e) {
+        messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
+
+        const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
+        const username = '<?php echo $_SESSION['studentID']; ?>'; // Admin username from session
+
+        // When connected to the server
+        socket.on('connect', () => {
+            console.log('Connected to chat server as student');
+            socket.emit('auth', {
+                username
+            });
+        });
+
+        //Send Message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                const time = new Date().toLocaleTimeString();
+                socket.emit('chat', {
+                    from: username,
+                    to: 'admin', // Admin Session
+                    message,
+                    time
+                });
+                messageInput.value = ''; // Clear input field
+
+                // Sent Message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${username}-message user-message`;
+                messageDiv.innerHTML = `
+                    <p>${message}</p>
+                    <div class="message-time">${time}</div>
+                `;
+                messagesDiv.appendChild(messageDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        }
+
+        //Receive Message
+        socket.on('chat', (data) => {
+            const {
+                from,
+                message,
+                time
+            } = data;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${from}-message admin-message`;
+            messageDiv.innerHTML = `
+                <p>${message}</p><span>${from} | ${time}</span>`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        })
+
+        //Handle Disconnected
+        socket.on('disconnect', () => {
+            console.log('Disconnected from chat server');
+            const chatBody = document.getElementById('chatBody');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', 'system');
+            messageElement.textContent = 'You have been disconnected from the chat.';
+            chatBody.appendChild(messageElement);
+        });
     </script>
-      <script src="http://localhost:4000/socket.io/socket.io.js"></script>
-      <script src="../../views/student/js/chatSupport.js"></script>
+
 </body>
+
 </html>

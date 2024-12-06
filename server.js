@@ -7,11 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
 const socketio = require('socket.io');
-
-const userLogin = require('./models/userLogin');
-const DocumentRequest = require('./models/documentRequest');
-const DocumentList = require('./models/documentList');
-
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -20,9 +15,17 @@ const io = socketio(server, {
         methods: ["GET", "POST"]
     }
 });
-const { sendEmail } = require('./api/SendEmail'); //Send Email
 
+//.env
 require('dotenv').config()
+
+//Schemas
+const userLogin = require('./models/userLogin');
+const DocumentRequest = require('./models/documentRequest');
+const DocumentList = require('./models/documentList');
+
+//Send Email API
+const { sendEmail } = require('./api/SendEmail');
 
 // Middleware setup
 app.use(cors());
@@ -32,57 +35,45 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MongoDBTOken)
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.log('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log('MongoDB connection error:', err));
 
-// WebSocket setup
+
+const clients = new Map(); // Track connected clients
 io.on('connection', (socket) => {
-    console.log('New WebSocket connection');
+    console.log('A user connected:', socket.id);
 
-    socket.emit('message', 'Welcome to the chat!');
+    socket.on('auth', (data) => {
+        const { username } = data;
+        clients.set(username, socket.id);
+        console.log(`${username} authenticated.`);
+    });
 
-    socket.broadcast.emit('message', 'A new user has joined the chat.');
+    socket.on('chat', (data) => {
+        const { from, to, message, time } = data;
+        const recipientSocketId = clients.get(to);
 
-    socket.on('chatMessage', (msg) => {
-        io.emit('message', msg);
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('chat', { from, message, time });
+        } else {
+            console.log(`User ${to} is not connected.`);
+        }
     });
 
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left the chat.');
+        for (const [username, id] of clients.entries()) {
+            if (id === socket.id) {
+                clients.delete(username);
+                console.log(`${username} disconnected.`);
+                break;
+            }
+        }
     });
 });
 
-// Login route -- V1 
-// app.post('/login', async(req, res) => {
-//     const { studentID, password } = req.body;
-
-//     try {
-//         const user = await userLogin.findOne({ studentID });
-//         if (!user) {
-//             return res.status(400).json({ success: false, message: 'User not found!' });
-//         }
-
-//         const isMatch = await user.comparePassword(password);
-//         if (!isMatch) {
-//             return res.status(400).json({ success: false, message: 'Invalid password!' });
-//         }
-
-//         res.json({
-//             success: true,
-//             user: {
-//                 name: user.name,
-//                 studentID: user.studentID,
-//                 email: user.email 
-//             },
-//         });
-        
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
 
 // Login route -- V2 SESSION HANDLER
-app.post('/login', async(req, res) => {
+app.post('/login', async (req, res) => {
     const { studentID, password } = req.body;
 
     try {
@@ -102,10 +93,10 @@ app.post('/login', async(req, res) => {
                 _id: user._id, // Ito gagamitin for Student Session
                 name: user.name,
                 studentID: user.studentID,
-                email: user.email 
+                email: user.email
             },
         });
-        
+
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
@@ -113,7 +104,7 @@ app.post('/login', async(req, res) => {
 
 
 // Signup route
-app.post('/signup', async(req, res) => {
+app.post('/signup', async (req, res) => {
     const { name, studentID, email, password } = req.body;
 
     try {
@@ -130,26 +121,6 @@ app.post('/signup', async(req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
-
-// // Post ng Document Request
-// app.post('/submitRequest', async (req, res) => {
-//     const { name, studentID, requestedDocument, totalPayment } = req.body;
-//     if (!name || !studentID || !requestedDocument || !totalPayment) {
-//         return res.status(400).json({ success: false, message: 'All fields are required' });
-//     }
-//     try {
-//         const newRequest = new DocumentRequest({
-//             name,
-//             studentID,
-//             requestedDocument,
-//             totalPayment,
-//         });
-//         await newRequest.save();
-//         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
 
 // Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
@@ -199,8 +170,8 @@ app.get('/getDocumentRequests', async (req, res) => {
 app.get('/getDocumentList', async (req, res) => {
     try {
         const documentList = await DocumentList.find({});
-        res.json({ 
-            success: true, 
+        res.json({
+            success: true,
             documentList: documentList.length ? documentList : [] // Return empty array if no documents found
         });
     } catch (error) {
@@ -208,8 +179,11 @@ app.get('/getDocumentList', async (req, res) => {
     }
 });
 
-// Sending Email
+//TODO: Conversation database
 
+
+
+// Sending Email
 app.post('/send-email', async (req, res) => {
     const { name, email, status, appointment } = req.body;
 
