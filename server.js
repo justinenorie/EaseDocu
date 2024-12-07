@@ -180,6 +180,92 @@ app.get('/getDocumentList', async (req, res) => {
 });
 
 //TODO: Conversation database
+const ChatConversation = require('./models/chatConversation');
+
+// Create or fetch a conversation
+app.post('/conversation', async (req, res) => {
+    const { participants } = req.body;
+
+    if (!participants || participants.length < 2) {
+        return res.status(400).json({ success: false, message: 'Participants are required' });
+    }
+
+    try {
+        // Check if a conversation already exists
+        let conversation = await ChatConversation.findOne({ participants: { $all: participants } });
+
+        // If not, create a new one
+        if (!conversation) {
+            conversation = new ChatConversation({ participants });
+            await conversation.save();
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Add a message to a conversation
+app.post('/conversation/message', async (req, res) => {
+    const { conversationId, sender, message } = req.body;
+
+    if (!conversationId || !sender || !message) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    try {
+        const conversation = await ChatConversation.findById(conversationId);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        // Add message to the conversation
+        conversation.messages.push({ sender, message });
+        conversation.updatedAt = Date.now();
+
+        await conversation.save();
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch a conversation by ID
+app.get('/conversation/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const conversation = await ChatConversation.findById(id);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch all conversations for a participant
+app.get('/conversations', async (req, res) => {
+    const { participant } = req.query;
+
+    if (!participant) {
+        return res.status(400).json({ success: false, message: 'Participant is required' });
+    }
+
+    try {
+        const conversations = await ChatConversation.find({ participants: participant });
+
+        res.json({ success: true, conversations });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
 
 
 
