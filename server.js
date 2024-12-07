@@ -11,6 +11,7 @@ const socketio = require('socket.io');
 const userLogin = require('./models/userLogin');
 const DocumentRequest = require('./models/documentRequest');
 const DocumentList = require('./models/documentList');
+const authRoutes = require('./routes/authRoutes')
 
 const app = express();
 const server = http.createServer(app);
@@ -26,8 +27,11 @@ require('dotenv').config()
 // Middleware setup
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "views")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use("/api/auth", authRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MongoDBTOken)
@@ -207,6 +211,9 @@ app.get('/getDocumentList', async (req, res) => {
     }
 });
 
+app.get("/api/auth/reset-password/:resetToken", (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
+});
 
 // Start the server
 const PORT = 4000;
