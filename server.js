@@ -25,11 +25,6 @@ const io = socketio(server, {
 //.env
 require('dotenv').config()
 
-//Schemas
-const userLogin = require('./models/userLogin');
-const DocumentRequest = require('./models/documentRequest');
-const DocumentList = require('./models/documentList');
-
 //Send Email API
 const { sendEmail } = require('./api/SendEmail');
 
@@ -99,7 +94,7 @@ app.post('/login', async (req, res) => {
         res.json({
             success: true,
             user: {
-                _id: user._id, // Ito gagamitin for Student Session
+                _id: user._id,
                 name: user.name,
                 studentID: user.studentID,
                 email: user.email
@@ -191,6 +186,7 @@ app.get('/getDocumentList', async (req, res) => {
 app.get("/api/auth/reset-password/:resetToken", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
 });
+
 //TODO: Conversation database
 const ChatConversation = require('./models/chatConversation');
 
