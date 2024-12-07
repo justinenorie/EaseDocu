@@ -13,12 +13,6 @@ window.onload = function() {
     });
 };
 
-// TODO: Not final need to change based on the database
-document.querySelector('#signup-form').addEventListener('submit', function(event){
-    event.preventDefault();
-    alertSignupSuccess();
-});
-
 //Signup Success Popup
 function alertSignupSuccess() {
     event.preventDefault();

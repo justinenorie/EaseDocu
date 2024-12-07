@@ -19,7 +19,7 @@ $(document).ready(function () {
                 const requests = response.documentRequests;
 
                 // Sort the requests array by date in descending order (latest date first)
-                requests.sort((a, b) => new Date(b.date) - new Date(a.date));
+                requests.sort((b, a) => new Date(b.date) - new Date(a.date));
 
                 const requestList = $("#request-list");
                 requestList.empty(); // Clear the table before adding new rows
@@ -177,11 +177,12 @@ $(document).ready(function () {
 
         return buttonText
             ? `
-            <form class="status-update-form" data-id="${escapeHtml(
-                request._id.$oid
-            )}" data-current-status="${escapeHtml(
-                request.status
-            )}" style="display: ${display};">
+            <form class="status-update-form" 
+            data-id="${escapeHtml(request._id.$oid)}" 
+            data-name="${escapeHtml(request.name)}"
+            data-current-status="${escapeHtml(request.status)}" 
+            data-email="${escapeHtml(request.email)}"
+            style="display: ${display};">
                 <button type="button" class="confirm-btn">${buttonText}</button>
             </form>
         `
@@ -195,6 +196,17 @@ $(document).ready(function () {
         const form = $(this).closest(".status-update-form");
         const studentObjectID = form.data("id");
         const currentStatus = form.data("current-status");
+        const email = form.data("email");
+        const name = form.data("name");
+
+        // Define the status transitions
+        const nextStatuses = {
+            unpaid: "paid",
+            paid: "process",
+            process: "ready",
+        };
+
+        const nextStatus = nextStatuses[currentStatus] || "completed"; // Default if no transition exists
 
         if (currentStatus === "process") {
             // Call the date and time selection function
@@ -206,8 +218,29 @@ $(document).ready(function () {
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
+                            // Send Email
+                            const appointment = `${date} ${time}`;
+                            $.ajax({
+                                url: "http://localhost:4000/send-email",
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify({
+                                    name,
+                                    email,
+                                    status: nextStatus, // Pass the next status
+                                    appointment,
+                                }),
+                                success: function (emailResponse) {
+                                    console.log("Email sent successfully:", emailResponse);
+                                },
+                                error: function (emailError) {
+                                    console.error("Error sending email:", emailError);
+                                }
+                            });
+
                             // Refresh requests and keep the selected row open
                             fetchRequests(currentStatus);
+
                         } else {
                             alert("Failed to update status. Please try again.");
                         }
@@ -227,6 +260,24 @@ $(document).ready(function () {
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
+                            // Send Email
+                            $.ajax({
+                                url: "http://localhost:4000/send-email",
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify({
+                                    name,
+                                    email,
+                                    status: nextStatus, // Pass the next status
+                                }),
+                                success: function (emailResponse) {
+                                    console.log("Email sent successfully:", emailResponse);
+                                },
+                                error: function (emailError) {
+                                    console.error("Error sending email:", emailError);
+                                }
+                            });
+
                             fetchRequests(currentStatus);
                         } else {
                             alert("Failed to update status. Please try again.");

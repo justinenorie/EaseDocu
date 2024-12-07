@@ -33,7 +33,6 @@ if (!isset($_SESSION['admin'])) {
             </div>
 
             <div class="filters">
-                <!-- TODO: Working on filter -->
                 <h2>Filters</h2>
                 <nav>
                     <ul>
