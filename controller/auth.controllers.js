@@ -1,5 +1,6 @@
 const userSchema = require('../models/userLogin');
 const sendEmail = require('../utils/sendMail');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
@@ -15,8 +16,10 @@ exports.forgotPassword = async (req, res) => {
 
         // Generate reset token
         const resetToken = crypto.randomBytes(32).toString('hex');
-        user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-        user.resetPasswordExpire = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+        const resetTokenExpire = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpire = resetTokenExpire;
 
         await user.save();
 
@@ -65,60 +68,74 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-    const { resetToken } = req.params;
-    const { password, confirmPassword } = req.body;
-
     try {
-        const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+        const { resetToken } = req.params;
+        const { password } = req.body;
 
+        // Validate password length
+        if (!password || !validator.isLength(password, { min: 8 })) {
+            return res
+                .status(400)
+                .json({ success: false, message: 'Password must be at least 8 characters long.' });
+        }
+
+        // Validate password complexity
+        const passwordComplexity = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordComplexity.test(password)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password must include at least one uppercase letter, one number, and one special character.',
+            });
+        }
+
+        // Check if reset token is valid and not expired
         const user = await userSchema.findOne({
-            resetPasswordToken: hashedToken,
-            resetPasswordExpire: { $gt: Date.now() }, // Check token validity
+            resetPasswordToken: resetToken,
+            resetPasswordExpire: { $gt: Date.now() },
         });
 
         if (!user) {
-            return res.status(400).json({ success: false, message: "Invalid or expired token" });
+            return res.status(404).json({ success: false, message: 'Invalid or expired token.' });
         }
 
-        if (password !== confirmPassword) {
-            return res.status(400).json({ success: false, message: "Passwords do not match" });
+        // Check if the new password is the same as the old one
+        const isOldPasswordSame = await user.comparePassword(password);
+        if (isOldPasswordSame) {
+            return res.status(400).json({ success: false, message: 'Please enter a new password.' });
         }
 
-        user.password = await bcrypt.hash(password, 10);
+        // Update password and reset token fields
+        user.password = password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
+
         await user.save();
 
-        const message = `<!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Password Reset Successful</title>
-                        </head>
-                        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <div style="background: linear-gradient(to right, #4CAF50, #45a049); padding: 20px; text-align: center;">
-                            <h1 style="color: white; margin: 0;">Password Reset Successful</h1>
-                        </div>
-                        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                            <p>Hello,</p>
-                            <p>We're writing to confirm that your password has been successfully reset.</p>
-                            <div style="text-align: center; margin: 30px 0;">
-                            <div style="background-color: #4CAF50; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; display: inline-block; font-size: 30px;">
-                                ✓
-                            </div>
-                            </div>
-                            <p>Your password has been successfully reset. You can now log in to your account</p>
-                            <p>If you did not initiate this password reset, please contact our support team immediately.</p>
-                            <p>Thank you for helping us keep your account secure.</p>
-                            <p>Best regards,<br>Your App Team</p>
-                        </div>
-                        <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
-                            <p>This is an automated message, please do not reply to this email.</p>
-                        </div>
-                        </body>
-                        </html>
-                        `;
+        // Send confirmation email
+        const message = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Password Reset Successful</title>
+            </head>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <h1 style="text-align: center; color: #4CAF50;">Password Reset Successful</h1>
+                <p>Hello,</p>
+                <p>Your password has been successfully reset. You can now log in to your account.</p>
+                <div style="text-align: center; margin: 30px 0;">
+                   <div style="background-color: #4CAF50; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; display: inline-block; font-size: 30px;">
+                      ✓
+                   </div>
+                </div>
+                <p>If you did not initiate this password reset, please contact our support team immediately.</p>
+                <p>Thank you for keeping your account secure.</p>
+                <p>Best regards,</p>
+                <p>Your App Team</p>
+            </body>
+            </html>
+        `;
 
         await sendEmail({
             email: user.email,
@@ -126,9 +143,10 @@ exports.resetPassword = async (req, res) => {
             html: message,
         });
 
-        return res.status(200).json({ success: true, message: "Password reset successfully" });
+        return res.status(200).json({ success: true, message: 'Password reset successfully.' });
+
     } catch (error) {
-        console.error("Reset Password Error:", error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        console.error('Reset Password Error:', error);
+        return res.status(500).json({ success: false, message: 'Internal Server Error.' });
     }
 };
