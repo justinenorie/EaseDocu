@@ -113,7 +113,7 @@ function renderDocumentListItem($document)
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.getElementById('request-btn').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         const date = new Date().toISOString().split('T')[0];
         const requestedDocument = [];
 
@@ -135,27 +135,56 @@ function renderDocumentListItem($document)
             return;
         }
 
-        // Confirm submission
-        Swal.fire({
-            title: 'Review Your Request',
-            html: `<p>Total Payment: ${totalPayment}</p>`,
-            icon: 'info',
-            confirmButtonText: 'Submit',
-            showCancelButton: true,
-            cancelButtonText: 'Edit',
-            reverseButtons: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Send AJAX request
-                fetch('http://localhost:4000/submitRequest', {
+        // First, check for existing requests
+        fetch('http://localhost:4000/checkExistingRequests', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studentID: '<?php echo $studentData['studentID']; ?>'
+            }),
+        })
+        .then(response => response.json())
+        .then(existingRequestsData => {
+            // If there are existing requests, show warning and stop
+            if (existingRequestsData.hasPendingRequests) {
+                let errorMessage = 'You have existing document requests:\n';
+                existingRequestsData.existingRequests.forEach(req => {
+                    // errorMessage += `- Request on ${req.date}: ${req.requestedDocuments.join(', ')} (Status: ${req.status})\n`;
+                    errorMessage += `- Request on ${req.date}: (Status: ${req.status})\n`;
+                });
+
+                Swal.fire({
+                    title: 'Existing Request',
+                    text: errorMessage,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return; // Stop further processing
+            }
+
+            // Proceed with request submission if no existing requests
+            Swal.fire({
+                title: 'Review Your Request',
+                html: `Total Payment: ₱${totalPayment}`,
+                icon: 'info',
+                confirmButtonText: 'Submit',
+                showCancelButton: true,
+                cancelButtonText: 'Edit',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send request submission
+                    fetch('http://localhost:4000/submitRequest', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            name: '<?php echo $studentData['name']; ?>', // Pass user name from PHP
-                            studentID: '<?php echo $studentData['studentID']; ?>', // Pass student ID from PHP
-                            email: '<?php echo $studentData['email']; ?>', // Pass email
+                            name: '<?php echo $studentData['name']; ?>',
+                            studentID: '<?php echo $studentData['studentID']; ?>',
+                            email: '<?php echo $studentData['email']; ?>',
                             date,
                             requestedDocument,
                             totalPayment,
@@ -165,7 +194,6 @@ function renderDocumentListItem($document)
                     .then(data => {
                         if (data.success) {
                             Swal.fire('Success', data.message, 'success');
-                            // Redirect to the request status page
                             setTimeout(function() {
                                 window.location.href = 'requestStatus.php';
                             }, 1500);
@@ -176,50 +204,10 @@ function renderDocumentListItem($document)
                     .catch(error => {
                         Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
                     });
-            }
-
-            // If no active requests, proceed with submission confirmation
-            Swal.fire({
-                title: 'Review Your Request',
-                html: `<p>Total Payment: ${totalPayment}</p>`,
-                icon: 'info',
-                confirmButtonText: 'Submit',
-                showCancelButton: true,
-                cancelButtonText: 'Edit',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch('http://localhost:4000/submitRequest', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: '<?php echo $userName; ?>', 
-                            studentID: '<?php echo $studentID; ?>',
-                            requestedDocument,
-                            totalPayment,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                title: 'Success',
-                                text: data.message,
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                // Optional: Redirect or refresh the page
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire('Error', data.message, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire('Error', 'An error occurred while submitting your request.', 'error');
-                    });
                 }
+            })
+            .catch(error => {
+                Swal.fire('Error', 'Unable to complete request submission.', 'error');
             });
         })
         .catch(error => {
