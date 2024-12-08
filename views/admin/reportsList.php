@@ -34,27 +34,33 @@ if (!isset($_SESSION['admin'])) {
                 <button class="filter-btn closed">Closed</button>
             </div>
 
-            <div class="report-list">
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-01820', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
-                    <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-01820
-                            <span class="report-status active-status">Active</span>
-                        </h3>
-                        <p class="report-text">Pa follow up po pl ang tagal ko na nagaanta . . .</p>
-                        <span class="report-date">11/9/24 10:33am</span>
-                    </div>
-                    <a href="javascript:void(0)">
-                        <img src="../../public/images/icons/chat-black.png" class="chat-icon">
-                    </a>
-                </div>
+            <!-- TODO: Fetch each Conversation here-->
+            
+            <!-- 
+            html Structure
+            * report - div
+            * report-info - div
+            * report-name - h3
+            * report-text - p
+            * report-date - span
+            * a with img
 
-                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-0003', 'Pa follow up po ples ang tagal ko na nagaanta . . .', '11/9/24 10:33am')">
+            id to fetch
+            * sender-name
+            * convo-status
+            * sender-message
+            * sender-timestamp 
+            -->
+
+            <div class="report-list">
+                <!-- Sample Structure -->
+                <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-01820')">
                     <div class="report-info">
-                        <h3 class="report-name">Marc Jan Banzal - 22-0003
-                            <span class="report-status active-status">Active</span>
+                        <h3 class="report-name" id="sender-name">Marc Jan Banzal - 22-01820
+                            <span class="report-status active-status" id="convo-status">Active</span>
                         </h3>
-                        <p class="report-text">Pa follow up po ples ang tagal ko na nagaanta . . .</p>
-                        <span class="report-date">11/9/24 10:33am</span>
+                        <p class="report-text" id="sender-message">Pa follow up po pl ang tagal ko na nagaanta . . .</p>
+                        <span class="report-date" id="sender-timestamp">11/9/24 10:33am</span>
                     </div>
                     <a href="javascript:void(0)">
                         <img src="../../public/images/icons/chat-black.png" class="chat-icon">
@@ -83,14 +89,13 @@ if (!isset($_SESSION['admin'])) {
         </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function openChatModal(name, studentNumber, message, date) {
             document.getElementById('chatSenderInfo').innerText = `${name}\n${studentNumber}`;
             const chatBody = document.getElementById('chatBody');
             const chatInput = document.getElementById('chatInput');
-
-            // Clear existing chat
             chatBody.innerHTML = '';
 
             // Add the initial message (if any)
@@ -104,7 +109,6 @@ if (!isset($_SESSION['admin'])) {
             document.body.classList.add('modal-open');
         }
 
-        // Close the chat modal
         function closeChatModal() {
             document.body.classList.remove('modal-open');
             document.getElementById('chatBody').innerHTML = ''; // Clear chat history

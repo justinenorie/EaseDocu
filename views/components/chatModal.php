@@ -90,7 +90,6 @@
         }
 
         .message {
-            margin-bottom: 10px;
             padding: 8px 12px;
             max-width: 80%;
             padding: 8px 12px;
