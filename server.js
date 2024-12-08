@@ -187,6 +187,48 @@ app.get("/api/auth/reset-password/:resetToken", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
 });
 
+app.post('/checkExistingRequests', async (req, res) => {
+    const { studentID } = req.body;
+
+    if (!studentID) {
+        return res.status(400).json({ success: false, message: 'Student ID is required' });
+    }
+
+    try {
+        // Find any requests for the student that are not completed
+        const existingRequests = await DocumentRequest.find({ 
+            studentID: studentID, 
+            status: { $nin: ['Completed', 'Rejected'] } // Exclude completed or rejected requests
+        });
+
+        // If there are existing requests, return details
+        if (existingRequests.length > 0) {
+            return res.json({
+                hasPendingRequests: true,
+                existingRequests: existingRequests.map(req => ({
+                    requestId: req._id,
+                    requestedDocuments: req.requestedDocument,
+                    date: req.date,
+                    status: req.status || 'Pending'
+                }))
+            });
+        }
+
+        // No existing active requests found
+        res.json({
+            hasPendingRequests: false
+        });
+    } catch (error) {
+        console.error('Error checking existing requests:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error checking existing requests',
+            error: error.message
+        });
+    }
+});
+
+
 //TODO: Conversation database
 const ChatConversation = require('./models/chatConversation');
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Ready for Pickup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .header {
+            background-color: #FF9800;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+        .highlight {
+            background-color: #FFF3E0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Document Ready for Pickup</h1>
+        </div>
+        <p>Hello ${recipientName},</p>
+        <p>Your requested document is ready for pickup. Please visit our CDM Registrar office to get your requested document.</p>
+        <div class="highlight">
+            <p><strong>Please bring your payment receipt.</strong></p>
+            <p><strong>Scheduled appointment:</strong> ${formattedAppointment}</p>
+        </div>
+        <p>Thank you!</p>
+    </div>
+</body>
+</html>
