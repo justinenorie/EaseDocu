@@ -108,7 +108,7 @@
             top: 80px;
             right: 20px;
             background-color: var(--text-light);
-            width: 250px;
+            width: 200px;
             border-radius: 10px;
             box-shadow: 0 4px 20px var(--shadow-color);
             overflow: hidden;
@@ -181,6 +181,13 @@
                 align-items: center;
             }
         }
+        .modal-text{
+            font-size: 16px;
+            font-family: Arial;
+            font-weight: 500;
+            margin: 0;
+            color: rgb(50, 50, 50);
+        }
     </style>
 </head>
 
@@ -205,13 +212,13 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Show Profile
+                    <p class="modal-text">Show Profile</p>
                 </div>
                 <div class="modal-item" id="logout-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
-                    Logout
+                    <p class="modal-text">Logout</p>
                 </div>
             </div>
         </div>

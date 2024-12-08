@@ -156,7 +156,7 @@ function renderDocumentListItem($document)
                 });
 
                 Swal.fire({
-                    title: 'Existing Requests',
+                    title: 'Existing Request',
                     text: errorMessage,
                     icon: 'warning',
                     confirmButtonText: 'OK'
