@@ -22,7 +22,11 @@ const io = socketio(server, {
     }
 });
 
+//.env
 require('dotenv').config()
+
+//Send Email API
+const { sendEmail } = require('./api/SendEmail');
 
 // Middleware setup
 app.use(cors());
@@ -35,57 +39,45 @@ app.use("/api/auth", authRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MongoDBTOken)
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.log('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log('MongoDB connection error:', err));
 
-// WebSocket setup
+
+const clients = new Map(); // Track connected clients
 io.on('connection', (socket) => {
-    console.log('New WebSocket connection');
+    console.log('A user connected:', socket.id);
 
-    socket.emit('message', 'Welcome to the chat!');
+    socket.on('auth', (data) => {
+        const { username } = data;
+        clients.set(username, socket.id);
+        console.log(`${username} authenticated.`);
+    });
 
-    socket.broadcast.emit('message', 'A new user has joined the chat.');
+    socket.on('chat', (data) => {
+        const { from, to, message, time } = data;
+        const recipientSocketId = clients.get(to);
 
-    socket.on('chatMessage', (msg) => {
-        io.emit('message', msg);
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('chat', { from, message, time });
+        } else {
+            console.log(`User ${to} is not connected.`);
+        }
     });
 
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left the chat.');
+        for (const [username, id] of clients.entries()) {
+            if (id === socket.id) {
+                clients.delete(username);
+                console.log(`${username} disconnected.`);
+                break;
+            }
+        }
     });
 });
 
-// Login route -- V1 
-// app.post('/login', async(req, res) => {
-//     const { studentID, password } = req.body;
-
-//     try {
-//         const user = await userLogin.findOne({ studentID });
-//         if (!user) {
-//             return res.status(400).json({ success: false, message: 'User not found!' });
-//         }
-
-//         const isMatch = await user.comparePassword(password);
-//         if (!isMatch) {
-//             return res.status(400).json({ success: false, message: 'Invalid password!' });
-//         }
-
-//         res.json({
-//             success: true,
-//             user: {
-//                 name: user.name,
-//                 studentID: user.studentID,
-//                 email: user.email 
-//             },
-//         });
-        
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
 
 // Login route -- V2 SESSION HANDLER
-app.post('/login', async(req, res) => {
+app.post('/login', async (req, res) => {
     const { studentID, password } = req.body;
 
     try {
@@ -102,13 +94,13 @@ app.post('/login', async(req, res) => {
         res.json({
             success: true,
             user: {
-                _id: user._id, // Ito gagamitin for Student Session
+                _id: user._id,
                 name: user.name,
                 studentID: user.studentID,
-                email: user.email 
+                email: user.email
             },
         });
-        
+
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
@@ -116,7 +108,7 @@ app.post('/login', async(req, res) => {
 
 
 // Signup route
-app.post('/signup', async(req, res) => {
+app.post('/signup', async (req, res) => {
     const { name, studentID, email, password } = req.body;
 
     try {
@@ -133,26 +125,6 @@ app.post('/signup', async(req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
-
-// // Post ng Document Request
-// app.post('/submitRequest', async (req, res) => {
-//     const { name, studentID, requestedDocument, totalPayment } = req.body;
-//     if (!name || !studentID || !requestedDocument || !totalPayment) {
-//         return res.status(400).json({ success: false, message: 'All fields are required' });
-//     }
-//     try {
-//         const newRequest = new DocumentRequest({
-//             name,
-//             studentID,
-//             requestedDocument,
-//             totalPayment,
-//         });
-//         await newRequest.save();
-//         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// });
 
 // Handling the POST request to submit the request
 app.post('/submitRequest', async (req, res) => {
@@ -202,8 +174,8 @@ app.get('/getDocumentRequests', async (req, res) => {
 app.get('/getDocumentList', async (req, res) => {
     try {
         const documentList = await DocumentList.find({});
-        res.json({ 
-            success: true, 
+        res.json({
+            success: true,
             documentList: documentList.length ? documentList : [] // Return empty array if no documents found
         });
     } catch (error) {
@@ -214,6 +186,110 @@ app.get('/getDocumentList', async (req, res) => {
 app.get("/api/auth/reset-password/:resetToken", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
 });
+
+//TODO: Conversation database
+const ChatConversation = require('./models/chatConversation');
+
+// Create or fetch a conversation
+app.post('/conversation', async (req, res) => {
+    const { participants } = req.body;
+
+    if (!participants || participants.length < 2) {
+        return res.status(400).json({ success: false, message: 'Participants are required' });
+    }
+
+    try {
+        // Check if a conversation already exists
+        let conversation = await ChatConversation.findOne({ participants: { $all: participants } });
+
+        // If not, create a new one
+        if (!conversation) {
+            conversation = new ChatConversation({ participants });
+            await conversation.save();
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Add a message to a conversation
+app.post('/conversation/message', async (req, res) => {
+    const { conversationId, sender, message } = req.body;
+
+    if (!conversationId || !sender || !message) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    try {
+        const conversation = await ChatConversation.findById(conversationId);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        // Add message to the conversation
+        conversation.messages.push({ sender, message });
+        conversation.updatedAt = Date.now();
+
+        await conversation.save();
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch a conversation by ID
+app.get('/conversation/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const conversation = await ChatConversation.findById(id);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch all conversations for a participant
+app.get('/conversations', async (req, res) => {
+    const { participant } = req.query;
+
+    if (!participant) {
+        return res.status(400).json({ success: false, message: 'Participant is required' });
+    }
+
+    try {
+        const conversations = await ChatConversation.find({ participants: participant });
+
+        res.json({ success: true, conversations });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+
+
+// Sending Email
+app.post('/send-email', async (req, res) => {
+    const { name, email, status, appointment } = req.body;
+
+    try {
+        const response = await sendEmail(name, email, status, appointment);
+        res.json({ success: true, response });
+    } catch (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 
 // Start the server
 const PORT = 4000;

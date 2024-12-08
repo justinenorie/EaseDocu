@@ -11,11 +11,6 @@ $studentID = $_SESSION['studentID'];
 $studentModel = new StudentModel();
 $studentData = $studentModel->getStudentById($studentID);
 
-// $userId = $_SESSION['user_id']; 
-// $studentID = $_SESSION['studentID'];
-// $userEmail = $_SESSION['user_email'];
-// $userName = $_SESSION['user_name'];
-
 require '../../views/components/topBarStudent.php';
 require '../../views/components/chatModal.php';
 
@@ -75,61 +70,64 @@ function renderProgressIndicator($currentStatus, $statusSteps)
 <?php
 }
 
-    function renderStatusMessage($currentStatus, $request = null) {
-        $messages = [
-            'unpaid' => [
-                'title' => 'Payment process expires in 24 hours',
-                'description' => 'Please complete your payment to proceed with your request.'
-            ],
-            'paid' => [
-                'title' => 'Payment successfully received',
-                'description' => 'Thank you for your payment. Your request will be processed shortly.'
-            ],
-            'process' => [
-                'title' => 'Your document is on the process......',
-                'description' => 'We are currently working on your document request.'
-            ],
-            'ready' => [
-                'title' => 'Your document is available to pick-up',
-                'description' => $request && $request['appointmentDate'] && $request['appointmentTime'] 
-                    ? formatPickupDescription($request['appointmentDate'], $request['appointmentTime'])
-                    : 'Your document is ready for pick-up.'
-            ]
-        ];
-    
-        $message = $messages[$currentStatus];
-        ?>
-        <div class="status-message">
-            <h3><?php echo $message['title']; ?></h3>
-            <p><?php echo $message['description']; ?></p>
-        </div>
-        <?php
-    }
-    
-    // Date and Time Format to Readable
-    function formatPickupDescription($dateString, $timeString) {
+function renderStatusMessage($currentStatus, $request = null)
+{
+    $messages = [
+        'unpaid' => [
+            'title' => 'Payment process expires in 24 hours',
+            'description' => 'Please complete your payment to proceed with your request.'
+        ],
+        'paid' => [
+            'title' => 'Payment successfully received',
+            'description' => 'Thank you for your payment. Your request will be processed shortly.'
+        ],
+        'process' => [
+            'title' => 'Your document is on the process......',
+            'description' => 'We are currently working on your document request.'
+        ],
+        'ready' => [
+            'title' => 'Your document is available to pick-up',
+            'description' => $request && $request['appointmentDate'] && $request['appointmentTime']
+                ? formatPickupDescription($request['appointmentDate'], $request['appointmentTime'])
+                : 'Your document is ready for pick-up.'
+        ]
+    ];
 
-        $timestamp = strtotime($dateString);
-        $formattedDate = date('F j, Y', $timestamp);
-    
-        // TODO: Format the time (assuming 24-hour format)
-        $formattedTime = date('h:i A', strtotime($timeString));
-    
-        return "Your document is ready for pick-up on $formattedDate at $formattedTime Onwards.";
-    }
+    $message = $messages[$currentStatus];
+?>
+    <div class="status-message">
+        <h3><?php echo $message['title']; ?></h3>
+        <p><?php echo $message['description']; ?></p>
+    </div>
+<?php
+}
 
-    // Count Document Quantities
-    function countDocumentQuantities($documents) {
-        $docCount = [];
-        foreach ($documents as $doc) {
-            if (isset($docCount[$doc])) {
-                $docCount[$doc]++;
-            } else {
-                $docCount[$doc] = 1;
-            }
+// Date and Time Format to Readable
+function formatPickupDescription($dateString, $timeString)
+{
+
+    $timestamp = strtotime($dateString);
+    $formattedDate = date('F j, Y', $timestamp);
+
+    // TODO: Format the time (assuming 24-hour format)
+    $formattedTime = date('h:i A', strtotime($timeString));
+
+    return "Your document is ready for pick-up on $formattedDate at $formattedTime Onwards.";
+}
+
+// Count Document Quantities
+function countDocumentQuantities($documents)
+{
+    $docCount = [];
+    foreach ($documents as $doc) {
+        if (isset($docCount[$doc])) {
+            $docCount[$doc]++;
+        } else {
+            $docCount[$doc] = 1;
         }
-        return $docCount;
     }
+    return $docCount;
+}
 ?>
 
 <!DOCTYPE html>
@@ -215,6 +213,7 @@ function renderProgressIndicator($currentStatus, $statusSteps)
             </div>
         </section>
     </div>
+
 </body>
 
 </html>

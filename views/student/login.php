@@ -1,25 +1,52 @@
 <?php
-require __DIR__ . '/../../models/StudentModel.php';
 session_start();
-$student = new StudentModel();
-$getStudentByID = $student->getStudentById($studentId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = ['success' => false, 'message' => 'Invalid username or password'];
 
     if (!empty($_POST['studentID']) && !empty($_POST['password'])) {
-        $studentId = $_POST['studentID'];
+        $studentID = $_POST['studentID'];
         $password = $_POST['password'];
 
-        // Verify login details using AdminModel
-        $verifyLogin = $student->verifyLogin($studentId, $password); // Assumes this method exists
-        if ($verifyLogin) {
-            $_SESSION['studentID'] = $studentId; // Set the session variable
-            $response['success'] = true;
-            $response['message'] = 'Login successful';
-        } else {
-            $response['message'] = 'Invalid login details';
+        // Express server endpoint
+        $url = 'http://localhost:4000/login';
+        $data = json_encode(['studentID' => $studentID, 'password' => $password]);
+
+        // Set up HTTP options for the request
+        $options = [
+            'http' => [
+                'header'  => "Content-Type: application/json\r\n",
+                'method'  => 'POST',
+                'content' => $data,
+            ],
+        ];
+        $context = stream_context_create($options);
+
+        try {
+            // Make the HTTP POST request to the Express server
+            $result = file_get_contents($url, false, $context);
+
+            if ($result !== false) {
+                $responseData = json_decode($result, true);
+
+                if (!empty($responseData['success']) && $responseData['success'] === true) {
+                    // Save user data to the session
+                    $_SESSION['studentID'] = $responseData['user']['studentID'];
+                    $_SESSION['name'] = $responseData['user']['name'] ?? 'Unknown';
+
+                    $response['success'] = true;
+                    $response['message'] = 'Login successful';
+                } else {
+                    $response['message'] = $responseData['message'] ?? 'Invalid login details';
+                }
+            } else {
+                $response['message'] = 'Unable to connect to the server. Please try again later.';
+            }
+        } catch (Exception $e) {
+            $response['message'] = 'An error occurred while processing the request: ' . $e->getMessage();
         }
+    } else {
+        $response['message'] = 'Student ID and password are required.';
     }
 
     header('Content-Type: application/json');
