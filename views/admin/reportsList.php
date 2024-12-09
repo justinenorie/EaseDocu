@@ -1,6 +1,6 @@
 <!-- Session -->
 <?php
-//If the user is not logged in, it will redirect to the login page
+//If the user is not logged in, it will redirect  the login page
 session_start();
 if (!isset($_SESSION['admin'])) {
     header("Location: loginAdmin.php");
@@ -34,9 +34,10 @@ if (!isset($_SESSION['admin'])) {
                 <button class="filter-btn closed">Closed</button>
             </div>
 
-            <!-- TODO: Fetch each Conversation here-->
-            
-            <!-- 
+            <div class="report-list">
+                <!-- TODO: Fetch each Conversation here-->
+
+                <!-- 
             html Structure
             * report - div
             * report-info - div
@@ -51,8 +52,6 @@ if (!isset($_SESSION['admin'])) {
             * sender-message
             * sender-timestamp 
             -->
-
-            <div class="report-list">
                 <!-- Sample Structure -->
                 <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-01820')">
                     <div class="report-info">
@@ -92,21 +91,148 @@ if (!isset($_SESSION['admin'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function openChatModal(name, studentNumber, message, date) {
-            document.getElementById('chatSenderInfo').innerText = `${name}\n${studentNumber}`;
-            const chatBody = document.getElementById('chatBody');
-            const chatInput = document.getElementById('chatInput');
-            chatBody.innerHTML = '';
+        let activeConversationId = null; // Track the currently active conversation
 
-            // Add the initial message (if any)
-            if (message) {
-                const initialMessage = document.createElement('div');
-                initialMessage.classList.add('chat-message', 'received');
-                initialMessage.innerHTML = `<p>${message}</p><span>${date}</span>`;
-                chatBody.appendChild(initialMessage);
+        document.addEventListener("DOMContentLoaded", () => {
+            const reportList = document.querySelector(".report-list");
+
+            // Fetch all conversations
+            fetch("http://localhost:4000/conversations?participant=admin")
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success && data.conversations) {
+                        reportList.innerHTML = ""; // Clear existing list
+                        data.conversations.forEach((conversation) => {
+                            const {
+                                _id,
+                                participants,
+                                messages,
+                                chatStatus,
+                                updatedAt
+                            } = conversation;
+
+                            // Find participant other than admin
+                            const student = participants.find((p) => p !== "admin");
+
+                            // Use the latest message in conversation
+                            const lastMessage = messages[messages.length - 1] || {
+                                message: "No messages yet",
+                                timestamp: updatedAt,
+                            };
+
+                            const html = `
+                    <div class="report" onclick="openChatModal('${_id}', '${student}', '${lastMessage.message}', '${lastMessage.timestamp}')">
+                        <div class="report-info">
+                            <p class="report-id">${_id}</p>
+                            <h3 class="report-name">${student}
+                                <span class="report-status active-status">${chatStatus}</span>
+                            </h3>
+                            <p class="report-text">${lastMessage.message}</p>
+                            <span class="report-date">${new Date(lastMessage.timestamp).toLocaleString()}</span>
+                        </div>
+                    </div>`;
+                            reportList.innerHTML += html;
+                        });
+                    } else {
+                        reportList.innerHTML = `<p>No conversations available</p>`;
+                    }
+                })
+                .catch((error) => console.error("Error fetching conversations:", error));
+        });
+
+        function openChatModal(conversationId, studentName, lastMessage, lastTimestamp) {
+            const chatSenderInfo = document.getElementById("chatSenderInfo");
+            const chatBody = document.getElementById("chatBody");
+            const chatInput = document.getElementById("chatInput");
+
+            // Set active conversation
+            activeConversationId = conversationId;
+            chatSenderInfo.innerText = `${studentName}`;
+
+            // Clear chat messages
+            chatBody.innerHTML = "";
+
+            // Fetch conversation messages
+            fetch(`http://localhost:4000/conversation/${conversationId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success && data.conversation) {
+                        const {
+                            messages
+                        } = data.conversation;
+
+                        messages.forEach((msg) => {
+                            const messageElement = document.createElement("div");
+                            messageElement.classList.add("chat-message", msg.sender === "admin" ? "sent" : "received");
+                            messageElement.innerHTML = `<p>${msg.message}</p><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>`;
+                            chatBody.appendChild(messageElement);
+                        });
+
+                        chatBody.scrollTop = chatBody.scrollHeight; // Scroll to latest
+                    }
+                })
+                .catch((error) => console.error("Error fetching messages:", error));
+
+            document.body.classList.add("modal-open");
+
+            // Remove any existing event listeners to prevent duplicates
+            chatInput.removeEventListener("keypress", handleKeyPress);
+
+            // Add the event listener for the new conversation
+            chatInput.addEventListener("keypress", handleKeyPress);
+        }
+
+        // Keypress handler for sending messages
+        function handleKeyPress(e) {
+            if (e.key === "Enter") {
+                sendMessage();
             }
+        }
 
-            document.body.classList.add('modal-open');
+        // Send a chat message
+        function sendMessage() {
+            const chatInput = document.getElementById("chatInput");
+            const chatBody = document.getElementById("chatBody");
+            const message = chatInput.value.trim();
+            const recipientInfo = document.getElementById("chatSenderInfo").innerText;
+
+            if (message && activeConversationId) {
+                fetch("http://localhost:4000/conversation/message", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            conversationId: activeConversationId,
+                            sender: "admin",
+                            message,
+                        }),
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            const time = new Date().toLocaleTimeString();
+
+                            // Emit the message via socket
+                            socket.emit("chat", {
+                                from: "admin",
+                                to: recipientInfo,
+                                message,
+                                time,
+                            });
+
+                            // Append the sent message
+                            const messageElement = document.createElement("div");
+                            messageElement.classList.add("chat-message", "sent");
+                            messageElement.innerHTML = `<p>${message}</p><div class="message-time">${time}</div>`;
+                            chatBody.appendChild(messageElement);
+
+                            chatBody.scrollTop = chatBody.scrollHeight; // Scroll to latest
+                            chatInput.value = ""; // Clear input field
+                        }
+                    })
+                    .catch((error) => console.error("Error sending message:", error));
+            }
         }
 
         function closeChatModal() {
@@ -114,12 +240,8 @@ if (!isset($_SESSION['admin'])) {
             document.getElementById('chatBody').innerHTML = ''; // Clear chat history
         }
 
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    
+
+
         // Initialize Socket.IO and connect to the server
         const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
         const username = '<?php echo $_SESSION['admin']; ?>'; // Admin username from session
@@ -127,7 +249,9 @@ if (!isset($_SESSION['admin'])) {
         // When connected to the server
         socket.on('connect', () => {
             console.log('Connected to chat server as admin');
-            socket.emit('auth', { username });
+            socket.emit('auth', {
+                username
+            });
         });
 
         // Receive chat messages
@@ -137,7 +261,7 @@ if (!isset($_SESSION['admin'])) {
                 message,
                 time
             } = data;
-            
+
             // Display received messages
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-message', 'received');
@@ -146,33 +270,8 @@ if (!isset($_SESSION['admin'])) {
             chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the latest message
         });
 
-        // Send a chat message
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            const recipientInfo = document.getElementById('chatSenderInfo').innerText.split('\n');
-            const recipient = recipientInfo[1]; // Assuming the student number is used as the recipient identifier
 
-            if (message) {
-                const time = new Date().toLocaleTimeString();
-                socket.emit('chat', {
-                    from: username,
-                    to: recipient,
-                    message,
-                    time
-                });
-                chatInput.value = ''; // Clear the input field
 
-                // Display sent message
-                const chatBody = document.getElementById('chatBody');
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-message', 'sent');
-                messageElement.innerHTML = `<p>${message}</p>
-                <div class="message-time">${time}</div>`;
-                chatBody.appendChild(messageElement);
-
-                chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the latest message
-            }
-        }
 
         // Handle disconnect
         socket.on('disconnect', () => {

@@ -231,7 +231,6 @@ app.post('/checkExistingRequests', async (req, res) => {
 
 //TODO: Conversation database
 const ChatConversation = require('./models/chatConversation');
-
 // Create or fetch a conversation
 app.post('/conversation', async (req, res) => {
     const { participants } = req.body;
