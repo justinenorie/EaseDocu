@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
         });
 
         function enableEdit(field) {
-            const displayElement = document.getElementById(${field}-display);
+            const displayElement = document.getElementById(`${field}-display`);
             const currentValue = displayElement.textContent;
 
             const inputElement = document.createElement('input');
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
 
             displayElement.replaceWith(inputElement);
 
-            const editLink = document.getElementById(edit-${field});
+            const editLink = document.getElementById(`edit-${field}`);
             editLink.textContent = 'Save';
             editLink.onclick = function () {
                 saveEdit(field, inputElement.value);
@@ -198,22 +198,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
         }
 
         function saveEdit(field, newValue) {
-            const inputElement = document.querySelector(#${field}-display ~ input);
+            const inputElement = document.querySelector(`#${field}-display ~ input`);
 
             const displayElement = document.createElement('h1');
-            displayElement.id = ${field}-display;
+            displayElement.id = `${field}-display`;
             displayElement.textContent = newValue;
 
             inputElement.replaceWith(displayElement);
 
-            const saveLink = document.getElementById(edit-${field});
+            const saveLink = document.getElementById(`edit-${field}`);
             saveLink.textContent = 'Edit';
             saveLink.onclick = function () {
                 enableEdit(field);
             };
 
-            console.log(Updated ${field}: ${newValue});
+            console.log(`Updated ${field}: ${newValue}`);
         }
     </script>
 </body>
 </html>
+
