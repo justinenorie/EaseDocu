@@ -90,7 +90,6 @@
         }
 
         .message {
-            margin-bottom: 10px;
             padding: 8px 12px;
             max-width: 80%;
             padding: 8px 12px;
@@ -161,6 +160,7 @@
 
         <div class="chat-modal" id="chatModal">
             <div class="chat-header">
+                <p id="convo-id" style="display: none;"></p>
                 <span>Admin Support</span>
                 <button class="close-button" onclick="toggleChat()">×</button>
             </div>
@@ -179,20 +179,16 @@
         const chatModal = document.getElementById('chatModal');
         const messagesDiv = document.getElementById('chatMessages');
         const messageInput = document.querySelector('.message-input');
-
-        function toggleChat() {
-            chatModal.classList.toggle('active');
-            //TODO: Initial Message
-        }
+        const convoIdElement = document.querySelector("#convo-id");
+        const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
+        const username = '<?php echo $_SESSION['studentID']; ?>'; // Admin username from session
+        const name = '<?php echo $_SESSION['name']; ?>';
 
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-
-        const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
-        const username = '<?php echo $_SESSION['studentID']; ?>'; // Admin username from session
 
         // When connected to the server
         socket.on('connect', () => {
@@ -202,30 +198,135 @@
             });
         });
 
-        //Send Message
+        //Gumagana na
+        // Toggle chat and fetch conversation
+        function toggleChat() {
+            chatModal.classList.toggle("active");
+            messagesDiv.innerHTML = ""; // Clear previous chat messages
+
+            fetch(`http://localhost:4000/conversations?participant=${username}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success && data.conversations.length > 0) {
+                        const conversation = data.conversations[0]; // Assuming first conversation is relevant
+                        const {
+                            _id,
+                            messages
+                        } = conversation;
+
+                        // Set conversation ID
+                        convoIdElement.textContent = _id;
+
+                        // Render messages
+                        messages.forEach((msg) => {
+                            const messageElement = document.createElement("div");
+                            messageElement.classList.add(
+                                "message",
+                                msg.sender === username ? "user-message" : "admin-message"
+                            );
+                            
+                            if (msg.sender === username) {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            } else {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${msg.sender} | ${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            }
+
+                            messagesDiv.appendChild(messageElement);
+                        });
+
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
+                    } else {
+                        console.error("No conversations found.");
+                    }
+                })
+                .catch((error) => console.error("Error fetching messages:", error));
+        }
+
         function sendMessage() {
             const message = messageInput.value.trim();
-            if (message) {
-                const time = new Date().toLocaleTimeString();
-                socket.emit('chat', {
-                    from: username,
-                    to: 'admin', // Admin Session
-                    message,
-                    time
-                });
-                messageInput.value = ''; // Clear input field
+            const convoId = convoIdElement.textContent.trim(); // Get conversation ID from the element
 
-                // Sent Message
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${username}-message user-message`;
-                messageDiv.innerHTML = `
-                    <p>${message}</p>
-                    <div class="message-time">${time}</div>
-                `;
-                messagesDiv.appendChild(messageDiv);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            if (!message) {
+                console.error("Message is empty. Cannot send.");
+                return;
+            }
+
+            // Function to create a new conversation
+            const createConversation = () => {
+                return fetch("http://localhost:4000/conversation", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            participants: [username, "admin"], // Assuming the other participant is "admin"
+                        }),
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            // Set the new conversation ID
+                            convoIdElement.textContent = data.conversation._id;
+                            return data.conversation._id;
+                        } else {
+                            throw new Error("Failed to create a conversation");
+                        }
+                    });
+            };
+
+            // Function to send a message
+            const sendChatMessage = (conversationId) => {
+                fetch("http://localhost:4000/conversation/message", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            conversationId,
+                            sender: username,
+                            message,
+                        }),
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            // Render sent message
+                            const messageElement = document.createElement("div");
+                            const time = new Date().toLocaleTimeString();
+
+                            socket.emit("chat", {
+                                from: username,
+                                to: "admin", // Admin Session
+                                message,
+                                time,
+                            });
+
+                            messageElement.classList.add("message", "user-message");
+                            messageElement.innerHTML = `<p>${message}</p><div class="message-time">${time}</div>`;
+                            messagesDiv.appendChild(messageElement);
+
+                            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
+                            messageInput.value = ""; // Clear input field
+                        } else {
+                            console.error("Error sending message:", data.message);
+                        }
+                    })
+                    .catch((error) => console.error("Error sending message:", error));
+            };
+
+            // Check if convoId exists, otherwise create a new conversation
+            if (!convoId) {
+                console.log("No conversation ID found. Creating a new conversation...");
+                createConversation()
+                    .then((newConvoId) => {
+                        sendChatMessage(newConvoId); // Send the message after creating the conversation
+                    })
+                    .catch((error) => console.error("Error creating conversation:", error));
+            } else {
+                sendChatMessage(convoId); // Send the message directly if convoId exists
             }
         }
+
 
         //Receive Message
         socket.on('chat', (data) => {
@@ -238,7 +339,7 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${from}-message admin-message`;
             messageDiv.innerHTML = `
-                <p>${message}</p><span>${from} | ${time}</span>`;
+                <p>${message}</p><div class="message-time">${from} | ${time}</div>`;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         })

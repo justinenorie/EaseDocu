@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../');
+$dotenv->load();
 
 //Database Connection to configure
 function getMongoClient() {
@@ -10,6 +11,7 @@ function getMongoClient() {
         try {
             //TODO: change the connection into .env
             $client = new MongoDB\Client($_ENV['MongoDBTOken']);
+            // $client = new MongoDB\Client('mongodb+srv://easedocu:easedocu123@easecluster.6yvnz.mongodb.net/easedocu');
             // echo "Connected to MongoDB successfully.";
         } catch (Exception $e) {
             echo "Failed to connect to MongoDB: ", $e->getMessage();

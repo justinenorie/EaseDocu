@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
     studentID: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
 });
 
 module.exports = userSchema;

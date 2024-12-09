@@ -7,6 +7,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
 const socketio = require('socket.io');
+
+const userLogin = require('./models/userLogin');
+const DocumentRequest = require('./models/documentRequest');
+const DocumentList = require('./models/documentList');
+const authRoutes = require('./routes/authRoutes')
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -19,19 +25,17 @@ const io = socketio(server, {
 //.env
 require('dotenv').config()
 
-//Schemas
-const userLogin = require('./models/userLogin');
-const DocumentRequest = require('./models/documentRequest');
-const DocumentList = require('./models/documentList');
-
 //Send Email API
 const { sendEmail } = require('./api/SendEmail');
 
 // Middleware setup
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "views")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use("/api/auth", authRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MongoDBTOken)
@@ -90,7 +94,7 @@ app.post('/login', async (req, res) => {
         res.json({
             success: true,
             user: {
-                _id: user._id, // Ito gagamitin for Student Session
+                _id: user._id,
                 name: user.name,
                 studentID: user.studentID,
                 email: user.email
@@ -179,7 +183,138 @@ app.get('/getDocumentList', async (req, res) => {
     }
 });
 
+app.get("/api/auth/reset-password/:resetToken", (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
+});
+
+app.post('/checkExistingRequests', async (req, res) => {
+    const { studentID } = req.body;
+
+    if (!studentID) {
+        return res.status(400).json({ success: false, message: 'Student ID is required' });
+    }
+
+    try {
+        // Find any requests for the student that are not completed
+        const existingRequests = await DocumentRequest.find({ 
+            studentID: studentID, 
+            status: { $nin: ['Completed', 'Rejected'] } // Exclude completed or rejected requests
+        });
+
+        // If there are existing requests, return details
+        if (existingRequests.length > 0) {
+            return res.json({
+                hasPendingRequests: true,
+                existingRequests: existingRequests.map(req => ({
+                    requestId: req._id,
+                    requestedDocuments: req.requestedDocument,
+                    date: req.date,
+                    status: req.status || 'Pending'
+                }))
+            });
+        }
+
+        // No existing active requests found
+        res.json({
+            hasPendingRequests: false
+        });
+    } catch (error) {
+        console.error('Error checking existing requests:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error checking existing requests',
+            error: error.message
+        });
+    }
+});
+
+
 //TODO: Conversation database
+const ChatConversation = require('./models/chatConversation');
+// Create or fetch a conversation
+app.post('/conversation', async (req, res) => {
+    const { participants } = req.body;
+
+    if (!participants || participants.length < 2) {
+        return res.status(400).json({ success: false, message: 'Participants are required' });
+    }
+
+    try {
+        // Check if a conversation already exists
+        let conversation = await ChatConversation.findOne({ participants: { $all: participants } });
+
+        // If not, create a new one
+        if (!conversation) {
+            conversation = new ChatConversation({ participants });
+            await conversation.save();
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Add a message to a conversation
+app.post('/conversation/message', async (req, res) => {
+    const { conversationId, sender, message } = req.body;
+
+    if (!conversationId || !sender || !message) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    try {
+        const conversation = await ChatConversation.findById(conversationId);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        // Add message to the conversation
+        conversation.messages.push({ sender, message });
+        conversation.updatedAt = Date.now();
+
+        await conversation.save();
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch a conversation by ID
+app.get('/conversation/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const conversation = await ChatConversation.findById(id);
+
+        if (!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        res.json({ success: true, conversation });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+// Fetch all conversations for a participant
+app.get('/conversations', async (req, res) => {
+    const { participant } = req.query;
+
+    if (!participant) {
+        return res.status(400).json({ success: false, message: 'Participant is required' });
+    }
+
+    try {
+        const conversations = await ChatConversation.find({ participants: participant });
+
+        res.json({ success: true, conversations });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
 
 
 
