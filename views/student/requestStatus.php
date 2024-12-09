@@ -15,7 +15,7 @@ require '../../views/components/topBarStudent.php';
 require '../../views/components/chatModal.php';
 
 // Modify the URL to include studentID
-$url = 'http://localhost:4000/getDocumentRequests?studentID=' . urlencode($studentData['studentID']);
+$url = 'http://localhost:4000/getDocumentRequests?studentID=' . urlencode($studentID);
 $response = file_get_contents($url);
 $responseData = json_decode($response, true);
 
@@ -70,7 +70,7 @@ function renderProgressIndicator($currentStatus, $statusSteps)
 <?php
 }
 
-function renderStatusMessage($currentStatus, $request = null)
+function renderStatusMessage($currentStatus, $responseData = null)
 {
     $messages = [
         'unpaid' => [
@@ -87,9 +87,7 @@ function renderStatusMessage($currentStatus, $request = null)
         ],
         'ready' => [
             'title' => 'Your document is available to pick-up',
-            'description' => $request && $request['appointmentDate'] && $request['appointmentTime']
-                ? formatPickupDescription($request['appointmentDate'], $request['appointmentTime'])
-                : 'Your document is ready for pick-up.'
+            'description' => formatPickupDescription($responseData['appointmentDate'], $responseData['appointmentTime'])
         ]
     ];
 
@@ -155,7 +153,7 @@ function countDocumentQuantities($documents)
                     foreach ($responseData['requests'] as $request) {
                         // Use the status directly from the MongoDB data
                         renderProgressIndicator($request['status'], $statusSteps);
-                        renderStatusMessage($request['status']);
+                        renderStatusMessage($request['status'], $request);
                     }
                 } else {
                     echo '<p>No document requests found.</p>';
