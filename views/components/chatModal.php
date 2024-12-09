@@ -182,6 +182,7 @@
         const convoIdElement = document.querySelector("#convo-id");
         const socket = io('http://localhost:4000'); // Connect to the Socket.IO server
         const username = '<?php echo $_SESSION['studentID']; ?>'; // Admin username from session
+        const name = '<?php echo $_SESSION['name']; ?>';
 
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -223,9 +224,13 @@
                                 "message",
                                 msg.sender === username ? "user-message" : "admin-message"
                             );
-                            messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${new Date(
-                            msg.timestamp
-                        ).toLocaleTimeString()}</div>`;
+                            
+                            if (msg.sender === username) {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            } else {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${msg.sender} | ${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            }
+
                             messagesDiv.appendChild(messageElement);
                         });
 
@@ -334,7 +339,7 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${from}-message admin-message`;
             messageDiv.innerHTML = `
-                <p>${message}</p><span>${from} | ${time}</span>`;
+                <p>${message}</p><div class="message-time">${from} | ${time}</div>`;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         })
