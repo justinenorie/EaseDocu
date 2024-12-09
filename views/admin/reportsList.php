@@ -123,13 +123,16 @@ if (!isset($_SESSION['admin'])) {
                             const html = `
                     <div class="report" onclick="openChatModal('${_id}', '${student}', '${lastMessage.message}', '${lastMessage.timestamp}')">
                         <div class="report-info">
-                            <p class="report-id">${_id}</p>
+                            <p class="report-id" style="display: none;">${_id}</p>
                             <h3 class="report-name">${student}
                                 <span class="report-status active-status">${chatStatus}</span>
                             </h3>
                             <p class="report-text">${lastMessage.message}</p>
                             <span class="report-date">${new Date(lastMessage.timestamp).toLocaleString()}</span>
                         </div>
+                        <a href="javascript:void(0)">
+                            <img src="../../public/images/icons/chat-black.png" class="chat-icon">
+                        </a>
                     </div>`;
                             reportList.innerHTML += html;
                         });
@@ -164,7 +167,11 @@ if (!isset($_SESSION['admin'])) {
                         messages.forEach((msg) => {
                             const messageElement = document.createElement("div");
                             messageElement.classList.add("chat-message", msg.sender === "admin" ? "sent" : "received");
-                            messageElement.innerHTML = `<p>${msg.message}</p><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>`;
+                            if (msg.sender === "admin") {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            } else {
+                                messageElement.innerHTML = `<p>${msg.message}</p><div class="message-time">${msg.sender} | ${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                            }
                             chatBody.appendChild(messageElement);
                         });
 
@@ -265,7 +272,7 @@ if (!isset($_SESSION['admin'])) {
             // Display received messages
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-message', 'received');
-            messageElement.innerHTML = `<p>${message}</p><span>${from} | ${time}</span>`;
+            messageElement.innerHTML = `<p>${message}</p><span class="message-time">${from} | ${time}</span>`;
             chatBody.appendChild(messageElement);
             chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to the latest message
         });
