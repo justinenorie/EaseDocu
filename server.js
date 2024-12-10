@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
 
 
 // Login route -- V2 SESSION HANDLER
-app.post('/login', async (req, res) => {
+app.post('/login', async(req, res) => {
     const { studentID, password } = req.body;
 
     try {
@@ -108,7 +108,7 @@ app.post('/login', async (req, res) => {
 
 
 // Signup route
-app.post('/signup', async (req, res) => {
+app.post('/signup', async(req, res) => {
     const { name, studentID, email, password } = req.body;
 
     try {
@@ -127,7 +127,7 @@ app.post('/signup', async (req, res) => {
 });
 
 // Handling the POST request to submit the request
-app.post('/submitRequest', async (req, res) => {
+app.post('/submitRequest', async(req, res) => {
     const { name, studentID, requestedDocument, totalPayment, date, email } = req.body;
 
     // Check if all required fields are present
@@ -149,13 +149,13 @@ app.post('/submitRequest', async (req, res) => {
 
         res.json({ success: true, message: 'Document request submitted successfully!', requestId: newRequest._id });
     } catch (error) {
-        console.error(error);  // Log error to server console
+        console.error(error); // Log error to server console
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
 
 // Get ng Document Request (student id gagamitin kasi walang _id foreign key sa document request)
-app.get('/getDocumentRequests', async (req, res) => {
+app.get('/getDocumentRequests', async(req, res) => {
     const studentID = req.query.studentID; // Change from userId to studentID
 
     if (!studentID) {
@@ -171,7 +171,7 @@ app.get('/getDocumentRequests', async (req, res) => {
 });
 
 // Get Document List
-app.get('/getDocumentList', async (req, res) => {
+app.get('/getDocumentList', async(req, res) => {
     try {
         const documentList = await DocumentList.find({});
         res.json({
@@ -187,7 +187,7 @@ app.get("/api/auth/reset-password/:resetToken", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'student', 'resetPassword.html'));
 });
 
-app.post('/checkExistingRequests', async (req, res) => {
+app.post('/checkExistingRequests', async(req, res) => {
     const { studentID } = req.body;
 
     if (!studentID) {
@@ -196,8 +196,8 @@ app.post('/checkExistingRequests', async (req, res) => {
 
     try {
         // Find any requests for the student that are not completed
-        const existingRequests = await DocumentRequest.find({ 
-            studentID: studentID, 
+        const existingRequests = await DocumentRequest.find({
+            studentID: studentID,
             status: { $nin: ['Completed', 'Rejected'] } // Exclude completed or rejected requests
         });
 
@@ -232,7 +232,7 @@ app.post('/checkExistingRequests', async (req, res) => {
 //TODO: Conversation database
 const ChatConversation = require('./models/chatConversation');
 // Create or fetch a conversation
-app.post('/conversation', async (req, res) => {
+app.post('/conversation', async(req, res) => {
     const { participants } = req.body;
 
     if (!participants || participants.length < 2) {
@@ -256,7 +256,7 @@ app.post('/conversation', async (req, res) => {
 });
 
 // Add a message to a conversation
-app.post('/conversation/message', async (req, res) => {
+app.post('/conversation/message', async(req, res) => {
     const { conversationId, sender, message } = req.body;
 
     if (!conversationId || !sender || !message) {
@@ -283,7 +283,7 @@ app.post('/conversation/message', async (req, res) => {
 });
 
 // Fetch a conversation by ID
-app.get('/conversation/:id', async (req, res) => {
+app.get('/conversation/:id', async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -300,7 +300,7 @@ app.get('/conversation/:id', async (req, res) => {
 });
 
 // Fetch all conversations for a participant
-app.get('/conversations', async (req, res) => {
+app.get('/conversations', async(req, res) => {
     const { participant } = req.query;
 
     if (!participant) {
@@ -319,7 +319,7 @@ app.get('/conversations', async (req, res) => {
 
 
 // Sending Email
-app.post('/send-email', async (req, res) => {
+app.post('/send-email', async(req, res) => {
     const { name, email, status, appointment } = req.body;
 
     try {
@@ -331,11 +331,34 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
+app.post('/api/profile/update', async(req, res) => {
+    const { field, value, studentID } = req.body;
+
+    if (!field || !value || !studentID) {
+        return res.status(400).json({ success: false, message: 'Invalid data' });
+    }
+
+    try {
+        const updateData = {
+            [field]: value }; // Dynamic field update
+        const result = await userLogin.findOneAndUpdate({ studentID }, { $set: updateData }, { new: true } // Return the updated document
+        );
+
+        if (result) {
+            res.json({ success: true, message: 'Profile updated successfully', user: result });
+        } else {
+            res.status(404).json({ success: false, message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+
 
 // Start the server
 const PORT = 4000;
 server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-
-

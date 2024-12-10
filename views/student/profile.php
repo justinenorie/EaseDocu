@@ -9,7 +9,7 @@ if (!isset($_SESSION['studentID'])) {
 $studentId = isset($_SESSION['studentID']) ? $_SESSION['studentID'] : 'N/A';
 $name = isset($_SESSION['name']) ? $_SESSION['name'] : 'N/A';
 $email = isset($_SESSION['email']) ? $_SESSION['email'] : 'N/A';
-$profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : 'default.png';
+$profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '../../public/images/icons/profile.png';
 
 require '../../views/components/topBarStudent.php';
 
@@ -50,13 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
             color: #333;
+            margin-top: 200px;
         }
-
         .profile_1 {
             max-width: 800px;
             margin: 20px auto;
@@ -70,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-
         .profile_1 h1 {
             font-size: 34px;
             margin-bottom: 40px;
@@ -82,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
             position: relative;
             margin-bottom: 30px;
             text-align: right;
+            margin-top: 10px;
         }
 
         .profile-text {
@@ -150,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
             <h1>Profile</h1>
         </div>
         <div class="profile-image-container">
+            <!-- Display profile image -->
             <img src="<?php echo htmlspecialchars($profileImage); ?>" alt="Profile Image" class="profile-image" id="profileImage">
             <form method="POST" enctype="multipart/form-data" id="imageUploadForm">
                 <input type="file" name="profileImage" id="profileImageInput" accept="image/*" onchange="document.getElementById('imageUploadForm').submit();">
@@ -172,16 +172,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
     </div>
 
     <script>
+        // Profile Image Upload Trigger
         document.getElementById('profileImage').addEventListener('click', function () {
             document.getElementById('profileImageInput').click();
         });
 
+        // Enable Edit Function
         function enableEdit(field) {
             const displayElement = document.getElementById(`${field}-display`);
-            const currentValue = displayElement.textContent;
+            if (!displayElement) {
+                console.error(`Element with id '${field}-display' not found.`);
+                return;
+            }
 
+            const currentValue = displayElement.textContent.trim(); // Get current display text
+
+            // Create an input field with the same value
             const inputElement = document.createElement('input');
             inputElement.type = 'text';
+            inputElement.id = `${field}-input`;
             inputElement.value = currentValue;
             inputElement.style.border = "1px solid black";
             inputElement.style.borderRadius = "8px";
@@ -190,31 +199,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profileImage'])) {
 
             displayElement.replaceWith(inputElement);
 
+            // Change the "Edit" button to a "Save" button
             const editLink = document.getElementById(`edit-${field}`);
+            if (!editLink) {
+                console.error(`Edit link for '${field}' not found.`);
+                return;
+            }
+
             editLink.textContent = 'Save';
             editLink.onclick = function () {
-                saveEdit(field, inputElement.value);
+                saveEdit(field);
             };
         }
 
-        function saveEdit(field, newValue) {
-            const inputElement = document.querySelector(`#${field}-display ~ input`);
+        // Save Edit Function
+        function saveEdit(field) {
+            const inputElement = document.getElementById(`${field}-input`);
+            if (!inputElement) {
+                console.error(`Input element for '${field}' not found.`);
+                return;
+            }
 
+            const newValue = inputElement.value.trim();
+            if (!newValue) {
+                alert(`${field} cannot be empty.`);
+                return;
+            }
+
+            // Replace input with updated display element
             const displayElement = document.createElement('h1');
             displayElement.id = `${field}-display`;
             displayElement.textContent = newValue;
-
             inputElement.replaceWith(displayElement);
 
-            const saveLink = document.getElementById(`edit-${field}`);
-            saveLink.textContent = 'Edit';
-            saveLink.onclick = function () {
-                enableEdit(field);
-            };
+            // Change "Save" back to "Edit"
+            const editLink = document.getElementById(`edit-${field}`);
+            if (editLink) {
+                editLink.textContent = 'Edit';
+                editLink.onclick = function () {
+                    enableEdit(field);
+                };
+            }
 
-            console.log(`Updated ${field}: ${newValue}`);
+            // Send updated data to the server
+            fetch('http://localhost:4000/api/profile/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ field, value: newValue, studentID: '<?php echo $studentId; ?>' }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    console.log(`${field} updated successfully`);
+                } else {
+                    console.error(`Failed to update ${field}:`, data.message);
+                    alert('Failed to save changes. Please try again.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while saving. Please try again later.');
+            });
         }
     </script>
 </body>
 </html>
-
