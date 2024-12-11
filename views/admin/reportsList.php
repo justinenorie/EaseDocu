@@ -27,11 +27,11 @@ if (!isset($_SESSION['admin'])) {
         <h1 class="concern">REPORT CONCERNS</h1>
         <div class="card">
             <div class="filter">
-                <span class="filter-label">Filter</span>
-                <button class="filter-btn all">All</button>
+                <!-- <span class="filter-label">COnve</span> -->
+                <!-- <button class="filter-btn all">All</button>
                 <button class="filter-btn open">Open</button>
                 <button class="filter-btn active">Active</button>
-                <button class="filter-btn closed">Closed</button>
+                <button class="filter-btn closed">Closed</button> -->
             </div>
 
             <div class="report-list">
