@@ -1,14 +1,20 @@
 <?php
 session_start();
 
+require __DIR__ . '/../../models/StudentModel.php';
+
 if (!isset($_SESSION['studentID'])) {
     header("Location: login.php");
     exit();
 }
 
-$studentId = isset($_SESSION['studentID']) ? $_SESSION['studentID'] : 'N/A';
-$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'N/A';
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : 'N/A';
+$studentID = $_SESSION['studentID'];
+$studentModel = new StudentModel();
+$studentData = $studentModel->getStudentById($studentID);
+
+$studentId = isset($_SESSION['studentID']) ? $studentData['studentID'] : 'N/A';
+$name = isset($_SESSION['studentID']) ? $studentData['name'] : 'N/A';
+$email = isset($_SESSION['studentID']) ? $studentData['email'] : 'N/A';
 $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '../../public/images/icons/profile.png';
 
 require '../../views/components/topBarStudent.php';

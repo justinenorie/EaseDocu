@@ -52,7 +52,7 @@ if (!isset($_SESSION['admin'])) {
             * sender-message
             * sender-timestamp 
             -->
-                <!-- Sample Structure -->
+                <!-- Sample Structure
                 <div class="report" onclick="openChatModal('Marc Jan Banzal', '22-01820')">
                     <div class="report-info">
                         <h3 class="report-name" id="sender-name">Marc Jan Banzal - 22-01820
@@ -64,7 +64,7 @@ if (!isset($_SESSION['admin'])) {
                     <a href="javascript:void(0)">
                         <img src="../../public/images/icons/chat-black.png" class="chat-icon">
                     </a>
-                </div>
+                </div> -->
             </div>
         </div>
 
